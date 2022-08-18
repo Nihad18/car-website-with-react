@@ -1,9 +1,9 @@
 import React from 'react'
 import Select from "react-select"
-const Input = ({name,options,placeholder,value,onChange}) => {
+const Input = ({name,sup,options,placeholder,value,isDisabled,onChange}) => {
   return (
-    <div className='px-1 pt-2 pb-2 rounded flex items-center'>
-          <div className='mr-5'>{name}</div>
+    <div className='px-1 pt-2 pb-2 w-[48%] rounded flex items-center justify-between'>
+          <div >{name}<sup>{sup}</sup></div>
           <div className='w-[250px]'>
           <Select
            isClearable
@@ -11,6 +11,7 @@ const Input = ({name,options,placeholder,value,onChange}) => {
             placeholder={placeholder}
             value={value}
             onChange={onChange}
+            isDisabled={isDisabled}
           />
           </div>
         </div>

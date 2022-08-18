@@ -38,7 +38,7 @@ export const Login = () => {
     }
   };
   return (
-    // <div className="flex items-center justify-center">
+    <>
       <div className='w-[352px] p-6 rounded-lg  bg-white'>
       <h1 className='header text-4xl font-semibold pb-2'>Login</h1>
       <p className='about'>Stay updated on your professional world</p>
@@ -69,6 +69,6 @@ export const Login = () => {
         </div>
       </form>
     </div>
-    // </div>
+   </>
   );
 };

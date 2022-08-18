@@ -36,7 +36,7 @@ const Navbar = () => {
     <>
       <div
         className='flex justify-between items-center h-[60px] w-full sm:w-[540px] pl-6 pr-6 mx-auto //mobile
-    lg:bg-[#081A3E] dark:bg-[#242426] lg:text-white lg:h-[90px] lg:min-w-[960px]'>{/*desktop*/}
+    lg:bg-[#081A3E] dark:bg-[#242426] lg:text-white lg:h-[90px] lg:min-w-[960px] xl:min-w-[1250px]'>{/*desktop*/}
 
         {/* ------MOBILE MENU--------------------------------------- */}
         <button onClick={() => dispatch(setToggle())}>
