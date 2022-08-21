@@ -232,7 +232,7 @@ const NewAnnouncement = () => {
       <div className="font-semibold text-xl">
       Şəkillər
       </div>
-      <div className="border border-gray-400 w-full min-h-[150px] flex items-center">
+      <div className="border border-gray-400 w-full min-h-[170px] flex items-center">
       {/* RULES */}
       <div className="w-2/5 text-sm px-4">
         <div>- Minimum – 3 şəkil (ön, arxa və bütöv ön panelin görüntüsü mütləqdir).</div>
@@ -240,18 +240,10 @@ const NewAnnouncement = () => {
         <div>- Optimal ölçü – 1024x768 piksel.</div>
       </div>
       {/* add pictures */}
-      <div className={`flex flex-wrap`} > 
-      <Picture 
-      // photo={photo} 
-      text={'1'}/>
-      <Picture 
-      // photo={photo} 
-      text={'2'}/>
-      <Picture 
-      // photo={photo} 
-      text={'3'}/>
-      <AddPictures/>
-      </div>
+      <Picture/>
+      {/* <div >  */}
+      {/* <AddPictures/> */}
+      {/* </div> */}
       
       </div>
       {/* ------------------- */}
