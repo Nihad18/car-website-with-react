@@ -33,7 +33,7 @@ const Profile = () => {
   return (
     <div className=' min-h-[380px] text-white flex flex-col justify-center items-center'>
       <div className='relative mt-5 lg:mt-8 mb-4 lg:mb-10 '> 
-        <img className='w-[100px] h-[100px] bg-cover bg-center rounded' src={profileImg} alt='profile photo'/>
+        <img className='w-[100px] h-[100px] bg-cover bg-center rounded' src={profileImg} alt='profile'/>
         <input id="input" onChange={imageHandler} className='hidden' type="file" accept='image/*'/>
         <label htmlFor="input">
           <AiOutlineCamera  className='cursor-pointer absolute text-black bg-white text-xl bottom-0 right-0 m-2'/>

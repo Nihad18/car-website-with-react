@@ -1,13 +1,14 @@
-import { configureStore } from '@reduxjs/toolkit'
-import loginSlice from './reducers/loginSlice'
-import registerSlice from './reducers/registerSlice'
-import toggleSlice from './reducers/toggleSlice'
-
+import { configureStore } from "@reduxjs/toolkit";
+import loginSlice from "./reducers/loginSlice";
+import registerSlice from "./reducers/registerSlice";
+import toggleSlice from "./reducers/toggleSlice";
+import imageSlice from "./reducers/imageSlice";
 
 export const store = configureStore({
   reducer: {
-   login: loginSlice,
-   register: registerSlice,
-   toggle: toggleSlice,
+    login: loginSlice,
+    register: registerSlice,
+    toggle: toggleSlice,
+    selectedImages: imageSlice,
   },
-})
+});

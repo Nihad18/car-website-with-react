@@ -1,9 +1,9 @@
 import { useState, useEffect,useRef } from "react";
 import Input from "./Input";
 import axios from "axios";
-import photo from "../../images/profileImg.png";
-import {AiOutlineClose} from "react-icons/ai";
-import {FiRotateCcw,FiRotateCw} from "react-icons/fi";
+import Picture from "./Picture";
+import AddPictures from "./AddPictures";
+import photo from '../../images/profileImg.png'
 const NewAnnouncement = () => {
   const api='http://207.154.251.70'
   const [brandValue, setBrandValue] = useState(null);
@@ -61,36 +61,7 @@ const NewAnnouncement = () => {
     getBrands(id)
   },[brandValue])
 
-  // ADD PICTURES
-  const [profileImg, uploadimg] = useState(photo);
-  const imageHandler = (e) => {
-    e.preventDefault()
-    const reader = new FileReader();
-    const file = e.target.files[0];
-    reader.onload = () =>{
-      if(reader.readyState === 2){
-        uploadimg(reader.result)
-      }
-    }
-    reader.readAsDataURL(file)
-  }
-  const imgRef=useRef()
-  const deleteImg=()=>{
-    uploadimg(photo)
-    imgRef.current.value=null
-  }
-  const [style, setStyle] = useState({transform: 'rotate(0deg)'});
-  const rotateLeft=()=>{
-    // setStyle({transform:'rotate(-90deg)'})
-    // how to rotate the image when i always click on the left arrow
-    setStyle({transform:'rotate(90deg)'})
-    
-
-  }
-  const rotateRight=()=>{
-    setStyle({transform:'rotate(90deg)'})
-  }
-
+ 
   return (
     <div
     className='flex flex-col min-h-screen w-full sm:w-[540px] pt-6 pl-6 pr-6 mx-auto
@@ -262,31 +233,24 @@ const NewAnnouncement = () => {
       Şəkillər
       </div>
       <div className="border border-gray-400 w-full min-h-[150px] flex items-center">
-      {/* About */}
+      {/* RULES */}
       <div className="w-2/5 text-sm px-4">
         <div>- Minimum – 3 şəkil (ön, arxa və bütöv ön panelin görüntüsü mütləqdir).</div>
         <div>- Maksimum – 21 şəkil.</div>
         <div>- Optimal ölçü – 1024x768 piksel.</div>
       </div>
       {/* add pictures */}
-      <div className="flex w-3/5"> 
-      <div>
-      <label htmlFor="input" className="flex flex-col items-center justify-center cursor-pointer border border-gray-400 hover:border-blue-400 ">
-        <img style={style} className={`${profileImg===photo ? 'w-[60px] h-[60px] mx-4 mt-4' : 'w-[100px] h-[100px]'} bg-cover bg-center rounded`} src={profileImg} alt='car'/>
-        <input ref={imgRef} id="input" onChange={imageHandler} className='hidden' type="file" accept='image/*'/>
-        <span className={`${profileImg===photo ? '' : 'hidden'} 'mx-4 mb-2`}>Ön görünüş</span>
-        </label>
-        {
-          profileImg!==photo && 
-          <div className="flex justify-between items-center">
-            <AiOutlineClose onClick={deleteImg} className="cursor-pointer text-red-500"/>
-            <div className="flex">
-              <FiRotateCcw onClick={rotateLeft} className="cursor-pointer mr-1"/>
-              <FiRotateCw onClick={rotateRight} className="cursor-pointer"/>
-            </div>
-            </div>
-        }
-      </div>
+      <div className={`flex flex-wrap`} > 
+      <Picture 
+      // photo={photo} 
+      text={'1'}/>
+      <Picture 
+      // photo={photo} 
+      text={'2'}/>
+      <Picture 
+      // photo={photo} 
+      text={'3'}/>
+      <AddPictures/>
       </div>
       
       </div>
