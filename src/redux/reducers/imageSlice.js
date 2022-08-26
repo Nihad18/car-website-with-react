@@ -7,8 +7,8 @@ export const imageSlice = createSlice({
   },
   
   reducers: {
-    setSelectedImages: (state, {payload}) => {
-      state.value = payload.value;
+    setSelectedImages: (state,action) => {
+      state.value =[...action.payload];
     }}
 });
 

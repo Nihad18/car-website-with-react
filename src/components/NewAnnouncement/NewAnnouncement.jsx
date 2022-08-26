@@ -2,12 +2,21 @@ import { useState, useEffect,useRef } from "react";
 import Input from "./Input";
 import axios from "axios";
 import Picture from "./Picture";
+import {useSelector} from 'react-redux'
+
 import AddPictures from "./AddPictures";
 import photo from '../../images/profileImg.png'
 const NewAnnouncement = () => {
   const api='http://207.154.251.70'
   const [brandValue, setBrandValue] = useState(null);
   const [modelValue, setModelValue] = useState(null);
+  const [gearValue, setGearValue] = useState(null);
+  const [milageValue, setMilageValue] = useState(null);
+  const [priceValue, setPriceValue] = useState(null);
+
+  
+  const token=useSelector(state=>state.token.value)
+  const selectedImages=useSelector(state=>state.selectedImages.value)
 
   const [brands, setBrands] = useState([]);
   const [models, setModels] = useState([]);
@@ -52,7 +61,107 @@ const NewAnnouncement = () => {
       setModels(modelsData.data.map(n => ({ value: n.id, label: n.name })));
     }
     
-  } 
+  }
+  // console.log('Bearer'+token)
+    const files=useSelector(state=>state.file.value)
+    var array = Object.keys(files)
+    .map(function(key) {
+        return files[key];
+    });
+    // const avengers = ['thor', 'captain america', 'hulk'];
+    // avengers.forEach((item, index)=>{
+    //   console.log(index, item)
+    // })
+    // const items = array.forEach((item)=>{
+    //   console.log(item)
+    //   return item
+    // })
+    // const test = array.forEach(item=>item)
+    // console.log('Items:', test)
+    // console.log("files: ",files)
+    // let sortable = {};
+    // const sortable = Object.entries(files)
+    // .sort(([,a],[,b]) => a-b)
+    // .reduce((r, [k, v]) => ({ ...r, [k]: v }), {});
+    // console.log("sortable: ",sortable)
+    const carData={
+    "uploaded_images": files[0],
+    "mileage": 100,
+    "price": 1500,
+    "engine_power": 1,
+    // "extra_boolean_fields": [1],
+    "crashed": false,
+    "loan": false,
+    "painted": false,
+    "description": "test",
+    "brand": 1,
+    "auto_model": 1,
+    "category": 1,
+    "mileage_type": 1,
+    "color": 1,
+    "price_type": 1,
+    "prior_owners_count": 1,
+    "seats_count": 1,
+    "fuel_type": 1,
+    "gear": 1,
+    "transmission": 1,
+    "year": 1,
+    "engine_volume":1,
+    "market": 1,
+    "city": 1
+  }
+  let formData=new FormData()
+  // formData.append("uploaded_images" ,   array.map((item,key) => item[key]))
+  for ( var key in array ) {
+    formData.append("uploaded_images",array[key]);
+    console.log(array[key])
+}
+console.log(array)
+  formData.append("mileage", 1)
+  formData.append("price", 1)
+  formData.append("engine_power", 1)
+  const extraFields=[1,2]
+  for (let i = 0; i < extraFields.length; i++) {
+    formData.append("extra_boolean_fields[]",extraFields[i])
+  }
+  // formData.append("extra_boolean_fields", [])
+  formData.append("crashed", false)
+  formData.append("loan", false)
+  formData.append("painted", false)
+  formData.append("description", "test")
+  formData.append("brand", 1)
+  formData.append("auto_model",1)
+  formData.append("category", 1)
+  formData.append("mileage_type", 1)
+  formData.append("color", 1)
+  formData.append("price_type", 1)
+  formData.append("prior_owners_count", 1)
+  formData.append("seats_count", 1)
+  formData.append("fuel_type", 1)
+  formData.append("gear", 1)
+  formData.append("transmission", 1)
+  formData.append("year", 1)
+  formData.append("engine_volume", 1)
+  formData.append("market", 1)
+  formData.append("city", 1)
+  // console.log(brands.indexOf(brandValue)+1)
+  // console.log("price : ",priceValue)
+  const postCarData=(e)=>{
+    e.preventDefault()
+    const url=`${api}/api/post/create/`
+    const post =axios.post(url,formData,{
+      headers:{
+        'Authorization':`Bearer ${token}`,
+        // 'Content-type':'application/json',
+        'Content-type': 'multipart/form-data',
+        // 'Content-type':'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW',
+      },
+      // body:formData,
+      // pic:selectedImages,
+    })
+    console.log(post)
+    // console.log(brandValue,selectedImages)
+    }
   useEffect(() => {
     setModelValue(null);
   }, [brandValue]);
@@ -61,15 +170,13 @@ const NewAnnouncement = () => {
     getBrands(id)
   },[brandValue])
 
- 
   return (
     <div
     className='flex flex-col min-h-screen w-full sm:w-[540px] pt-6 pl-6 pr-6 mx-auto
     bg-white dark:bg-[#1c1c1e] text-black dark:text-white lg:min-w-[960px]'
     >
       <div className=''>Yeni elan yerləşdirin</div>
-
-      <form className=' flex w-full justify-between flex-wrap'>
+      <form onSubmit={postCarData} className=' flex w-full justify-between flex-wrap'>
         <Input
           name={"Marka :"}
           options={brands}
@@ -111,7 +218,7 @@ const NewAnnouncement = () => {
           <div className='mr-5'>Yürüş :</div>
          
           <div className="w-[250px] flex items-center">
-          <input type="number" placeholder="0" min="0" step="10000" className="max-w-[110px] px-2 bg-white text-black border-gray-400 border rounded flex items-center min-h-[38px] outline-none"/>
+          <input value={milageValue} onChange={(e)=>setMilageValue(e.target.value)} type="number" placeholder="0" min="0" step="10000" className="max-w-[110px] px-2 bg-white text-black border-gray-400 border rounded flex items-center min-h-[38px] outline-none"/>
          
          <input type="radio" name="mileage" defaultChecked id='km' className="ml-2"/>
          <label htmlFor="km" className=" mr-2">Km</label>
@@ -141,7 +248,7 @@ const NewAnnouncement = () => {
           <div className='mr-5'>Qiymət :</div>
          
           <div className="w-[250px] flex items-center">
-          <input type="number" placeholder="0" min="0" step="500" className="max-w-[110px] px-2 bg-white text-black border-gray-400 border rounded flex items-center min-h-[38px] outline-none"/>
+          <input value={priceValue} onChange={(e)=>setPriceValue(e.target.value)} type="number" placeholder="0" min="0" step="500" className="max-w-[110px] px-2 bg-white text-black border-gray-400 border rounded flex items-center min-h-[38px] outline-none"/>
          
          <input type="radio" name="price" defaultChecked id='azn' className="ml-1"/>
          <label htmlFor="azn">AZN</label>
@@ -155,6 +262,8 @@ const NewAnnouncement = () => {
       <Input
           name={"Mühərrikin gücü,a . g"}
           options={data.gears}
+          value={gearValue}
+          onChange={setGearValue}
           placeholder={"Mühərrikin gücü,a . g"}
         />
       <Input
@@ -234,7 +343,7 @@ const NewAnnouncement = () => {
       </div>
       <div className="border border-gray-400 w-full min-h-[170px] flex items-center">
       {/* RULES */}
-      <div className="w-2/5 text-sm px-4">
+      <div className={`${selectedImages.length>3 ? 'hidden' : ''} w-2/5 text-sm px-4`}>
         <div>- Minimum – 3 şəkil (ön, arxa və bütöv ön panelin görüntüsü mütləqdir).</div>
         <div>- Maksimum – 21 şəkil.</div>
         <div>- Optimal ölçü – 1024x768 piksel.</div>
@@ -247,6 +356,7 @@ const NewAnnouncement = () => {
       
       </div>
       {/* ------------------- */}
+      <button className="p-1 bg-red-500">Elanı paylaş</button>
       </form>
     </div>
   );

@@ -59,7 +59,10 @@ const Navbar = () => {
               <AiFillHeart className='fill-white hover:fill-red-500' />
             </IconButton>
           </Tooltip>
-
+          {/*----------NEW ANNOUNCEMENT */}
+          <div className='register mx-4 bg-green-500 w-20 h-8 rounded flex items-center justify-center'>
+            <NavLink to='/newannouncement'>Yeni elan</NavLink>
+          </div>
           {/* --------LOGIN LINK-------------*/}
           <div className='register mx-4 bg-red-500 w-20 h-8 rounded flex items-center justify-center'>
             <NavLink to='/login'>{t("Login.1")}</NavLink>

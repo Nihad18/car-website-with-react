@@ -5,6 +5,7 @@ import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 
 import { setData, setError } from "../../redux/reducers/loginSlice";
+import {setToken} from '../../redux/reducers/authSlice'
 import { useSelector,useDispatch } from "react-redux";
 export const Login = () => {
   const data = useSelector((state) => state.login.data);
@@ -20,7 +21,9 @@ export const Login = () => {
       const url = "http://207.154.251.70/api/account/token/";
       const tkn = await axios.post(url, data);
       console.log("token",tkn.data)
-      localStorage.setItem("USER_DATA", JSON.stringify(tkn.data));
+      dispatch(setToken(tkn.data.access))
+      // localStorage.setItem("login", JSON.stringify({login:true,token:tkn.data.access}));
+      localStorage.setItem("token", JSON.stringify(tkn.data.access));
       // localStorage.setItem("token", JSON.stringify(tkn.data.token));
       // localStorage.setItem("email", JSON.stringify(tkn.data.email));
 

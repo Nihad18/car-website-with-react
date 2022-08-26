@@ -35,7 +35,7 @@ const MobileFooter = () => {
           </div>
         </NavLink>
         {/* PROFILE */}
-        <NavLink to='/profile'>
+        <NavLink to='/user/profile'>
           <div className='flex flex-col items-center justify-end pb-2 text-xs font-medium text-center cursor-pointer'>
             <CgProfile className='mb-1 text-xl' />
             Profil
