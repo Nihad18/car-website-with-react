@@ -7,8 +7,6 @@ import toast from "react-hot-toast";
 import { setData, setError } from "../../redux/reducers/registerSlice";
 import { useSelector, useDispatch } from "react-redux";
 
-//Cookies
-import { useCookies } from "react-cookie"; 
 export const Register = () => {
   const data = useSelector((state) => state.register.data);
   const dispatch = useDispatch();
@@ -45,11 +43,6 @@ export const Register = () => {
     }
   };
 
-  // COOKIES-i basqa faylin icinde islet
-  // const [cookies, setCookie] = useCookies(["name"]);
-  // const handleCookie = (e) => {
-  //   setCookie("name", data.name, { path: "/" });
-  // }
   return (
     <div className='card-layoutv w-[352px] p-6 rounded-lg mx-auto bg-white '>
       <h1 className='header text-4xl font-semibold pb-2'>Sign up</h1>

@@ -5,9 +5,9 @@ import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 
 import { setData, setError } from "../../redux/reducers/loginSlice";
-import {setToken} from '../../redux/reducers/authSlice'
 import { useSelector,useDispatch } from "react-redux";
 export const Login = () => {
+  const api='http://207.154.251.70'
   const data = useSelector((state) => state.login.data);
   const dispatch=useDispatch()
   const handleChange = ({ currentTarget: input }) => {
@@ -18,12 +18,14 @@ export const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const url = "http://207.154.251.70/api/account/token/";
+      const url = `${api}/api/account/token/`;
       const tkn = await axios.post(url, data);
-      console.log("token",tkn.data)
-      dispatch(setToken(tkn.data.access))
+      localStorage.setItem("auth", JSON.stringify(true));
+      localStorage.setItem("token", tkn.data.access)
+    //  const token= localStorage.setItem("token", JSON.stringify(tkn.data.access))
+    //   dispatch(setToken(token))
+    //   dispatch(setAuth(true))
       // localStorage.setItem("login", JSON.stringify({login:true,token:tkn.data.access}));
-      localStorage.setItem("token", JSON.stringify(tkn.data.access));
       // localStorage.setItem("token", JSON.stringify(tkn.data.token));
       // localStorage.setItem("email", JSON.stringify(tkn.data.email));
 
@@ -32,9 +34,17 @@ export const Login = () => {
       if (
         error.response &&
         error.response.status >= 400 &&
-        error.response.status <= 500
+        error.response.status <= 500 &&
+        error.response.data.message === "jwt expired"
       ) {
-        alert('email ve ya sifre yanlisdir!');
+        const storedToken = JSON.parse(localStorage.getItem("token"));
+        const rs=await axios.post(`${api}/api/account/token/refresh/`,{
+          "refresh" : storedToken,
+        })
+        const { token} = rs.data;
+
+        localStorage.setItem("token", JSON.stringify(token));
+
         dispatch(setError(error.response.data.message));
         toast.error(error.response.data.message);
       }

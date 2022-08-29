@@ -5,7 +5,7 @@ import { Register } from "../components/Form/Register";
 import User from "../components/User/User";
 import  Profile from "../components/User/Profile";
 import Advertisements from "../components/User/Advertisements";
-import NewAnnouncement from "../components/NewAnnouncement/NewAnnouncement"
+import NewAnnouncement from "../components/NewAnnouncement/Desktop/NewAnnouncement"
 const routes = [
   {
     path: "/",
