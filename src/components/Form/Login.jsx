@@ -36,13 +36,13 @@ export const Login = () => {
         error.response.status <= 500 &&
         error.response.data.message === "jwt expired"
       ) {
-        const storedToken = JSON.parse(localStorage.getItem("token"));
+        const storedToken = localStorage.getItem("token");
         const rs=await axios.post(`/api/account/token/refresh/`,{
           "refresh" : storedToken,
         })
         const { token} = rs.data;
 
-        localStorage.setItem("token", JSON.stringify(token));
+        localStorage.setItem("token", token);
 
         dispatch(setError(error.response.data.message));
         toast.error(error.response.data.message);

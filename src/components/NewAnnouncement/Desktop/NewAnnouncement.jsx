@@ -18,7 +18,7 @@ const NewAnnouncement = () => {
     yearValue: null,
     colorValue: null,
     transmissionValue: null,
-    milageValue: null,
+    mileageValue: null,
     engineVolumeValue: null,
     enginePowerValue: null,
     priorOwnerCountValue: null,
@@ -26,10 +26,14 @@ const NewAnnouncement = () => {
     cityValue: null,
     seatsCountValue: null,
     priceValue: null,
+    priceTypeValue:1,
+    mileageTypeValue:1,
     descriptionValue: null,
     extraBoolenFieldsValue: [],
+    crashedValue: null,
+    paintedValue: null,
+    loanValue: null,
   });
-  const [priceTypeValue,setPriceTypeValue] = useState()
 
   const selectedImages = useSelector((state) => state.selectedImages.value);
 
@@ -49,6 +53,7 @@ const NewAnnouncement = () => {
     city: null,
     seatsCount: null,
     priceType: null,
+    mileageType: null,
     extraBooleanFields: [],
   });
   const getBrands = async (id) => {
@@ -69,6 +74,7 @@ const NewAnnouncement = () => {
       seatsCount: data.seats_count.map((n) => ({value: n.id, label: n.count,})),
       extraBooleanFields: data.extra_boolean_fields.map((n) => n.name),
       priceType: data.price_type.map((n) => n.name),
+      mileageType: data.mileage_type.map((n) => n.name),
     });
 
     // when the brand is selected, get the models
@@ -86,6 +92,30 @@ const NewAnnouncement = () => {
     getBrands(id);
   }, [brandValue]);
 
+  //------------------------------------------------------------ 
+  const handleChange = (e) => {
+    // Destructuring
+    const { value, checked } = e.target;
+    const { extraBoolenFieldsValue } = values;
+      
+    console.log(`${value} is ${checked}`);
+     
+    // Case 1 : The user checks the box
+    if (checked) {
+      setValues({
+        extraBoolenFieldsValue: [...extraBoolenFieldsValue, value],
+      });
+    }
+  
+    // Case 2  : The user unchecks the box
+    else {
+      setValues({
+        extraBoolenFieldsValue: extraBoolenFieldsValue.filter((e) => e !== value),
+      });
+    }
+  };
+  //------------------------------------------------------------ 
+
   const files = useSelector((state) => state.file.value);
   var filesArray = Object.keys(files).map(function (key) {
     return files[key];
@@ -94,23 +124,21 @@ const NewAnnouncement = () => {
   for (var key in filesArray) {
     formData.append("uploaded_images", filesArray[key]);
   }
-  formData.append("mileage", values?.milageValue);
+  formData.append("mileage", values?.mileageValue);
   formData.append("price", values.priceValue);
-  formData.append("engine_power", 1);
-  const extraFields = [1, 2];
-  for (let i = 0; i < extraFields.length; i++) {
-    formData.append("extra_fields", extraFields[i]);
+  for (let i = 0; i < values.extraBoolenFieldsValue?.length; i++) {
+    formData.append("extra_fields", values.extraBoolenFieldsValue[i]);
   }
-  formData.append("crashed", false);
-  formData.append("loan", false);
-  formData.append("painted", false);
+  formData.append("crashed", values?.loanValue);
+  formData.append("loan", values?.loanValue);
+  formData.append("painted",values?.loanValue);
   formData.append("description", values.descriptionValue);
   formData.append("brand", brandValue?.value);
   formData.append("auto_model", modelValue?.value);
   formData.append("category", values?.categoryValue?.value);
-  formData.append("mileage_type", 1);
+  formData.append("mileage_type", values.mileageTypeValue);
   formData.append("color", values?.colorValue?.value);
-  formData.append("price_type",1);
+  formData.append("price_type",values?.priceTypeValue);
   formData.append("prior_owners_count", values?.priorOwnerCountValue?.value);
   formData.append("seats_count", values?.seatsCountValue?.value);
   formData.append("fuel_type", values?.fuelValue?.value);
@@ -134,7 +162,7 @@ const NewAnnouncement = () => {
     });
     console.log("post : ", post);
   };
-  console.log("values : ", values)
+  console.log("values : ", values?.mileageTypeValue)
   return (
     <>
       <MobileNewAnnouncement />
@@ -197,27 +225,23 @@ const NewAnnouncement = () => {
 
             <div className='w-[250px] flex items-center'>
               <input
-                value={values.milageValue}
-                onChange={(e) => setValues({...values, milageValue: e.target.value })}
+                value={values.mileageValue}
+                onChange={(e) => setValues({...values, mileageValue: e.target.value })}
                 type='number'
                 placeholder='0'
                 min='0'
                 step='10000'
                 className='max-w-[110px] px-2 bg-white text-black border-gray-400 border rounded flex items-center min-h-[38px] outline-none'
               />
-
-              <input
-                type='radio'
-                name='mileage'
-                defaultChecked
-                id='km'
-                className='ml-2'
-              />
-              <label htmlFor='km' className=' mr-2'>
-                Km
-              </label>
-              <input type='radio' name='mileage' id='mil' />
-              <label htmlFor='mil'>Mil</label>
+              {data?.mileageType?.map((item, index) => {
+                return (
+                  <div key={index} className='w-[50px] flex ml-3'>
+                    <input  type='radio' defaultChecked={index === 0} value={index+1} onChange={(e) => setValues({...values,mileageTypeValue:e.target.value})}
+                      name='price' id={`${item}`} className=''/>{" "}
+                    <label name='price' htmlFor={`${item}`} className='ml-1'>{item}</label>
+                  </div>
+                );
+              })}
             </div>
           </div>
           {/* -------------------- */}
@@ -260,22 +284,12 @@ const NewAnnouncement = () => {
               {data?.priceType?.map((item, index) => {
                 return (
                   <div key={index} className='w-[200px] flex'>
-                    <input  type='radio' value={`${item}`} defaultChecked={item[0]} onChange={(e) => setPriceTypeValue(e.target.value)}
+                    <input  type='radio' defaultChecked={index === 0} value={index+1} onChange={(e) => setValues({...values,priceTypeValue:e.target.value})}
                       name='price' id={`${item}`} className='ml-1'/>{" "}
                     <label name='price' htmlFor={`${item}`} className='ml-1'>{item}</label>
                   </div>
                 );
               })}
-            {/* --------------------------------------------------------------------------------------------------------------------- */}
-              {/* <div  className='w-[200px] flex'>
-                    <input type='radio' value='azn' defaultChecked onChange={(e) => setPriceTypeValue(e.target.value)}
-                      name='price' id={'azn'}className='ml-1'/>{" "}
-                    <label name='price' htmlFor={'azn'} className='ml-1'>{'azn'}</label>
-
-                    <input type='radio' value='usd' onChange={(e) => setPriceTypeValue(e.target.value)}
-                      name='price' id={'usd'}className='ml-1'/>{" "}
-                    <label name='price' htmlFor={'usd'} className='ml-1'>{'usd'}</label>
-                  </div> */}
             </div>
           </div>
           {/* -------------------- */}
@@ -322,16 +336,16 @@ const NewAnnouncement = () => {
             onChange={(e) => setValues({...values, seatsCountValue: e })}
             placeholder={"Yerlərin sayı"}
           />
-          {/* ------ */}
+          {/* ---SITUATION--- */}
           <div className=' pt-2 pb-2 w-[48%] rounded flex items-center justify-between'>
             <div className='mr-5'>Vəziyyəti :</div>
 
             <div className='w-[250px] flex items-center'>
-              <input type='checkbox' id='checkbox1' />
+              <input onChange={(e)=>setValues({...values,crashedValue:e.target.checked})} type='checkbox' id='checkbox1' />
               <label htmlFor='checkbox1' className='mx-2'>
                 Vuruğu var
               </label>
-              <input type='checkbox' id='checkbox2' />
+              <input onChange={(e)=>setValues({...values,paintedValue:e.target.checked})} type='checkbox' id='checkbox2' />
               <label htmlFor='checkbox2' className='ml-2'>
                 Rənglənib
               </label>
@@ -343,7 +357,7 @@ const NewAnnouncement = () => {
             <div className='mr-5'>Kredit :</div>
 
             <div className='w-[250px] flex items-center'>
-              <input type='checkbox' id='checkbox3' />
+              <input onChange={(e)=>setValues({...values,loanValue:e.target.checked})} type='checkbox' id='checkbox3' />
               <label htmlFor='checkbox3' className='mx-1'>
                 Kreditədir
               </label>
@@ -370,7 +384,15 @@ const NewAnnouncement = () => {
             </div>
           </div>
           {/* -------------------- */}
+          {/*-------PHONE NUMBER---------*/}
+          <div className=' pt-2 pb-2 w-full rounded flex justify-between items-center'>
+            <div className='mr-5'>Əlavə məlumat :</div>
 
+            <div className='w-4/5  rounded text-sm '>
+              <input type='tel' placeholder="(000) 000-00-00" className="w-[200px] px-2 bg-white text-black border-gray-400 border rounded flex items-center h-[30px] outline-none"/>
+            </div>
+          </div>
+          {/*--------------------------- */}
           {/* CAR PROPERTIES */}
           <div className='flex flex-col w-full'>
             <div className='font-semibold text-xl'>Avtomobilin təchizatı</div>
@@ -378,7 +400,7 @@ const NewAnnouncement = () => {
               {data.extraBooleanFields.map((item, index) => {
                 return (
                   <div key={index} className='w-[200px]'>
-                    <input type='checkbox' id={item} />{" "}
+                    <input onChange={handleChange} value={item} type='checkbox' id={item} />{" "}
                     <label htmlFor={item}>{item}</label>
                   </div>
                 );
@@ -403,11 +425,7 @@ const NewAnnouncement = () => {
               <div>- Maksimum – 21 şəkil.</div>
               <div>- Optimal ölçü – 1024x768 piksel.</div>
             </div>
-            {/* add pictures */}
             <Picture />
-            {/* <div >  */}
-            {/* <AddPictures/> */}
-            {/* </div> */}
           </div>
           {/* ------------------- */}
           <button className={`p-1 bg-red-500`}>Elanı paylaş</button>
