@@ -8,7 +8,6 @@ import { useSelector,useDispatch } from "react-redux";
 import { setSelectedImages } from "../../../redux/reducers/imageSlice";
 
 const NewAnnouncement = () => {
-  const api = "http://207.154.251.70";
   const [brandValue, setBrandValue] = useState(null);
   const [modelValue, setModelValue] = useState(null);
 
@@ -53,7 +52,7 @@ const NewAnnouncement = () => {
     extraBooleanFields: [],
   });
   const getBrands = async (id) => {
-    const url = `${api}/api/post/choices/`;
+    const url = `/api/post/choices/`;
     const { data } = await axios.get(url);
     setBrands(data.brand.map((n) => ({ value: n.id, label: n.name })));
     setData({
@@ -74,7 +73,7 @@ const NewAnnouncement = () => {
 
     // when the brand is selected, get the models
     if (brandValue !== null) {
-      const models = `${api}/api/post/models-choices/?brand=${id}`;
+      const models = `/api/post/models-choices/?brand=${id}`;
       const modelsData = await axios.get(models);
       setModels(modelsData.data.map((n) => ({ value: n.id, label: n.name })));
     }
@@ -126,7 +125,7 @@ const NewAnnouncement = () => {
   const token = localStorage.getItem("token");
   const postCarData = (e) => {
     e.preventDefault();
-    const url = `${api}/api/post/create/`;
+    const url = `/api/post/create/`;
     const post = axios.post(url, formData, {
       headers: {
         Authorization: `Bearer ${token}`,

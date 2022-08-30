@@ -26,7 +26,7 @@ export const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const url = "http://207.154.251.70/api/account/register/";
+      const url = "/api/account/register/";
       const { data: res } = await axios.post(url, data);
       localStorage.setItem("name", data.name);
       // localStorage.setItem("USER_DATA", JSON.stringify(res));

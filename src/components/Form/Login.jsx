@@ -7,7 +7,6 @@ import toast, { Toaster } from "react-hot-toast";
 import { setData, setError } from "../../redux/reducers/loginSlice";
 import { useSelector,useDispatch } from "react-redux";
 export const Login = () => {
-  const api='http://207.154.251.70'
   const data = useSelector((state) => state.login.data);
   const dispatch=useDispatch()
   const handleChange = ({ currentTarget: input }) => {
@@ -18,7 +17,7 @@ export const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const url = `${api}/api/account/token/`;
+      const url = `/api/account/token/`;
       const tkn = await axios.post(url, data);
       localStorage.setItem("auth", JSON.stringify(true));
       localStorage.setItem("token", tkn.data.access)
@@ -38,7 +37,7 @@ export const Login = () => {
         error.response.data.message === "jwt expired"
       ) {
         const storedToken = JSON.parse(localStorage.getItem("token"));
-        const rs=await axios.post(`${api}/api/account/token/refresh/`,{
+        const rs=await axios.post(`/api/account/token/refresh/`,{
           "refresh" : storedToken,
         })
         const { token} = rs.data;
