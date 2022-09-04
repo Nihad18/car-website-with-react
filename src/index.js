@@ -8,6 +8,7 @@ import { BrowserRouter } from "react-router-dom";
 //********REDUX************
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
+import "../src/interceptors/axios"
 //******REACT COOKIES********
 import { CookiesProvider } from "react-cookie";
 

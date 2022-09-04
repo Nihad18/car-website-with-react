@@ -1,16 +1,17 @@
 import { NavLink } from "react-router-dom";
-import { AiOutlineMenu, AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { AiOutlineMenu, AiOutlineHeart, AiFillHeart} from "react-icons/ai";
 import { VscSettings } from "react-icons/vsc";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 
+import { MyAccount } from "./MyAccount";
 import Select from "react-select";
 
 // Redux
 import { setToggle } from "../../../redux/reducers/toggleSlice";
-import { useDispatch } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 
-//**DARK MODE ANIMATION ICON------------
+//**DARK MODE ANIMATION ICON CSS------------
 import "../../../style/darkmodeAnimate.scss";
 
 //------Hook----------------
@@ -32,6 +33,7 @@ const Navbar = () => {
   function clickLanguage(lang) {
     changeLanguage(lang);
   }
+  const token = useSelector(state=>state.auth.value);
   return (
     <>
       <div
@@ -60,13 +62,16 @@ const Navbar = () => {
             </IconButton>
           </Tooltip>
           {/*----------NEW ANNOUNCEMENT */}
-          <div className='register mx-4 bg-green-500 w-20 h-8 rounded flex items-center justify-center'>
+          <div className='mx-4 bg-green-500 w-20 h-8 rounded flex items-center justify-center'>
             <NavLink to='/newannouncement'>Yeni elan</NavLink>
           </div>
-          {/* --------LOGIN LINK-------------*/}
-          <div className='register mx-4 bg-red-500 w-20 h-8 rounded flex items-center justify-center'>
-            <NavLink to='/login'>{t("Login.1")}</NavLink>
-          </div>
+          
+          {
+            token ? <MyAccount/>
+            : <div className='register mx-4 bg-red-500 w-20 h-8 rounded flex items-center justify-center'>
+              <NavLink to='/login'>{t("Login.1")}</NavLink>
+              </div>
+          }
 
           {/* -------LANGUAGE SELECT------------ */}
           <Select

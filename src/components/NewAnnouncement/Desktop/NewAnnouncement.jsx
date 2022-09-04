@@ -4,6 +4,7 @@ import Picture from "../Picture";
 import MobileNewAnnouncement from "../Mobile/MobileNewAnnouncement";
 import axios from "axios";
 import { useSelector,useDispatch } from "react-redux";
+// import PhoneNumberInput from "../PhoneNumberFormat";
 
 import { setSelectedImages } from "../../../redux/reducers/imageSlice";
 
@@ -28,6 +29,7 @@ const NewAnnouncement = () => {
     priceValue: null,
     priceTypeValue:1,
     mileageTypeValue:1,
+    phoneNumberValue:null,
     descriptionValue: null,
     extraBoolenFieldsValue: [],
     crashedValue: null,
@@ -98,12 +100,10 @@ const NewAnnouncement = () => {
     const { value, checked } = e.target;
     const { extraBoolenFieldsValue } = values;
       
-    console.log(`${value} is ${checked}`);
-     
     // Case 1 : The user checks the box
     if (checked) {
       setValues({
-        extraBoolenFieldsValue: [...extraBoolenFieldsValue, value],
+        extraBoolenFieldsValue: [...values,...extraBoolenFieldsValue, value],
       });
     }
   
@@ -135,6 +135,7 @@ const NewAnnouncement = () => {
   formData.append("description", values.descriptionValue);
   formData.append("brand", brandValue?.value);
   formData.append("auto_model", modelValue?.value);
+  formData.append("phone_number", values?.phoneNumberValue);
   formData.append("category", values?.categoryValue?.value);
   formData.append("mileage_type", values.mileageTypeValue);
   formData.append("color", values?.colorValue?.value);
@@ -150,19 +151,37 @@ const NewAnnouncement = () => {
   formData.append("market", values?.marketValue?.value);
   formData.append("city", values?.cityValue?.value);
 
-  const token = localStorage.getItem("token");
-  const postCarData = (e) => {
+  const postCarData =async (e) => {
+    const token = localStorage.getItem("token");
     e.preventDefault();
     const url = `/api/post/create/`;
-    const post = axios.post(url, formData, {
+    const post = await axios.post(url, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-type": "multipart/form-data",
       },
     });
-    console.log("post : ", post);
   };
-  console.log("values : ", values?.mileageTypeValue)
+  
+  //---------------------------------------------------------------------------------------------
+  const [inputValue,setInputValue]=useState('')
+  const handleInput=e=>{
+      const formattedPhoneNumber=formatPhoneNumber(e.target.value)
+      setInputValue(formattedPhoneNumber)
+      setValues({...values,phoneNumberValue:e.target.value.replace(/[^\d]/gm,'')})
+}
+
+function formatPhoneNumber(value) {
+  if(!value) return value;
+  const phoneNumber=value.replace(/[^\d]/gm,'')
+  const phoneNumberLength = phoneNumber.length
+  if(phoneNumberLength<4) return phoneNumber
+  if(phoneNumberLength<7){
+      return `(${phoneNumber.slice(0,3)}) ${phoneNumber.slice(3)}`
+  }
+  return `(${phoneNumber.slice(0,3)}) ${phoneNumber.slice(3,6,)}-${phoneNumber.slice(6,10)}`
+}
+  //---------------------------------------------------------------------------------------------- 
   return (
     <>
       <MobileNewAnnouncement />
@@ -237,8 +256,8 @@ const NewAnnouncement = () => {
                 return (
                   <div key={index} className='w-[50px] flex ml-3'>
                     <input  type='radio' defaultChecked={index === 0} value={index+1} onChange={(e) => setValues({...values,mileageTypeValue:e.target.value})}
-                      name='price' id={`${item}`} className=''/>{" "}
-                    <label name='price' htmlFor={`${item}`} className='ml-1'>{item}</label>
+                      name='mileage' id={`${item}`} className=''/>{" "}
+                    <label name='mileage' htmlFor={`${item}`} className='ml-1'>{item}</label>
                   </div>
                 );
               })}
@@ -389,7 +408,7 @@ const NewAnnouncement = () => {
             <div className='mr-5'>Əlavə məlumat :</div>
 
             <div className='w-4/5  rounded text-sm '>
-              <input type='tel' placeholder="(000) 000-00-00" className="w-[200px] px-2 bg-white text-black border-gray-400 border rounded flex items-center h-[30px] outline-none"/>
+              <input value={inputValue} maxLength='14' onChange={handleInput} type='tel' placeholder="(000) 000-00-00" className="w-[200px] px-2 bg-white text-black border-gray-400 border rounded flex items-center h-[30px] outline-none"/>
             </div>
           </div>
           {/*--------------------------- */}
