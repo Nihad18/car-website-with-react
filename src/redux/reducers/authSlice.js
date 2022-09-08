@@ -4,7 +4,7 @@ export const authSlice = createSlice({
   name: "auth",
   initialState: {
     value:localStorage.getItem("token"),
-    name:null,
+    name:''
   },
   
   reducers: {
@@ -17,6 +17,6 @@ export const authSlice = createSlice({
   },
 });
 
-export const { setAuth,setName } = authSlice.actions;
+export const { setAuth,setName} = authSlice.actions;
 
 export default authSlice.reducer;

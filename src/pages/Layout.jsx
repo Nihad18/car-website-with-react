@@ -12,10 +12,10 @@ const MainLayout = () => {
     <MobileNavbar /> 
     <div className={`min-h-screen w-screen dark:bg-[#1C1C1E]  ${!toggle ? 'blur-sm lg:blur-0': ''} `}>
       <Navbar />
-      <div className='min-h-[90vh] bg-[#F3F7FC] dark:bg-[#1C1C1E] flex justify-center items-center'>
+      <div className='min-h-[80vh] bg-[#F3F7FC] dark:bg-[#1C1C1E] flex justify-center items-center'>
         <Outlet/>
       </div>
-    <MobileFooter/>
+    {/* <MobileFooter/> */}
     <Footer/>
     </div>
      </div>

@@ -7,6 +7,7 @@ import User from "../components/User/User";
 import  Profile from "../components/User/Profile";
 import Advertisements from "../components/User/Advertisements";
 import NewAnnouncement from "../components/NewAnnouncement/Desktop/NewAnnouncement"
+import Favourites from "../pages/Favourites"
 const routes = [
   {
     path: "/",
@@ -44,7 +45,15 @@ const routes = [
     ,{
       path:"/newannouncement",
       element: <NewAnnouncement />,
-    }
+    },
+    {
+      path:"/favourites",
+      element: <Favourites />,
+    },
+    {
+      path:"/postdetail",
+      element: <PostDetail/>,
+    },
     ],
   },
 ];

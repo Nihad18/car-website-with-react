@@ -21,7 +21,7 @@ const MobileFooter = () => {
           </div>
         </NavLink>
         {/* SELECTED ADDS */}
-        <NavLink to='/selectedadds'>
+        <NavLink to='/favourites'>
           <div className='flex flex-col items-center justify-end pb-2 text-xs font-medium text-center cursor-pointer'>
             <AiOutlineHeart className='mb-1 text-xl hover:fill-red-500' />
             Seçilmişlər

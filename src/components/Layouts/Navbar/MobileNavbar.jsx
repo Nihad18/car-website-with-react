@@ -9,7 +9,7 @@ import { NavLink } from "react-router-dom";
 import useDarkMode from "../../../hooks/UseDarkMode";
 // -------
 // ICONS
-import { GrFormClose } from "react-icons/gr";
+import { IoMdClose } from "react-icons/io";
 import { CgProfile } from "react-icons/cg";
 import { AiOutlineStar } from "react-icons/ai";
 import { GiScales } from "react-icons/gi";
@@ -21,7 +21,7 @@ import { useTranslation } from "react-i18next";
 const MobileNavbar = () => {
   const dispatch = useDispatch();
   const toggle = useSelector((state) => state.toggle.value);
-  const name = localStorage.getItem("name");
+  const name = useSelector((state) => state.auth.name);
   const [setTheme, colorTheme] = useDarkMode();
 
   const { t, i18n } = useTranslation();
@@ -65,8 +65,8 @@ const MobileNavbar = () => {
             />
           </div>
           {/* CLOSE ICON */}
-          <button className="flex items-start" onClick={() => dispatch(setToggle())}>
-            <GrFormClose className='w-8 h-8' />
+          <button className="flex items-start dark:text-white" onClick={() => dispatch(setToggle())}>
+            <IoMdClose className='w-8 h-8 dark:fill-white' />
           </button>
         </div>
         {/* --------------------------------------------------------------------- */}
@@ -74,20 +74,26 @@ const MobileNavbar = () => {
           <li className='flex items-center'>
             <CgProfile className='w-8 h-8 mr-2' />
 
-            <div>
-              <NavLink to='/login' className={"mx-2"}>
-                {t("Login.1")}
-              </NavLink>
-              <span>/</span>
-              <NavLink to='/register' className={"mx-2"}>
-                {t("Register.1")}
-              </NavLink>
-            </div>
+            {name ? 
+            <NavLink to="/user/profile">
+              {name}
+            </NavLink>
+            :<div>
+            <NavLink to='/login' className={"mx-2"}>
+              {t("Login.1")}
+            </NavLink>
+            <span>/</span>
+            <NavLink to='/register' className={"mx-2"}>
+              {t("Register.1")}
+            </NavLink>
+          </div>}
+
           </li>
           <li>
             <AiOutlineStar />
-            Seçilmişlər
+            <NavLink to="favourites">Sevimlilər</NavLink>
           </li>
+          {/* favourites */}
           <li>
             <GiScales />
             Müqayisələr

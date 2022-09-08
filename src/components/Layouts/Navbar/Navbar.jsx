@@ -54,13 +54,15 @@ const Navbar = () => {
         </button>
 
         {/*---------DEKSTOP MENU---------------------- */}
-        {/*!---FAVORITE ADS---------- */}
+        {/*!---FAVORITES---------- */}
         <div className='container hidden items-center justify-end lg:flex'>
+          <NavLink to="favourites">
           <Tooltip title='Hearts' className='mx-4'>
             <IconButton>
               <AiFillHeart className='fill-white hover:fill-red-500' />
             </IconButton>
           </Tooltip>
+          </NavLink>
           {/*----------NEW ANNOUNCEMENT */}
           <div className='mx-4 bg-green-500 w-20 h-8 rounded flex items-center justify-center'>
             <NavLink to='/newannouncement'>Yeni elan</NavLink>

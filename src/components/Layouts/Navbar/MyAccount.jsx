@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import Popup from "reactjs-popup";
 import { AiOutlineHome, AiOutlineClose } from "react-icons/ai";
@@ -8,23 +8,26 @@ import Photo from "../../../images/profileImg.png";
 import "../../../style/modal-popup.scss";
 
 import {useSelector,useDispatch} from 'react-redux'
-import { setAuth ,setName} from "../../../redux/reducers/authSlice";
+import { setAuth,setName } from "../../../redux/reducers/authSlice";
 import axios from "axios"
+import {useNavigate} from 'react-router-dom'
 export const MyAccount = () => {
-  const dispatch=useDispatch()
-  const name = useSelector(state=>state.auth.name)
+  const name=useSelector((state)=>state.auth.name)
   const token = localStorage.getItem("token");
+  const dispatch=useDispatch()
+  const navigate=useNavigate()
   useEffect(()=>{
     axios.get("/api/account/detail/",{
-          headers: {Authorization: `Bearer ${token}`,},
-    }).then(response=>dispatch(setName(response?.data[0]?.name))).catch(err=>console.error(err))
-  },[])
+          headers: {Authorization: `Bearer ${token}`}
+    }).then(response=>(dispatch(setName(response?.data?.name))))
+    .catch(err=>console.error(err))}
+    ,[])
  
   const logOut=()=>{  
     dispatch(setAuth(localStorage.removeItem("token")))
     localStorage.removeItem("refreshToken")
+    navigate("/")
     }  
-  
   return (
     <>
       <div className='group bg-red-600 hover:bg-[#181A1B] text-white rounded px-3 relative'>
