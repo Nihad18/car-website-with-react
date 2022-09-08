@@ -7,6 +7,7 @@ import fileSlice from "./reducers/fileSlice";
 import authSlice from "./reducers/authSlice";
 import serviceSlice from "./reducers/serviceSlice";
 import postSlice from "./reducers/postSlice";
+import favouritesSlice from "./reducers/favouritesSlice";
 export const store = configureStore({
   reducer: {
     login: loginSlice,
@@ -17,5 +18,6 @@ export const store = configureStore({
     auth:authSlice,
     services:serviceSlice,
     post:postSlice,
+    favourites:favouritesSlice,
   },
 });

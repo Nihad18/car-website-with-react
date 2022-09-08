@@ -20,7 +20,7 @@ function Home() {
   const [isLoading,setIsLoading] = useState(true);
   const [pageCount, setPageCount] = useState(0);
   const [activePage, setActivePage] = useState(1)
-  
+
   const dispatch= useDispatch()
   const token=useSelector((state)=>state.auth.value)
   const notify = () => toast.warn("Elanı sevimlilərə elavə etmək üçün səhifəyə daxil olmalısız!")
@@ -89,7 +89,7 @@ function Home() {
     setPageCount(currentPage)
     setActivePage(currentPage)
   };
-
+  
   return (
     <>
     <div className='bg-[#F3F7FC] dark:bg-[#1C1C1E] sm:w-[540px] lg:w-[960px] xl:min-w-[1250px] '>
