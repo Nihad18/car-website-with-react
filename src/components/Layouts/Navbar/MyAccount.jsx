@@ -11,9 +11,14 @@ import {useSelector,useDispatch} from 'react-redux'
 import { setAuth,setName } from "../../../redux/reducers/authSlice";
 import axios from "axios"
 import {useNavigate} from 'react-router-dom'
+
+// Remove Cooike
+import RemoveCookie from "../../../hooks/RemoveCookie"
+
 export const MyAccount = () => {
   const name=useSelector((state)=>state.auth.name)
-  const token = localStorage.getItem("token");
+  // const token = localStorage.getItem("token");
+  const token = useSelector((state)=>state.auth.value)
   const dispatch=useDispatch()
   const navigate=useNavigate()
   useEffect(()=>{
@@ -24,8 +29,10 @@ export const MyAccount = () => {
     ,[])
  
   const logOut=()=>{  
-    dispatch(setAuth(localStorage.removeItem("token")))
-    localStorage.removeItem("refreshToken")
+    // dispatch(setAuth(localStorage.removeItem("token")))
+    dispatch(setAuth(RemoveCookie("token")))
+    // localStorage.removeItem("refreshToken")
+    RemoveCookie("refreshToken")
     navigate("/")
     }  
   return (

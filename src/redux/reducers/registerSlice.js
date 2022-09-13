@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 export const registerSlice = createSlice({
   name: "data",
   initialState: {
-    registerData: [{username:"", email: "", password: ""}],
+    // registerData: [{username:"", email: "", password: ""}],
+    registerData: [],
   },
   
   reducers: {

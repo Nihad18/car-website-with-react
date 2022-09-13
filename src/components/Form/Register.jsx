@@ -15,6 +15,7 @@ export const Register = () => {
   const handleChange = ({ currentTarget: input }) => {
     dispatch(setRegisterData({ ...data, [input.name]: input.value }));
   };
+  console.log("data",data)
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {

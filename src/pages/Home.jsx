@@ -1,8 +1,3 @@
-// import { Swiper, SwiperSlide } from "swiper/react";
-// import "swiper/css";
-// import "swiper/css/pagination";
-// import "swiper/css/navigation";
-// import { Autoplay, Pagination, Navigation } from "swiper";
 import car from "../images/download.jpeg"
 import { useState, useEffect } from "react";
 import ReactPaginate from 'react-paginate';
@@ -15,6 +10,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {NavLink} from 'react-router-dom'
 import {setPostId} from "../redux/reducers/postSlice"
+
+// Cookies
+import SetCookie from "../hooks/SetCookie"
+import GetCookie from "../hooks/GetCookie"
+
 function Home() {
   const [posts, setPosts] = useState([]);
   const [isLoading,setIsLoading] = useState(true);
@@ -23,7 +23,10 @@ function Home() {
 
   const dispatch= useDispatch()
   const token=useSelector((state)=>state.auth.value)
+  
   const notify = () => toast.warn("Elanı sevimlilərə elavə etmək üçün səhifəyə daxil olmalısız!")
+  const addedNotify = () =>toast.success("Elan uğurla sevimlilərə əlavə olundu!")
+  const deletedNotify = () =>toast.success("Elan uğurla sevilmilərdən silindi!")
 
   const toggleFav = (postId) => {
     const postIndex = posts.findIndex((post) => post.id === postId);
@@ -39,30 +42,33 @@ function Home() {
     }
     
   useEffect(() => {
-     axios.get(`/api/post/list/?page=${1}`,{
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },})
+     axios.get(`/api/post/list/?page=${1}`,
+      token && {
+          headers: {
+            Authorization: `Bearer ${token}`,
+      }})
     .then((response) => {
       setPosts(response?.data?.results);
       setPageCount(Math.ceil(response?.data?.count/20))
       setActivePage(1)
-      // dispatch(setPostId(response?.data?.results?.id))
+      // sessionStorage.setItem("postId",response.data.results.id)
+      // dispatch(setPostId(sessionStorage.getItem("postId")))
       setIsLoading(false)
     })
     .catch((error) => console.log(error));
   
-  }, []);
-  
+  },[]);
   const fetchPosts=(currentPage)=>{
-    axios.get(`/api/post/list/?page=${currentPage}`,{
+    axios.get(`/api/post/list/?page=${currentPage}`,
+    token && {
       headers: {
         Authorization: `Bearer ${token}`,
-      },})
+    }})
     .then((response) => {
       setPosts(response?.data?.results);
       setPageCount(Math.ceil(response?.data?.count/20))
-      // dispatch(setPostId(response?.data?.results?.id))
+      // sessionStorage.setItem("postId",response?.data?.results?.id)
+      // dispatch(setPostId(sessionStorage.getItem("postId")))
       setActivePage(currentPage)
       setIsLoading(false)
     })
@@ -97,7 +103,12 @@ function Home() {
         {isLoading && <PostLoader cards={20}/> }
       { posts?.map((post, key) => {
         return(
-          <div key={key} onClick={() =>{dispatch(setPostId(post?.id))}} className="w-[220px] min-h-[270px] m-2 rounded-md bg-white dark:bg-[#242426] dark:text-white">
+          <div key={key} onClick={() =>{
+              // localStorage.setItem("postId",post?.id)
+              // dispatch(setPostId(localStorage.getItem("postId")))
+              SetCookie("postId",post?.id)
+              dispatch(setPostId(GetCookie("postId")))
+          }} className="w-[220px] min-h-[270px] m-2 rounded-md bg-white dark:bg-[#242426] dark:text-white">
           <div className="relative">
            <NavLink to={`postdetail`} >  
            <img className="w-full h-[140px] rounded-md bg-cover bg-center" 
@@ -105,12 +116,13 @@ function Home() {
              alt="" />
           </NavLink>
           {token 
-          ? <label htmlFor={post.id} className="absolute text-2xl top-2 right-2 cursor-pointer z-50">
+          ? <label htmlFor={post.id} className="absolute top-2 right-2 cursor-pointer z-10">
           <input id={post.id} type="checkbox" className="hidden" /> 
           { post?.is_favourite  
-          ? <AiFillHeart className="fill-red-500"  onClick={()=>{toggleFav(post.id);deleteFav(post.id)}}/>
-          : <AiOutlineHeart className="text-white" onClick={()=>{toggleFav(post.id);postFav(post.id)}}/>
+          ? <AiFillHeart className="fill-red-500 text-2xl"  onClick={()=>{toggleFav(post.id);deleteFav(post.id);deletedNotify()}}/>
+          : <AiOutlineHeart className="text-white text-2xl" onClick={()=>{toggleFav(post.id);postFav(post.id);addedNotify()}}/>
           }
+          <ToastContainer/>
           </label> 
 
           : <div className="text-white absolute top-2 right-2 cursor-pointer">

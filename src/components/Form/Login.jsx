@@ -7,9 +7,13 @@ import toast, { Toaster } from "react-hot-toast";
 import { setLoginData, setError } from "../../redux/reducers/loginSlice";
 import { setAuth } from "../../redux/reducers/authSlice";
 import { useSelector, useDispatch } from "react-redux";
+
+// Cookie
+import SetCookie from "../../hooks/SetCookie";
+import GetCookie from "../../hooks/GetCookie";
+
 export const Login = () => {
   const loginData = useSelector((state) => state.login.loginData);
-  const registerData = useSelector((state) => state.register.registerData);
   const dispatch = useDispatch();
   const handleChange = ({ currentTarget: input }) => {
     dispatch(setLoginData({ ...loginData, [input.name]: input.value }));
@@ -21,9 +25,15 @@ export const Login = () => {
     try {
       const url = `/api/account/token/`;
       const tkn = await axios.post(url, loginData);
-      localStorage.setItem("token", tkn.data.access);
-      dispatch(setAuth(localStorage.getItem("token"))); 
-      localStorage.setItem("refreshToken", tkn.data.refresh);
+      // localStorage.setItem("token", tkn.data.access);
+      SetCookie("token", tkn.data.access)
+     
+      // dispatch(setAuth(localStorage.getItem("token"))); 
+      dispatch(setAuth(GetCookie("token"))); 
+
+      // localStorage.setItem("refreshToken", tkn.data.refresh);
+      SetCookie("refreshToken", tkn.data.refresh)
+
       navigate("/");
     } catch (error) {
       if (

@@ -1,9 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
+import GetCookie from "../../hooks/GetCookie";
 
 export const authSlice = createSlice({
   name: "auth",
   initialState: {
-    value:localStorage.getItem("token"),
+    // value:localStorage.getItem("token"),
+    value:GetCookie("token"),
     name:''
   },
   

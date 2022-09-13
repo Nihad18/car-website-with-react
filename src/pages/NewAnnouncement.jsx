@@ -1,12 +1,9 @@
 import { useState, useEffect, useRef } from "react";
-import Input from "./Input";
-import Picture from "../Picture";
-import MobileNewAnnouncement from "../Mobile/MobileNewAnnouncement";
+import Input from "../components/NewAnnouncement/Input";
+import Picture from "../components/NewAnnouncement/Picture";
+import MobileNewAnnouncement from "../components/NewAnnouncement/MobileNewAnnouncement";
 import axios from "axios";
 import { useSelector,useDispatch } from "react-redux";
-// import PhoneNumberInput from "../PhoneNumberFormat";
-
-import { setSelectedImages } from "../../../redux/reducers/imageSlice";
 
 const NewAnnouncement = () => {
   const [brandValue, setBrandValue] = useState(null);
@@ -31,12 +28,13 @@ const NewAnnouncement = () => {
     mileageTypeValue:1,
     phoneNumberValue:null,
     descriptionValue: null,
-    extraBoolenFieldsValue: [],
+    // extraBoolenFieldsValue: [],
     crashedValue: null,
     paintedValue: null,
     loanValue: null,
   });
-
+  // const [extraBoolen,setExtraBoolen]=useState({extraBoolenFieldsValue:[]})
+  const [extraBoolen,setExtraBoolen]=useState([])
   const selectedImages = useSelector((state) => state.selectedImages.value);
 
   const [brands, setBrands] = useState([]);
@@ -98,24 +96,27 @@ const NewAnnouncement = () => {
   const handleChange = (e) => {
     // Destructuring
     const { value, checked } = e.target;
-    const { extraBoolenFieldsValue } = values;
-      
+    // const { extraBoolenFieldsValue } = extraBoolen;
+    
     // Case 1 : The user checks the box
+  
     if (checked) {
-      setValues({
-        extraBoolenFieldsValue: [...values,...extraBoolenFieldsValue, value],
-      });
+      // setExtraBoolen({
+      //   extraBoolenFieldsValue:[...extraBoolenFieldsValue,value]
+      // });
+      setExtraBoolen([...extraBoolen,value]);
     }
   
     // Case 2  : The user unchecks the box
     else {
-      setValues({
-        extraBoolenFieldsValue: extraBoolenFieldsValue.filter((e) => e !== value),
-      });
+      // setExtraBoolen({
+      //   extraBoolenFieldsValue: extraBoolenFieldsValue.filter((e) => e !== value),
+      // });
+      setExtraBoolen(extraBoolen.filter((e) => e !== value));
     }
   };
   //------------------------------------------------------------ 
-
+  console.log(extraBoolen)
   const files = useSelector((state) => state.file.value);
   var filesArray = Object.keys(files).map(function (key) {
     return files[key];
@@ -126,8 +127,9 @@ const NewAnnouncement = () => {
   }
   formData.append("mileage", values?.mileageValue);
   formData.append("price", values.priceValue);
-  for (let i = 0; i < values.extraBoolenFieldsValue?.length; i++) {
-    formData.append("extra_fields", values.extraBoolenFieldsValue[i]);
+  for (let i = 0; i < extraBoolen.extraBoolenFieldsValue?.length; i++) {
+    formData.append("extra_fields", extraBoolen.extraBoolenFieldsValue[i]);
+    console.log("value : ",extraBoolen.extraBoolenFieldsValue[i]);
   }
   formData.append("crashed", values?.loanValue);
   formData.append("loan", values?.loanValue);
@@ -151,8 +153,8 @@ const NewAnnouncement = () => {
   formData.append("market", values?.marketValue?.value);
   formData.append("city", values?.cityValue?.value);
 
+  const token = useSelector((state)=>state.auth.value)
   const postCarData =async (e) => {
-    const token = localStorage.getItem("token");
     e.preventDefault();
     const url = `/api/post/create/`;
     const post = await axios.post(url, formData, {
@@ -162,7 +164,6 @@ const NewAnnouncement = () => {
       },
     });
   };
-  
   //---------------------------------------------------------------------------------------------
   const [inputValue,setInputValue]=useState('')
   const handleInput=e=>{
@@ -415,10 +416,10 @@ function formatPhoneNumber(value) {
           {/* CAR PROPERTIES */}
           <div className='flex flex-col w-full'>
             <div className='font-semibold text-xl'>Avtomobilin təchizatı</div>
-            <div className='flex items-center justify-between'>
+            <div className='flex flex-wrap items-center justify-between'>
               {data.extraBooleanFields.map((item, index) => {
                 return (
-                  <div key={index} className='w-[200px]'>
+                  <div key={index} className='min-w-[200px] p-1'>
                     <input onChange={handleChange} value={item} type='checkbox' id={item} />{" "}
                     <label htmlFor={item}>{item}</label>
                   </div>

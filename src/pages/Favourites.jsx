@@ -10,25 +10,18 @@ import {useSelector,useDispatch} from "react-redux"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {NavLink,useNavigate} from "react-router-dom"
-import {setFavPosts,setFavIsLoading, 
-setFavPageCount,setFavActivePage,
-setFavPostsCount} from "../redux/reducers/favouritesSlice"
-function Favourites() {
-  // const [posts, setPosts] = useState([]);
-  // const [postsExist,setPostsExist] = useState(true);
-  // const [isLoading,setIsLoading] = useState(true);
-  // const [pageCount, setPageCount] = useState(0);
-  // const [activePage, setActivePage] = useState(1)
-  // const [postCount, setPostCount] = useState(0);
-  const posts=useSelector(state=>state.favourites.favPosts)
-  const isLoading=useSelector(state=>state.favourites.favIsLoading)
-  const pageCount=useSelector(state=>state.favourites.favPageCount)
-  const activePage=useSelector(state=>state.favourites.favActivePage)
-  const postCount=useSelector(state=>state.favourites.favPostsCount)
+import { act } from "react-dom/test-utils";
 
+function Favourites() {
+  const [posts, setPosts] = useState([]);
+  const [postsExist,setPostsExist] = useState(true);
+  const [isLoading,setIsLoading] = useState(true);
+  const [pageCount, setPageCount] = useState(0);
+  const [activePage, setActivePage] = useState(1)
+  const [postCount, setPostCount] = useState(0);
+  const navigate=useNavigate()
   const token=useSelector((state)=>state.auth.value)
   const notify = () => toast.success("Elan uğurla sevimlilərdən silindi !")
-  const dispatch=useDispatch()
 
   const toggleFav = (postId) => {
     const postIndex = posts.findIndex((post) => post.id === postId);
@@ -38,9 +31,9 @@ function Favourites() {
     updatedPosts[postIndex] = {
       ...posts[postIndex],
       is_favourite : newFavStatus,
-    };    
-    // setPosts(updatedPosts);
-    dispatch(setFavPosts(updatedPosts));
+    };
+    // updatedPosts.splice(postIndex, 1);    
+    setPosts(updatedPosts);
   }
     
   useEffect(() => {
@@ -49,55 +42,50 @@ function Favourites() {
         Authorization: `Bearer ${token}`,
       },})
     .then((response) => {
-      // setPosts(response?.data?.results);
-      // setPageCount(Math.ceil(response?.data?.count/5))
-      // setPostCount(response?.data?.results.length);
-      // setActivePage(1)
-      // setIsLoading(false)
-      dispatch(setFavPosts(response?.data?.results));
-      dispatch(setFavPageCount(Math.ceil(response?.data?.count/5)));
-      dispatch(setFavPostsCount(response?.data?.results.length));
-      dispatch(setFavActivePage(1));
-      dispatch(setFavIsLoading(isLoading));
+      setPosts(response?.data?.results);
+      setPageCount(Math.ceil(response?.data?.count/5))
+      setPostCount(response?.data?.results.length);
+      setActivePage(1)
+      setIsLoading(false)
       // if(response?.data?.results.length===0){
-      //   // setPostsExist(false)
+        // setPostsExist(false)
       // }
-      console.log("length",response?.data?.count)
+      // console.log("length",response?.data?.count)
     })
     .catch((error) => console.log(error));
     
-  },[token]);
-
-  const fetchPosts=(currentPage)=>{
-    axios.get(`/api/favourite/list/?page=${currentPage}`,{
+  },[]);
+  const fetchPosts=async (currentPage)=>{
+   await axios.get(`/api/favourite/list/?page=${currentPage}`, {
       headers: {
         Authorization: `Bearer ${token}`,
-      },})
+      },}
+      )
     .then((response) => {
-      // setPosts(response?.data?.results);
-      // setPageCount(Math.ceil(response?.data?.count/5))
-      // setPostCount(response?.data?.results.length);
-      // setActivePage(currentPage)
-      // setIsLoading(false)
-      dispatch(setFavPosts(response?.data?.results));
-      dispatch(setFavPageCount(Math.ceil(response?.data?.count/5)));
-      dispatch(setFavPostsCount(response?.data?.results.length));
-      dispatch(setFavActivePage(currentPage));
-      dispatch(setFavIsLoading(isLoading));
+      setPosts(response?.data?.results);
+      setPageCount(Math.ceil(response?.data?.count/5))
+      setPostCount(response?.data?.results.length);
+      setActivePage(currentPage)
+      setIsLoading(false)
       // if(response?.data?.results.length===0){
       //   setPostsExist(false)
       // }
     })
     .catch((error) => console.log(error));
   }
-  useEffect(() =>{
-    if(posts.length===0 && activePage>1){
-      fetchPosts(activePage-1);
-    } 
-  },[posts])
+
+  // useEffect(() =>{
+  //   console.log("activePage: ",activePage)
+  //   if(activePage>1 && posts.length===0){
+  //     fetchPosts(activePage-1)
+  //   } 
+  //   else{
+  //     fetchPosts(activePage)  
+  //   }
+  // },[posts])
 // --------------------------------------------------------------------------
-const deleteFav=(postId)=>{
-  axios.delete(`/api/favourite/delete/${postId}`,{
+const deleteFav= async (postId)=>{
+ await axios.delete(`/api/favourite/delete/${postId}`,{
     headers: {
       Authorization: `Bearer ${token}`
   }}) 
@@ -107,14 +95,10 @@ console.log("post sayı",postCount)
 const handlePageClick =(data) => {
   let currentPage = data.selected + 1;
   fetchPosts(currentPage)
-  // setPageCount(currentPage)
-  // setActivePage(currentPage)
-  // setIsLoading(true)
-  // setPosts([])
-  dispatch(setFavPageCount(currentPage));
-  dispatch(setFavActivePage(currentPage));
-  dispatch(setFavIsLoading(!isLoading))
-  dispatch(setFavPostsCount([]));
+  setPageCount(currentPage)
+  setActivePage(currentPage)
+  setIsLoading(true)
+  setPosts([])
 };
 
   return (
