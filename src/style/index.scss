@@ -10,5 +10,15 @@
   #root {
     @apply h-full w-full box-border overflow-x-hidden;
     font-family: 'Roboto', sans-serif;
+    scroll-behavior: smooth;
+  }
+}
+
+@media (max-width: 850px) {
+  html{
+    scrollbar-width: thin;
+  }
+  html::-webkit-scrollbar{
+    width: 5px;
   }
 }

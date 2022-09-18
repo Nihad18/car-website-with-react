@@ -11,7 +11,7 @@ import { FiPhone } from "react-icons/fi";
 const MobileFooter = () => {
   return (
     // First div container for footer
-    <div className='bg-white dark:bg-[#242426] lg:hidden fixed bottom-0 left-2/4 -translate-x-2/4 w-full h-[60px] flex items-center '>
+    <div className='bg-white dark:bg-[#242426] lg:hidden sticky bottom-0 z-50 w-full h-[60px] flex items-center '>
       <div className=' flex justify-between mx-auto w-full sm:w-[540px] pl-6 pr-6 dark:bg-[#242426] dark:text-white'>
         {/* HOME */}
         <NavLink to='/'>

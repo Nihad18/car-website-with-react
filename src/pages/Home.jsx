@@ -112,7 +112,7 @@ function Home() {
           <div className="relative">
            <NavLink to={`postdetail`} >  
            <img className="w-full h-[140px] rounded-md bg-cover bg-center" 
-             src={car} 
+             src={post.image} 
              alt="" />
           </NavLink>
           {token 

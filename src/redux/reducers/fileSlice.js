@@ -8,7 +8,7 @@ export const fileSlice = createSlice({
   
   reducers: {
     setFile: (state, action) => {
-      state.value =action.payload;
+      state.value =[...action.payload];
     },
   },
 });

@@ -8,6 +8,7 @@ import { useSelector,useDispatch } from "react-redux";
 const NewAnnouncement = () => {
   const [brandValue, setBrandValue] = useState(null);
   const [modelValue, setModelValue] = useState(null);
+  const [extraBoolen,setExtraBoolen]=useState([])
 
   const [values, setValues] = useState({
     gearValue: null,
@@ -28,18 +29,15 @@ const NewAnnouncement = () => {
     mileageTypeValue:1,
     phoneNumberValue:null,
     descriptionValue: null,
-    // extraBoolenFieldsValue: [],
     crashedValue: null,
     paintedValue: null,
     loanValue: null,
   });
-  // const [extraBoolen,setExtraBoolen]=useState({extraBoolenFieldsValue:[]})
-  const [extraBoolen,setExtraBoolen]=useState([])
   const selectedImages = useSelector((state) => state.selectedImages.value);
-
+  
   const [brands, setBrands] = useState([]);
   const [models, setModels] = useState([]);
-
+  
   const [data, setData] = useState({
     fuels: null,
     gears: null,
@@ -96,28 +94,22 @@ const NewAnnouncement = () => {
   const handleChange = (e) => {
     // Destructuring
     const { value, checked } = e.target;
-    // const { extraBoolenFieldsValue } = extraBoolen;
-    
+    console.log("target",e.target)
     // Case 1 : The user checks the box
   
     if (checked) {
-      // setExtraBoolen({
-      //   extraBoolenFieldsValue:[...extraBoolenFieldsValue,value]
-      // });
       setExtraBoolen([...extraBoolen,value]);
     }
   
     // Case 2  : The user unchecks the box
     else {
-      // setExtraBoolen({
-      //   extraBoolenFieldsValue: extraBoolenFieldsValue.filter((e) => e !== value),
-      // });
       setExtraBoolen(extraBoolen.filter((e) => e !== value));
     }
   };
   //------------------------------------------------------------ 
   console.log(extraBoolen)
   const files = useSelector((state) => state.file.value);
+  console.log("files: " + files)
   var filesArray = Object.keys(files).map(function (key) {
     return files[key];
   });
@@ -127,9 +119,10 @@ const NewAnnouncement = () => {
   }
   formData.append("mileage", values?.mileageValue);
   formData.append("price", values.priceValue);
-  for (let i = 0; i < extraBoolen.extraBoolenFieldsValue?.length; i++) {
-    formData.append("extra_fields", extraBoolen.extraBoolenFieldsValue[i]);
-    console.log("value : ",extraBoolen.extraBoolenFieldsValue[i]);
+  for (let i = 0; i < extraBoolen?.length; i++) {
+
+    formData.append("extra_fields", extraBoolen[i]);
+    console.log("value : ",extraBoolen[i]);
   }
   formData.append("crashed", values?.loanValue);
   formData.append("loan", values?.loanValue);
@@ -420,8 +413,8 @@ function formatPhoneNumber(value) {
               {data.extraBooleanFields.map((item, index) => {
                 return (
                   <div key={index} className='min-w-[200px] p-1'>
-                    <input onChange={handleChange} value={item} type='checkbox' id={item} />{" "}
-                    <label htmlFor={item}>{item}</label>
+                    <input onChange={handleChange} value={index+1} type='checkbox' id={index+1} />{" "}
+                    <label htmlFor={index+1}>{item}</label>
                   </div>
                 );
               })}

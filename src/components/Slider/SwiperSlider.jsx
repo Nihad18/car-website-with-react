@@ -14,15 +14,14 @@ import "../../style/slider.css";
 import { FreeMode, Navigation, Thumbs } from "swiper";
 
 import { useSelector } from "react-redux";
-
 export default function App() {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const images=useSelector(state=>state.post.postDetailImages)
-  
+
   return (
     <>
-      <div className="xl:w-[830px] xl:mb-8">
-       <div className="xl:h-[490px]">
+      <div className="w-full lg:w-[544px] xl:w-[830px]">
+       <div className="h-[300px] sm:h-[400px] lg:h-[322px] xl:h-[490px]">
        <Swiper
           loop={true}
           spaceBetween={10}
@@ -50,7 +49,7 @@ export default function App() {
           freeMode={true}
           watchSlidesProgress={true}
           modules={[FreeMode, Navigation, Thumbs]}
-          className='h-1/5 w-full bg-white dark:bg-[#202022] mt-6'
+          className='h-1/5 w-full bg-white dark:bg-[#202022] mt-6 pl-5 hidden lg:block'
         >
                  {images.map((image, index) =>{
               return(

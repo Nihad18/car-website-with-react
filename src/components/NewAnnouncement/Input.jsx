@@ -6,7 +6,8 @@ const Input = ({name,sup,options,placeholder,value,isDisabled,onChange}) => {
           <div >{name}<sup>{sup}</sup></div>
           <div className='w-[250px]'>
           <Select
-           isClearable
+            className='text-black'
+            isClearable
             options={options}
             placeholder={placeholder}
             value={value}
