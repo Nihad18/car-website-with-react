@@ -58,8 +58,8 @@ function Home() {
     .catch((error) => console.log(error));
   
   },[]);
-  const fetchPosts=(currentPage)=>{
-    axios.get(`/api/post/list/?page=${currentPage}`,
+  const fetchPosts=async(currentPage)=>{
+   await axios.get(`/api/post/list/?page=${currentPage}`,
     token && {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -75,13 +75,14 @@ function Home() {
     .catch((error) => console.log(error));
   }
 // --------------------------------------------------------------------------
-  const postFav=(postId)=>{ axios.post(`/api/favourite/create/`,{"post":postId},{
+  const postFav=async(postId)=>{
+    await axios.post(`/api/favourite/create/`,{"post":postId},{
      headers: {
        Authorization: `Bearer ${token}`,
       }})
     }
-  const deleteFav=(postId)=>{
-     axios.delete(`/api/favourite/delete/${postId}`,{
+  const deleteFav=async(postId)=>{
+    await axios.delete(`/api/favourite/delete/${postId}`,{
     headers: {
       Authorization: `Bearer ${token}`,
     }})

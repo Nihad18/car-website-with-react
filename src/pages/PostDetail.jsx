@@ -40,8 +40,8 @@ const PostDetail = () => {
       })
       .catch((error) => console.log(error));
   }, []);
-  const deletePost = () => {
-    axios.delete(`/api/post/update-delete/${postId}`,{
+  const deletePost =async () => {
+   await axios.delete(`/api/post/update-delete/${postId}`,{
       headers: {
         Authorization: `Bearer ${token}`,
       },
