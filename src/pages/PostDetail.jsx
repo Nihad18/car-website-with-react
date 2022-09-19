@@ -46,10 +46,10 @@ const PostDetail = () => {
         Authorization: `Bearer ${token}`,
       },
     })
-    navigate("/")
-    toast.success("Elan uğurla silindi!")
+    // toast.success("Elan uğurla silindi!")
+    // navigate("/")
   }
-  // const deleteNotify=toast.success("Elan uğurla silindi!")
+  const deleteNotify=()=>toast.success("Elan uğurla silindi!")
   return (
     <div
       className='w-full sm:w-[540px] pl-6 pr-6 mx-auto 
@@ -144,9 +144,6 @@ const PostDetail = () => {
                   {/* EDIT AND DELETE BUTTONS */}
                   {post.is_owner && (
                     <div className='text-base flex justify-between mt-4'>
-                      {/* <button onClick={deletePost()} className='flex items-center bg-red-500 hover:bg-red-600 text-white py-1 px-3 sm:px-7 rounded'>
-                        <RiDeleteBin6Line className='mr-1' /> Elanı Sil
-                      </button> */}
             {/*-------POP UP------------------------------------------------------------------------*/}
                 <Popup
                 trigger={<button className='flex items-center bg-red-500 hover:bg-red-600 text-white py-1 px-3 sm:px-7 rounded'>
@@ -161,7 +158,7 @@ const PostDetail = () => {
                     <div className='mb-4 text-2xl font-bold text-[#263238] dark:text-white'>
                       Elanı silmək istədiyinizə əminsiz ?
                     </div>
-                    <button onClick={()=>{deletePost()}} className='bg-red-500 text-white hover:bg-red-300 p-1 mx-auto min-w-[100px] min-h-[24px] rounded flex items-center justify-center'>
+                    <button onClick={()=>{deletePost();deleteNotify();navigate("/")}} className='bg-red-500 text-white hover:bg-red-300 p-1 mx-auto min-w-[100px] min-h-[24px] rounded flex items-center justify-center'>
                       Əminəm
                     </button>
                     <ToastContainer/>
