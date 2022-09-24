@@ -42,19 +42,25 @@ function Home() {
     }
     
   useEffect(() => {
-     axios.get(`/api/post/list/?page=${1}`,
+    async function getPosts(){
+    const {data}= await axios.get(`/api/post/list/?page=${1}`,
       token && {
           headers: {
             Authorization: `Bearer ${token}`,
       }})
-    .then((response) => {
-      setPosts(response?.data?.results);
-      setPageCount(Math.ceil(response?.data?.count/20))
+      setPosts(data.results)
+      setPageCount(Math.ceil(data?.count/20))
       setActivePage(1)
       setIsLoading(false)
-    })
-    .catch((error) => console.log(error));
-  
+    }
+    // .then((response) => {
+    //   setPosts(response?.data?.results);
+    //   setPageCount(Math.ceil(response?.data?.count/20))
+    //   setActivePage(1)
+    //   setIsLoading(false)
+    // })
+    // .catch((error) => console.log(error));
+    getPosts()
   },[token]);
   const fetchPosts=async(currentPage)=>{
    await axios.get(`/api/post/list/?page=${currentPage}`,
