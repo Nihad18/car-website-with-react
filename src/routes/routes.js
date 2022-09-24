@@ -8,6 +8,7 @@ import Advertisements from "../components/User/Advertisements";
 import NewAnnouncement from "../pages/NewAnnouncement"
 import Favourites from "../pages/Favourites"
 import PostDetail from "../pages/PostDetail";
+import UpdatePostPage from "../pages/UpdatePostPage"
 const routes = [
   {
     path: "/",
@@ -41,6 +42,10 @@ const routes = [
     ,{
       path:"/newannouncement",
       element: <NewAnnouncement />,
+    },
+    {
+      path:"/updatepostpage",
+      element: <UpdatePostPage />,
     },
     {
       path:"/favourites",

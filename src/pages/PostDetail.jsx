@@ -17,8 +17,8 @@ import ProfileImg from "../images/profileImg.png";
 
 import Popup from "reactjs-popup";
 import "../style/modal-popup.scss";
-import {useNavigate } from "react-router";
-
+import {useNavigate} from "react-router";
+import { NavLink } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 
 const PostDetail = () => {
@@ -165,9 +165,12 @@ const PostDetail = () => {
                   </div>)}
                 </Popup>
           {/*------------------------------------------------------------------------------------------------------*/}
+                      <NavLink to="/updatepostpage">
                       <button className='flex items-center bg-slate-800 dark:bg-slate-600 dark:hover:bg-slate-700 text-white py-1 px-3 sm:px-7 rounded'>
                         <HiOutlinePencil className='mr-1' /> Düzəliş et
                       </button>
+                      </NavLink>
+                      
                     </div>
                   )}
                   {/* ----------------------------- */}

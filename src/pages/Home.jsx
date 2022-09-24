@@ -51,13 +51,11 @@ function Home() {
       setPosts(response?.data?.results);
       setPageCount(Math.ceil(response?.data?.count/20))
       setActivePage(1)
-      // sessionStorage.setItem("postId",response.data.results.id)
-      // dispatch(setPostId(sessionStorage.getItem("postId")))
       setIsLoading(false)
     })
     .catch((error) => console.log(error));
   
-  },[]);
+  },[token]);
   const fetchPosts=async(currentPage)=>{
    await axios.get(`/api/post/list/?page=${currentPage}`,
     token && {
@@ -67,8 +65,6 @@ function Home() {
     .then((response) => {
       setPosts(response?.data?.results);
       setPageCount(Math.ceil(response?.data?.count/20))
-      // sessionStorage.setItem("postId",response?.data?.results?.id)
-      // dispatch(setPostId(sessionStorage.getItem("postId")))
       setActivePage(currentPage)
       setIsLoading(false)
     })
@@ -105,8 +101,6 @@ function Home() {
       { posts?.map((post, key) => {
         return(
           <div key={key} onClick={() =>{
-              // localStorage.setItem("postId",post?.id)
-              // dispatch(setPostId(localStorage.getItem("postId")))
               SetCookie("postId",post?.id)
               dispatch(setPostId(GetCookie("postId")))
           }} className="w-[220px] min-h-[270px] m-2 rounded-md bg-white dark:bg-[#242426] dark:text-white">
