@@ -1,16 +1,12 @@
 {
-  "hosting": {
-    "public": "build",
-    "ignore": ["firebase.json", "/.", "/node_modules/*"],
-    "cleanUrls": true,
-    "trailingSlash": false,
-    "appAssociation": "AUTO"
-  },
-  "rewrites": [
-    {
-      "source": "**",
-      "destination": "./public/index.html",
-      "dynamicLinks": true
+    "hosting": {
+      "public": "build",
+      "ignore": ["firebase.json", "/.", "/node_modules/*"],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
     }
-  ]
-}
+  }
