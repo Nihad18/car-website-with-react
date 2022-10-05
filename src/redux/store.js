@@ -5,7 +5,6 @@ import toggleSlice from "./reducers/toggleSlice";
 import imageSlice from "./reducers/imageSlice";
 import fileSlice from "./reducers/fileSlice";
 import authSlice from "./reducers/authSlice";
-import serviceSlice from "./reducers/serviceSlice";
 import postSlice from "./reducers/postSlice";
 export const store = configureStore({
   reducer: {
@@ -15,7 +14,6 @@ export const store = configureStore({
     selectedImages: imageSlice,
     file:fileSlice,
     auth:authSlice,
-    services:serviceSlice,
     post:postSlice,
   },
 });
