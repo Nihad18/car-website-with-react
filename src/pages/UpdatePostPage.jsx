@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import Input from "../components/NewAnnouncement/Input";
-import Picture from "../components/NewAnnouncement/Picture";
+import Input from "../components/NewPost/Input";
 import axios from "axios";
 import { useSelector,useDispatch } from "react-redux";
 
@@ -8,14 +7,13 @@ const UpdatePostPage = () => {
     const postId = useSelector((state) => state.post.postId);
     
     const [postDetail,setPostDetail]= useState({})
-    const [brandValue, setBrandValue] = useState(postDetail.brand);
+    const [brandValue, setBrandValue] = useState(null);
     const [brands, setBrands] = useState([]);
     const [values, setValues] = useState({
-      priceValue: postDetail?.price,
+      priceValue: postDetail.price ,
     });
 
     // ----------------------------------------------------------
-    
     useEffect(() => {
       async function fetchDetails(){
        const {data}= await axios.get(`/api/post/update-delete/${postId}`,
@@ -28,10 +26,6 @@ const UpdatePostPage = () => {
        }
       fetchDetails()
   }, []);
-  
-  console.log("price  : ",postDetail?.price)
-  console.log("price type  : ",typeof postDetail?.price)
-
 
     let formData = new FormData();
     formData.append("brand", values.brandValue);
@@ -63,6 +57,7 @@ const UpdatePostPage = () => {
             options={brands}
             placeholder={"Marka"}
             value={brandValue}
+            defaultValue={brandValue}
             onChange={setBrandValue}
           />
           
@@ -73,7 +68,7 @@ const UpdatePostPage = () => {
             <div className='w-[250px] flex items-center'>
               <input
                 value={values?.priceValue}
-                defaultValue={postDetail?.price}
+                defaultValue={values?.priceValue}
                 onChange={(e) => setValues({...values, priceValue: e.target.value })}
                 type='number'
                 placeholder='0'

@@ -28,7 +28,7 @@ const MobileFooter = () => {
           </div>
         </NavLink>
         {/* NEW ADD */}
-        <NavLink to='/newannouncement'>
+        <NavLink to='/newpost'>
           <div className='flex flex-col items-center justify-end pb-2 text-xs font-medium text-center cursor-pointer'>
             <AiFillPlusCircle className='mb-1 text-5xl border-4 border-[#f3f7fc] dark:border-[#1c1c1e] rounded-full -mt-7 text-green-500' />
             <div className='text-green-500'>Yeni Elan</div>

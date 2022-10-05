@@ -1,11 +1,12 @@
-import Home from "../pages/Home";
-import MainLayout from "../pages/Layout";
 import { Login } from "../components/Form/Login";
 import { Register } from "../components/Form/Register";
-import User from "../components/User/User";
 import  Profile from "../components/User/Profile";
-import Advertisements from "../components/User/Advertisements";
-import NewAnnouncement from "../pages/NewAnnouncement"
+import PasswordChange from "../components/User/PasswordChange";
+import MyPosts from "../components/User/MyPosts";
+import Home from "../pages/Home";
+import MainLayout from "../pages/Layout";
+import User from "../pages/User";
+import NewPost from "../pages/NewPost"
 import Favourites from "../pages/Favourites"
 import PostDetail from "../pages/PostDetail";
 import UpdatePostPage from "../pages/UpdatePostPage"
@@ -34,14 +35,18 @@ const routes = [
           element: <Profile />,
         },
         {
-          path:"advertisements",
-          element: <Advertisements />,
+          path:"passwordchange",
+          element: <PasswordChange />,
+        },
+        {
+          path:"myposts",
+          element: <MyPosts />,
         }
       ]
     }
     ,{
-      path:"/newannouncement",
-      element: <NewAnnouncement />,
+      path:"/newpost",
+      element: <NewPost />,
     },
     {
       path:"/updatepostpage",

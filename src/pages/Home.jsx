@@ -1,14 +1,17 @@
-import car from "../images/download.jpeg"
 import { useState, useEffect } from "react";
 import ReactPaginate from 'react-paginate';
 import axios from "axios";
 import PostLoader from "../components/Home/PostLoader";
+// React Icons
 import {AiFillHeart,AiOutlineHeart } from 'react-icons/ai'
 import {RiArrowRightSLine,RiArrowLeftSLine} from "react-icons/ri";
-import {useSelector,useDispatch} from "react-redux"
+// React Toast
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+// Router
 import {NavLink} from 'react-router-dom'
+// Redux
+import {useSelector,useDispatch} from "react-redux"
 import {setPostId} from "../redux/reducers/postSlice"
 
 // Cookies
@@ -53,13 +56,6 @@ function Home() {
       setActivePage(1)
       setIsLoading(false)
     }
-    // .then((response) => {
-    //   setPosts(response?.data?.results);
-    //   setPageCount(Math.ceil(response?.data?.count/20))
-    //   setActivePage(1)
-    //   setIsLoading(false)
-    // })
-    // .catch((error) => console.log(error));
     getPosts()
   },[token]);
   const fetchPosts=async(currentPage)=>{
@@ -98,7 +94,6 @@ function Home() {
     setPageCount(currentPage)
     setActivePage(currentPage)
   };
-  
   return (
     <>
     <div className='bg-[#F3F7FC] dark:bg-[#1C1C1E] sm:w-[540px] lg:w-[960px] xl:min-w-[1250px] '>

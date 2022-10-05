@@ -2,7 +2,6 @@
   "name": "car-wb",
   "version": "0.1.0",
   "private": true,
-  "homepage": ".",
   "proxy": "https://ayxan0314.pythonanywhere.com",
   "dependencies": {
     "@emotion/react": "^11.10.0",

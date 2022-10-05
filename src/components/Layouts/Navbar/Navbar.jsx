@@ -66,7 +66,7 @@ const Navbar = () => {
           </NavLink>
           {/*----------NEW ANNOUNCEMENT */}
           <div className='mx-4 bg-green-500 w-20 h-8 rounded flex items-center justify-center'>
-            <NavLink to='/newannouncement'>Yeni elan</NavLink>
+            <NavLink to='/newpost'>Yeni elan</NavLink>
           </div>
           
           {

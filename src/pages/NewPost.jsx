@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from "react";
-import Input from "../components/NewAnnouncement/Input";
-import Picture from "../components/NewAnnouncement/Picture";
-import MobileNewAnnouncement from "../components/NewAnnouncement/MobileNewAnnouncement";
+import Input from "../components/NewPost/Input";
+import Picture from "../components/NewPost/Picture";
+import MobileNewAnnouncement from "../components/NewPost/MobileNewAnnouncement";
 import axios from "axios";
 import { useSelector,useDispatch } from "react-redux";
 
-const NewAnnouncement = () => {
+const NewPost = () => {
   const [brandValue, setBrandValue] = useState(null);
   const [modelValue, setModelValue] = useState(null);
   const [extraBoolen,setExtraBoolen]=useState([])
@@ -448,4 +448,4 @@ function formatPhoneNumber(value) {
   );
 };
 
-export default NewAnnouncement;
+export default NewPost;
