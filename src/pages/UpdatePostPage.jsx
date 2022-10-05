@@ -4,8 +4,8 @@ import axios from "axios";
 import { useSelector,useDispatch } from "react-redux";
 
 const UpdatePostPage = () => {
+    const url=`https://ayxan0314.pythonanywhere.com`
     const postId = useSelector((state) => state.post.postId);
-    
     const [postDetail,setPostDetail]= useState({})
     const [brandValue, setBrandValue] = useState(null);
     const [brands, setBrands] = useState([]);
@@ -16,7 +16,7 @@ const UpdatePostPage = () => {
     // ----------------------------------------------------------
     useEffect(() => {
       async function fetchDetails(){
-       const {data}= await axios.get(`/api/post/update-delete/${postId}`,
+       const {data}= await axios.get(`${url}/api/post/update-delete/${postId}`,
            token && {
              headers: {
                Authorization: `Bearer ${token}`,
@@ -33,8 +33,7 @@ const UpdatePostPage = () => {
     const token = useSelector((state)=>state.auth.value)
     const postCarData =async (e) => {
       e.preventDefault();
-      const url = `/api/post/update-delete/${postId}`;
-      const post = await axios.patch(url, formData, {
+      const post = await axios.patch(`${url}/api/post/update-delete/${postId}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-type": "multipart/form-data",

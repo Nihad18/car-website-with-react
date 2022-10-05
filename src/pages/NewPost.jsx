@@ -6,6 +6,7 @@ import axios from "axios";
 import { useSelector,useDispatch } from "react-redux";
 
 const NewPost = () => {
+  const url=`https://ayxan0314.pythonanywhere.com`
   const [brandValue, setBrandValue] = useState(null);
   const [modelValue, setModelValue] = useState(null);
   const [extraBoolen,setExtraBoolen]=useState([])
@@ -55,8 +56,7 @@ const NewPost = () => {
     extraBooleanFields: [],
   });
   const getBrands = async (id) => {
-    const url = `/api/post/choices/`;
-    const { data } = await axios.get(url);
+    const { data } = await axios.get(`${url}/api/post/choices/`);
     setBrands(data.brand.map((n) => ({ value: n.id, label: n.name })));
     setData({
       fuels: data.fuel_type.map((n) => ({ value: n.id, label: n.name })),
@@ -77,7 +77,7 @@ const NewPost = () => {
 
     // when the brand is selected, get the models
     if (brandValue !== null) {
-      const models = `/api/post/models-choices/?brand=${id}`;
+      const models = `${url}/api/post/models-choices/?brand=${id}`;
       const modelsData = await axios.get(models);
       setModels(modelsData.data.map((n) => ({ value: n.id, label: n.name })));
     }
@@ -149,8 +149,7 @@ const NewPost = () => {
   const token = useSelector((state)=>state.auth.value)
   const postCarData =async (e) => {
     e.preventDefault();
-    const url = `/api/post/create/`;
-    const post = await axios.post(url, formData, {
+    const post = await axios.post(`${url}/api/post/create/`, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-type": "multipart/form-data",

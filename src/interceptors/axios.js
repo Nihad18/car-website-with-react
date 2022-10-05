@@ -7,7 +7,7 @@ axios.interceptors.response.use(resp => resp, async error => {
     if (error.response.status === 401 && !refresh) {
         refresh = true;
         try{
-        const response = await axios.post('/api/account/token/refresh/',  {
+        const response = await axios.post('https://ayxan0314.pythonanywhere.com/api/account/token/refresh/',  {
             // refresh: localStorage.getItem('refreshToken'),
             refresh: GetCookie('refreshToken'),
             withCredentials: true

@@ -22,13 +22,14 @@ import { NavLink } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 
 const PostDetail = () => {
+  const url=`https://ayxan0314.pythonanywhere.com`
   const detail = useSelector((state) => state.post.postDetail);
   const dispatch = useDispatch();
   const token = useSelector((state) => state.auth.value);
   const postId = useSelector((state) => state.post.postId);
   const navigate=useNavigate()
   useEffect(() => {
-    axios.get(`/api/post/detail/${postId}`,
+    axios.get(`${url}/api/post/detail/${postId}`,
         token && {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -41,7 +42,7 @@ const PostDetail = () => {
       .catch((error) => console.log(error));
   }, []);
   const deletePost =async () => {
-   await axios.delete(`/api/post/update-delete/${postId}`,{
+   await axios.delete(`${url}/api/post/update-delete/${postId}`,{
       headers: {
         Authorization: `Bearer ${token}`,
       },

@@ -19,6 +19,7 @@ import SetCookie from "../hooks/SetCookie"
 import GetCookie from "../hooks/GetCookie"
 
 function Home() {
+  const url=`https://ayxan0314.pythonanywhere.com`
   const [posts, setPosts] = useState([]);
   const [isLoading,setIsLoading] = useState(true);
   const [pageCount, setPageCount] = useState(0);
@@ -46,7 +47,7 @@ function Home() {
     
   useEffect(() => {
     async function getPosts(){
-    const {data}= await axios.get(`/api/post/list/?page=${1}`,
+    const {data}= await axios.get(`${url}/api/post/list/?page=${1}`,
       token && {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -59,7 +60,7 @@ function Home() {
     getPosts()
   },[token]);
   const fetchPosts=async(currentPage)=>{
-   await axios.get(`/api/post/list/?page=${currentPage}`,
+   await axios.get(`${url}/api/post/list/?page=${currentPage}`,
     token && {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -74,13 +75,13 @@ function Home() {
   }
 // --------------------------------------------------------------------------
   const postFav=async(postId)=>{
-    await axios.post(`/api/favourite/create/`,{"post":postId},{
+    await axios.post(`${url}/api/favourite/create/`,{"post":postId},{
      headers: {
        Authorization: `Bearer ${token}`,
       }})
     }
   const deleteFav=async(postId)=>{
-    await axios.delete(`/api/favourite/delete/${postId}`,{
+    await axios.delete(`${url}/api/favourite/delete/${postId}`,{
     headers: {
       Authorization: `Bearer ${token}`,
     }})

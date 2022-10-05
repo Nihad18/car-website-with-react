@@ -2,11 +2,12 @@ import React,{useState,useEffect} from 'react'
 import car from "../../images/car-removebg-preview-removebg-preview.png"
 import axios from "axios"
 const MyPosts = () => {
+  const url=`https://ayxan0314.pythonanywhere.com`
   const [posts,setPosts]=useState([])
   const [isLoading,setIsLoading] = useState(true);
   useEffect(() => {
    async function fetchMyPosts(){
-    const {data}=await axios.get(`/api/account/my-posts/`)
+    const {data}=await axios.get(`${url}/api/account/my-posts/`)
     setPosts(data)
     setIsLoading(false)
     }

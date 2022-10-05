@@ -7,6 +7,7 @@ import {useSelector} from "react-redux"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 const PasswordChange = () => {
+  const url=`https://ayxan0314.pythonanywhere.com`
   const [password,setPassword]= useState({});
   const [notify,setNotify]=useState(false)
   const token = useSelector((state) => state.auth.value)
@@ -18,7 +19,7 @@ const PasswordChange = () => {
   const handleChange=async(e)=>{
     e.preventDefault()
     try{
-      await axios.put(`/api/account/change-password/`,password,{
+      await axios.put(`${url}/api/account/change-password/`,password,{
         headers: {Authorization: `Bearer ${token}`}
       })
       console.log("Successful change password")

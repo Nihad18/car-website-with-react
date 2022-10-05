@@ -5,13 +5,14 @@ import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 const Profile = () => {
+  const url=`https://ayxan0314.pythonanywhere.com`
   const [detail,setDetail]= useState({});
   const token = useSelector((state) => state.auth.value)
   const notify = () => toast.success("Dəyişiklik uğurla edildi")
   const handleChange = async(e) => {
     e.preventDefault();
     try{
-      await axios.put('/api/account/detail/',detail,{
+      await axios.put(`${url}/api/account/detail/`,detail,{
         headers:{
           'Authorization':`Bearer ${token}`
         }
@@ -25,7 +26,7 @@ const Profile = () => {
   useEffect(() =>{
    async function fetchData(){
      try{
-      const {data}= await axios.get(`/api/account/detail/`,{
+      const {data}= await axios.get(`${url}/api/account/detail/`,{
         headers: {Authorization: `Bearer ${token}`}
       })
       setDetail(data);

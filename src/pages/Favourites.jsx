@@ -13,6 +13,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { act } from "react-dom/test-utils";
 
 function Favourites() {
+  const url=`https://ayxan0314.pythonanywhere.com`
   const [posts, setPosts] = useState([]);
   const [postsExist, setPostsExist] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
@@ -38,7 +39,7 @@ function Favourites() {
 
   useEffect(() => {
     async function getFavs() {
-      const { data } = await axios.get(`/api/favourite/list/?page=${1}`, {
+      const { data } = await axios.get(`${url}/api/favourite/list/?page=${1}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -53,7 +54,7 @@ function Favourites() {
   }, []);
   const fetchPosts = async (currentPage) => {
     const { data } = await axios.get(
-      `/api/favourite/list/?page=${currentPage}`,
+      `${url}/api/favourite/list/?page=${currentPage}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -78,7 +79,7 @@ function Favourites() {
   // },[posts])
   // --------------------------------------------------------------------------
   const deleteFav = async (postId) => {
-    await axios.delete(`/api/favourite/delete/${postId}`, {
+    await axios.delete(`${url}/api/favourite/delete/${postId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
