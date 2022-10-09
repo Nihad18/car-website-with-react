@@ -16,13 +16,14 @@ import {useNavigate} from 'react-router-dom'
 import RemoveCookie from "../../../hooks/RemoveCookie"
 
 export const MyAccount = () => {
+  const url=`https://ayxan0314.pythonanywhere.com`
   const name=useSelector((state)=>state.auth.name)
   // const token = localStorage.getItem("token");
   const token = useSelector((state)=>state.auth.value)
   const dispatch=useDispatch()
   const navigate=useNavigate()
   useEffect(()=>{
-    axios.get("/api/account/detail/",{
+    axios.get(`${url}/api/account/detail/`,{
           headers: {Authorization: `Bearer ${token}`}
     }).then(response=>(dispatch(setName(response?.data?.name))))
     .catch(err=>console.error(err))}

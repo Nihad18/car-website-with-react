@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import "../../../style/darkmodeAnimate.scss";
 // REDUX
 import { setToggle } from "../../../redux/reducers/toggleSlice";
@@ -20,6 +20,7 @@ import { FiPhone } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
 const MobileNavbar = () => {
   const dispatch = useDispatch();
+  const [scrool, setScroll] =useState(true)
   const toggle = useSelector((state) => state.toggle.value);
   const name = useSelector((state) => state.auth.name);
   const [setTheme, colorTheme] = useDarkMode();
@@ -28,12 +29,25 @@ const MobileNavbar = () => {
   function clickLanguage(lang) {
     i18n.changeLanguage(lang);
   }
+
+  useEffect(() =>{
+    window.onwheel = e => {
+      if(e.deltaY >= 0){
+        // Scrolling Down with mouse
+        setScroll(false)
+        console.log("down",scrool)
+      } else {
+        // Scrolling Up with mouse
+        setScroll(true)
+        console.log("up",scrool)
+      }
+  }},[scrool])
   return (
     <div
-      className={` lg:hidden absolute z-50 w-[90%] sm:w-4/5 h-full  bg-red-500 dark:bg-[#232325] text-white transition-all
+      className={`lg:hidden absolute z-50 w-[90%] sm:w-4/5 h-full bg-red-500 dark:bg-[#232325] text-white transition-all
       ${toggle ? "hidden" : ""}  `}
     >
-      <div className='w-3/4 mx-auto'>
+      <div className={`${scrool===false ? 'hidden' : 'block'} w-3/4 mx-auto`}>
         <div className='flex justify-between mt-8'>
           <div className="overflow-auto">
             <button

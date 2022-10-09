@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 // *ICONS----------------------------------
-import { AiOutlineHome, AiOutlineEye, AiOutlineCalendar,AiOutlineClose} from "react-icons/ai";
+import { AiOutlineHome, AiOutlineEye, AiOutlineCalendar,AiOutlineClose,AiOutlineLink} from "react-icons/ai";
 import { RiArrowRightSLine, RiDeleteBin6Line } from "react-icons/ri";
 import { FiPhone } from "react-icons/fi";
 import { HiOutlinePencil } from "react-icons/hi";
@@ -18,7 +18,7 @@ import ProfileImg from "../images/profileImg.png";
 import Popup from "reactjs-popup";
 import "../style/modal-popup.scss";
 import {useNavigate} from "react-router";
-import { NavLink } from "react-router-dom";
+import { NavLink,useParams,useLocation} from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 
 const PostDetail = () => {
@@ -28,8 +28,11 @@ const PostDetail = () => {
   const token = useSelector((state) => state.auth.value);
   const postId = useSelector((state) => state.post.postId);
   const navigate=useNavigate()
+  const params=useParams()
+  const location=useLocation()
+  console.log("location : ",location)
   useEffect(() => {
-    axios.get(`${url}/api/post/detail/${postId}`,
+    axios.get(`${url}/api/post/detail/${params.postId}`,
         token && {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -42,7 +45,7 @@ const PostDetail = () => {
       .catch((error) => console.log(error));
   }, []);
   const deletePost =async () => {
-   await axios.delete(`${url}/api/post/update-delete/${postId}`,{
+   await axios.delete(`${url}/api/post/update-delete/${params.postId}`,{
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -51,6 +54,7 @@ const PostDetail = () => {
     // navigate("/")
   }
   const deleteNotify=()=>toast.success("Elan uğurla silindi!")
+  const copyNotify=()=>toast.success("Link kopyalandi!")
   return (
     <div
       className='w-full sm:w-[540px] pl-6 pr-6 mx-auto 
@@ -68,7 +72,7 @@ const PostDetail = () => {
                 {post.brand}
                 <RiArrowRightSLine />
                 {post.auto_model}
-                <RiArrowRightSLine />#{postId}
+                <RiArrowRightSLine />#{params.postId}
               </div>
               <div className='flex items-center'>
                 <AiOutlineEye className='mx-2' />
@@ -123,7 +127,7 @@ const PostDetail = () => {
                   </div>
                   {/* -------------------------------------------------------------------------------- */}
                   <div className='lg:hidden flex justify-between items-center text-base min-h-[40px] text-slate-500 dark:text-slate-200'>
-                    <div className='flex items-center '>№ {postId}</div>
+                    <div className='flex items-center '>№ {params.postId}</div>
                     <div className='flex items-center'>
                       <AiOutlineEye className='mx-2' />
                       <div>{post.views}</div>
@@ -141,7 +145,11 @@ const PostDetail = () => {
                     <FiPhone />
                     {post.phone_number}
                   </button>
-
+                  <button className='w-full text-base mt-4 flex justify-center items-center p-1 rounded bg-slate-500 text-white hover:bg-slate-400 '
+                  onClick={() => { navigator.clipboard.writeText("https://car-wb-nihad18.vercel.app"+location.pathname);copyNotify()}}>
+                    <AiOutlineLink className="text-xl mr-1"/> Linki kopyala
+                    <ToastContainer />
+                  </button>
                   {/* EDIT AND DELETE BUTTONS */}
                   {post.is_owner && (
                     <div className='text-base flex justify-between mt-4'>

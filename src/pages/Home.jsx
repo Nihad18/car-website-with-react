@@ -11,12 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 // Router
 import {NavLink} from 'react-router-dom'
 // Redux
-import {useSelector,useDispatch} from "react-redux"
-import {setPostId} from "../redux/reducers/postSlice"
-
-// Cookies
-import SetCookie from "../hooks/SetCookie"
-import GetCookie from "../hooks/GetCookie"
+import {useSelector} from "react-redux"
 
 function Home() {
   const url=`https://ayxan0314.pythonanywhere.com`
@@ -25,9 +20,8 @@ function Home() {
   const [pageCount, setPageCount] = useState(0);
   const [activePage, setActivePage] = useState(1)
 
-  const dispatch= useDispatch()
   const token=useSelector((state)=>state.auth.value)
-  
+
   const notify = () => toast.warn("Elanı sevimlilərə elavə etmək üçün səhifəyə daxil olmalısız!")
   const addedNotify = () =>toast.success("Elan uğurla sevimlilərə əlavə olundu!")
   const deletedNotify = () =>toast.success("Elan uğurla sevilmilərdən silindi!")
@@ -103,11 +97,9 @@ function Home() {
       { posts?.map((post, key) => {
         return(
           <div key={key} onClick={() =>{
-              SetCookie("postId",post?.id)
-              dispatch(setPostId(GetCookie("postId")))
           }} className="w-[220px] min-h-[270px] m-2 rounded-md bg-white dark:bg-[#242426] dark:text-white">
           <div className="relative">
-           <NavLink to={`postdetail`} >  
+           <NavLink to={`/postdetail/${post?.id}`} >  
            <img className="w-full h-[140px] rounded-md bg-cover bg-center" 
              src={post.image} 
              alt="" />
@@ -128,7 +120,7 @@ function Home() {
              </div>
           }
           </div>
-          <NavLink to={`postdetail`} >
+          <NavLink to={`/postdetail/${post.id}`} >
           <div className="text-xl font-bold ml-3 pt-2">{post?.price}{" "}{post?.price_type}</div> 
           <div className="text-base ml-3 ">{post?.brand}{" "}{post?.brand_type}</div> 
           <div className="text-base ml-3 ">{post?.year} İl{" , "}{post?.engine_volume/100} L</div> 
