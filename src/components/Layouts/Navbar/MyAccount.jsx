@@ -16,7 +16,7 @@ import {useNavigate} from 'react-router-dom'
 import RemoveCookie from "../../../hooks/RemoveCookie"
 
 export const MyAccount = () => {
-  const url=`https://ayxan0314.pythonanywhere.com`
+  const url=process.env.REACT_APP_API_URL
   const name=useSelector((state)=>state.auth.name)
   // const token = localStorage.getItem("token");
   const token = useSelector((state)=>state.auth.value)

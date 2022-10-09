@@ -14,7 +14,7 @@ import {NavLink} from 'react-router-dom'
 import {useSelector} from "react-redux"
 
 function Home() {
-  const url=`https://ayxan0314.pythonanywhere.com`
+  const url=process.env.REACT_APP_API_URL
   const [posts, setPosts] = useState([]);
   const [isLoading,setIsLoading] = useState(true);
   const [pageCount, setPageCount] = useState(0);

@@ -6,7 +6,7 @@ import axios from "axios";
 import { useSelector,useDispatch } from "react-redux";
 
 const NewPost = () => {
-  const url=`https://ayxan0314.pythonanywhere.com`
+  const url=process.env.REACT_APP_API_URL
   const [brandValue, setBrandValue] = useState(null);
   const [modelValue, setModelValue] = useState(null);
   const [extraBoolen,setExtraBoolen]=useState([])

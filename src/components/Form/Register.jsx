@@ -19,7 +19,7 @@ export const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const url = "https://ayxan0314.pythonanywhere.com/api/account/register/";
+      const url = `${process.env.REACT_APP_API_URL}/api/account/register/`;
       const { data: res } = await axios.post(url, data);
       // localStorage.setItem("name", data.name);
       // localStorage.setItem("USER_DATA", JSON.stringify(res));

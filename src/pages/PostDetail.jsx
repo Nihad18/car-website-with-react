@@ -22,7 +22,7 @@ import { NavLink,useParams,useLocation} from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 
 const PostDetail = () => {
-  const url=`https://ayxan0314.pythonanywhere.com`
+  const url=process.env.REACT_APP_API_URL
   const detail = useSelector((state) => state.post.postDetail);
   const dispatch = useDispatch();
   const token = useSelector((state) => state.auth.value);

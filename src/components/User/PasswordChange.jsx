@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 // LODAER CSS
 import "../../style/loader.css"
 const PasswordChange = () => {
-  const url = `https://ayxan0314.pythonanywhere.com`;
+  const url = process.env.REACT_APP_API_URL
   const [password, setPassword] = useState({});
   const [isLoading,setIsLoading]=useState(true)
   const token = useSelector((state) => state.auth.value);

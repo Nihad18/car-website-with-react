@@ -23,7 +23,7 @@ export const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const url = `https://ayxan0314.pythonanywhere.com/api/account/token/`;
+      const url = `${process.env.REACT_APP_API_URL}/api/account/token/`;
       const tkn = await axios.post(url, loginData);
       // localStorage.setItem("token", tkn.data.access);
       SetCookie("token", tkn.data.access)

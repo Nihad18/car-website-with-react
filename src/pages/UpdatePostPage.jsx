@@ -4,7 +4,7 @@ import axios from "axios";
 import { useSelector,useDispatch } from "react-redux";
 
 const UpdatePostPage = () => {
-    const url=`https://ayxan0314.pythonanywhere.com`
+    const url=process.env.REACT_APP_API_URL
     const postId = useSelector((state) => state.post.postId);
     const [postDetail,setPostDetail]= useState({})
     const [brandValue, setBrandValue] = useState(null);

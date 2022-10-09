@@ -13,7 +13,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { act } from "react-dom/test-utils";
 
 function Favourites() {
-  const url=`https://ayxan0314.pythonanywhere.com`
+  const url=process.env.REACT_APP_API_URL
   const [posts, setPosts] = useState([]);
   const [postsExist, setPostsExist] = useState(true);
   const [isLoading, setIsLoading] = useState(true);

@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 // LODAER CSS
 import "../../style/loader.css"
 const Profile = () => {
-  const url=`https://ayxan0314.pythonanywhere.com`
+  const url=process.env.REACT_APP_API_URL
   const [detail,setDetail]= useState({});
   const [error,setError] = useState(false);
   const [isLoading,setIsLoading]=useState(true)

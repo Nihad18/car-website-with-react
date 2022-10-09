@@ -12,7 +12,7 @@ import {AiFillHeart,AiOutlineHeart } from 'react-icons/ai'
 import {RiArrowRightSLine,RiArrowLeftSLine} from "react-icons/ri";
 
 const MyPosts = () => {
-  const url=`https://ayxan0314.pythonanywhere.com`
+  const url=process.env.REACT_APP_API_URL
   const token=useSelector((state)=>state.auth.value)
   const [posts,setPosts]=useState([])
   const [isLoading,setIsLoading] = useState(false);
