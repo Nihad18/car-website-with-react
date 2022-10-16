@@ -1,8 +1,11 @@
+// Components
 import { Login } from "../components/Form/Login";
 import { Register } from "../components/Form/Register";
 import Profile from "../components/User/Profile";
 import PasswordChange from "../components/User/PasswordChange";
 import MyPosts from "../components/User/MyPosts";
+
+// Pages
 import Home from "../pages/Home";
 import MainLayout from "../pages/Layout";
 import User from "../pages/User";
@@ -17,7 +20,7 @@ const routes = [
     element: <MainLayout />,
     children: [
       {
-        index: true,
+        index: "/:url",
         element: <Home />,
       },
       {
@@ -55,7 +58,7 @@ const routes = [
         element: <UpdatePostPage />,
       },
       {
-        path: "/favourites",
+        path: "favourites",
         element: <Favourites />,
       },
       {

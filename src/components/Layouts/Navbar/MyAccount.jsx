@@ -38,7 +38,7 @@ export const MyAccount = () => {
     }  
   return (
     <>
-      <div className='group bg-red-600 hover:bg-[#181A1B] text-white rounded px-3 relative'>
+      <div className='group bg-red-600 hover:bg-[#181A1B] text-white rounded px-3 relative z-30'>
         <div className='flex items-center min-w-[110px] h-8 cursor-pointer'>
           <AiOutlineHome className='text-xl mr-1 ' />
           Profilim

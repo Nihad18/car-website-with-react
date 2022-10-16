@@ -30,7 +30,7 @@ const PostDetail = () => {
   const navigate=useNavigate()
   const params=useParams()
   const location=useLocation()
-  console.log("location : ",location)
+  // console.log("location : ",location)
   useEffect(() => {
     axios.get(`${url}/api/post/detail/${params.postId}`,
         token && {

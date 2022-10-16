@@ -1,27 +1,42 @@
+import { useState, useEffect } from "react";
+// Images
 import car from "../images/download.jpeg";
 import CarFrontSide from "../images/car.svg";
-import { useState, useEffect } from "react";
-import ReactPaginate from "react-paginate";
+
+// Axios
 import axios from "axios";
+
+// Componets
+import ReactPaginate from "react-paginate";
 import PostLoader from "../components/Home/PostLoader";
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+
+// Icons
+import { AiFillHeart } from "react-icons/ai";
 import { RiArrowRightSLine, RiArrowLeftSLine } from "react-icons/ri";
-import { useSelector, useDispatch } from "react-redux";
+
+// Redux-Toolkit
+import { useSelector } from "react-redux";
+
+// React Router
+import { NavLink, useNavigate, useParams } from "react-router-dom";
+
+// Toast
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { NavLink, useNavigate } from "react-router-dom";
-import { act } from "react-dom/test-utils";
 
 function Favourites() {
-  const url=process.env.REACT_APP_API_URL
+  const url = process.env.REACT_APP_API_URL;
   const [posts, setPosts] = useState([]);
-  const [postsExist, setPostsExist] = useState(true);
+  const [postsArray, setPostsArray] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [pageIsNotLoading, setPageIsNotLoading] = useState(false);
   const [pageCount, setPageCount] = useState(0);
   const [activePage, setActivePage] = useState(1);
-  const [postCount, setPostCount] = useState(0);
-  const navigate = useNavigate();
+  const [postCount, setPostCount] = useState(1);
   const token = useSelector((state) => state.auth.value);
+
+  const navigate = useNavigate();
+
   const notify = () => toast.success("Elan uğurla sevimlilərdən silindi !");
 
   const toggleFav = (postId) => {
@@ -35,74 +50,92 @@ function Favourites() {
     };
     // updatedPosts.splice(postIndex, 1);
     setPosts(updatedPosts);
+    setPostsArray(updatedPosts);
   };
-
   useEffect(() => {
-    async function getFavs() {
-      const { data } = await axios.get(`${url}/api/favourite/list/?page=${1}`, {
+    axios
+      .get(`${url}/api/favourite/list/?page=${1}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      });
-      setPosts(data?.results);
-      setPageCount(Math.ceil(data?.count / 5));
-      setPostCount(data?.results.length);
-      setActivePage(1);
-      setIsLoading(false);
-    }
-    getFavs();
-  }, []);
-  const fetchPosts = async (currentPage) => {
-    const { data } = await axios.get(
-      `${url}/api/favourite/list/?page=${currentPage}`,
-      {
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          setPosts(res?.data?.results);
+          setPostsArray(res?.data?.results);
+          setPageCount(Math.ceil(res?.data?.count / 5));
+          setPostCount(res?.data?.results.length);
+          setActivePage(1);
+          setIsLoading(false);
+        } else {
+          // setIsLoading(true);
+          setPageIsNotLoading(true)
+        }
+      })
+      .catch((err) => console.error(err));
+  }, [token, url]);
+  const fetchPosts = (currentPage) => {
+    axios
+      .get(`${url}/api/favourite/list/?page=${currentPage}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
-    );
-    setPosts(data?.results);
-    setPageCount(Math.ceil(data?.count / 5));
-    setPostCount(data?.results.length);
-    setActivePage(currentPage);
-    setIsLoading(false);
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          setPosts(res?.data?.results);
+          setPostsArray(res?.data?.results);
+          setPageCount(Math.ceil(res?.data?.count / 5));
+          setPostCount(res?.data?.results.length);
+          setActivePage(currentPage);
+          setIsLoading(false);
+        } else {
+          // setIsLoading(true);
+          setPageIsNotLoading(true)
+        }
+      })
+      .catch((err) => console.error(err));
   };
-
-  // useEffect(() =>{
-  //   console.log("activePage: ",activePage)
-  //   if(activePage>1 && posts.length===0){
-  //     fetchPosts(activePage-1)
-  //   }
-  //   else{
-  //     fetchPosts(activePage)
-  //   }
-  // },[posts])
   // --------------------------------------------------------------------------
-  const deleteFav = async (postId) => {
-    await axios.delete(`${url}/api/favourite/delete/${postId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+  const deleteFav = (postId) => {
+    axios
+      .delete(`${url}/api/favourite/delete/${postId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        if (res.status === 204) {
+          console.log("Delete", res);
+          setPostsArray(fetchPosts(activePage));
+        } else {
+          console.log("Delete error");
+        }
+      });
   };
-  console.log("post sayı", postCount);
+      
   // -------------------------------------------------------------------------
   const handlePageClick = (data) => {
     let currentPage = data.selected + 1;
     fetchPosts(currentPage);
     setPageCount(currentPage);
     setActivePage(currentPage);
+    setPageIsNotLoading(false)
     setIsLoading(true);
     setPosts([]);
   };
-
   return (
     <>
       <div className='bg-[#F3F7FC] text-[#1b1b1b] dark:bg-[#1C1C1E] dark:text-white sm:w-[540px] lg:w-[960px] xl:min-w-[1250px] '>
         {token ? (
-          //-------------------------------------------------------------------------------------------------------------------------------
           <>
             <div className='flex flex-wrap justify-center '>
+              {pageCount > 1 && pageIsNotLoading && (
+                <div className='text-xl md:text-2xl font-semibold text-center text-black dark:text-white'>
+                  Bu səhifədə elan qalmadı, başqa səhifəyə keçin!
+                </div>
+              )}
+
               {isLoading && <PostLoader cards={5} />}
               {posts?.map((post, key) => {
                 return (
@@ -191,7 +224,7 @@ function Favourites() {
 
             <div
               className={`${
-                postCount !== 0 ? "hidden" : ""
+                postCount > 0 ? "hidden" : ""
               } flex flex-col justify-center items-center`}
             >
               <div className='w-[110px] h-[80px] sm:w-[150px] sm:h-[110px]'>

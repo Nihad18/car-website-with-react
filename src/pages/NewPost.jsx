@@ -107,9 +107,9 @@ const NewPost = () => {
     }
   };
   //------------------------------------------------------------ 
-  console.log(extraBoolen)
+  // console.log(extraBoolen)
   const files = useSelector((state) => state.file.value);
-  console.log("files: " + files)
+  // console.log("files: " + files)
   var filesArray = Object.keys(files).map(function (key) {
     return files[key];
   });

@@ -28,13 +28,13 @@ const MobileFooter = () => {
       if(e.changedTouches[0].clientY>0){
         // Scrolling Down with mouse
         setScroll(true)
-        console.log("up",scrool,"--",e.changedTouches[0].clientY)
+        // console.log("up",scrool,"--",e.changedTouches[0].clientY)
       } 
     window.ontouchmove = e => {
       if(e.touches[0].clientY >= 200){
         // Scrolling Down with mouse
         setScroll(false)
-        console.log("down",scrool,"--",e.touches[0].clientY)
+        // console.log("down",scrool,"--",e.touches[0].clientY)
       }
     }
     }

@@ -57,7 +57,6 @@ const MyPosts = () => {
    const handlePageClick =(data) => {
     let currentPage = data.selected + 1;
     setIsLoading(false)
-  // setPosts([])
     fetchPosts(currentPage)
     setPageCount(currentPage)
     setActivePage(currentPage)
@@ -120,7 +119,7 @@ const MyPosts = () => {
       {isLoading && 
         <div className='flex flex-col items-center'>
           <div className='font-bold text-xl text-center mb-2'>Postlar yüklənə bilmədi,səhifəni yeniləyin!</div>
-          <button className="bg-green-500 rounded py-1 px-2 ">Səhifəni yenilə</button>
+          <button onClick={window.location.reload()} className="bg-green-500 rounded py-1 px-2 ">Səhifəni yenilə</button>
         </div>}
     </div>
   )
