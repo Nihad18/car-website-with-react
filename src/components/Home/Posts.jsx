@@ -75,7 +75,7 @@ function Home() {
       .then((res) => {
         if (res.status === 200) {
           // setPosts(res.data.results);
-          dispatch(setPosts(res.data.results));
+          dispatch(setPosts(res.data));
           // setPageCount(Math.ceil(res.data?.count / 20));
           dispatch(setPageCount(Math.ceil(res.data?.count / 20)));
           // setActivePage(1);
@@ -108,7 +108,7 @@ function Home() {
       .then((response) => {
         if (response.status === 200) {
           // setPosts(response?.data?.results);
-          dispatch(setPosts(response?.data?.results));
+          dispatch(setPosts(response?.data));
           // setPageCount(Math.ceil(response?.data?.count / 20));
           dispatch(setPageCount(Math.ceil(response?.data?.count / 20)));
           // setActivePage(currentPage);
@@ -167,7 +167,7 @@ function Home() {
         } flex flex-wrap justify-center `}
       >
         {isLoading && <PostLoader cards={20} />}
-        {posts?.map((post, key) => {
+        {posts?.results?.map((post, key) => {
           return (
             <div
               key={key}

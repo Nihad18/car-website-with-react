@@ -3,13 +3,13 @@ import Input from "../components/NewPost/Input";
 import Picture from "../components/NewPost/Picture";
 import MobileNewAnnouncement from "../components/NewPost/MobileNewAnnouncement";
 import axios from "axios";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 const NewPost = () => {
-  const url=process.env.REACT_APP_API_URL
+  const url = process.env.REACT_APP_API_URL;
   const [brandValue, setBrandValue] = useState(null);
   const [modelValue, setModelValue] = useState(null);
-  const [extraBoolen,setExtraBoolen]=useState([])
+  const [extraBoolen, setExtraBoolen] = useState([]);
 
   const [values, setValues] = useState({
     gearValue: null,
@@ -26,19 +26,19 @@ const NewPost = () => {
     cityValue: null,
     seatsCountValue: null,
     priceValue: null,
-    priceTypeValue:1,
-    mileageTypeValue:1,
-    phoneNumberValue:null,
+    priceTypeValue: 1,
+    mileageTypeValue: 1,
+    phoneNumberValue: null,
     descriptionValue: null,
     crashedValue: null,
     paintedValue: null,
     loanValue: null,
   });
   const selectedImages = useSelector((state) => state.selectedImages.value);
-  
+
   const [brands, setBrands] = useState([]);
   const [models, setModels] = useState([]);
-  
+
   const [data, setData] = useState({
     fuels: null,
     gears: null,
@@ -62,14 +62,26 @@ const NewPost = () => {
       fuels: data.fuel_type.map((n) => ({ value: n.id, label: n.name })),
       gears: data.gear.map((n) => ({ value: n.id, label: n.name })),
       category: data.category.map((n) => ({ value: n.id, label: n.name })),
-      transmission: data.transmission.map((n) => ({value: n.id, label: n.name,})),
+      transmission: data.transmission.map((n) => ({
+        value: n.id,
+        label: n.name,
+      })),
       year: data.year.map((n) => ({ value: n.id, label: n.year })),
       color: data.color.map((n) => ({ value: n.id, label: n.name })),
-      engineVolume: data.engine_volume.map((n) => ({value: n.id, label: n.volume,})),
-      priorOwnerCount: data.prior_owners_count.map((n) => ({value: n.id, label: n.name,})),
+      engineVolume: data.engine_volume.map((n) => ({
+        value: n.id,
+        label: n.volume,
+      })),
+      priorOwnerCount: data.prior_owners_count.map((n) => ({
+        value: n.id,
+        label: n.name,
+      })),
       market: data.market.map((n) => ({ value: n.id, label: n.name })),
       city: data.city.map((n) => ({ value: n.id, label: n.name })),
-      seatsCount: data.seats_count.map((n) => ({value: n.id, label: n.count,})),
+      seatsCount: data.seats_count.map((n) => ({
+        value: n.id,
+        label: n.count,
+      })),
       extraBooleanFields: data.extra_boolean_fields.map((n) => n.name),
       priceType: data.price_type.map((n) => n.name),
       mileageType: data.mileage_type.map((n) => n.name),
@@ -90,23 +102,23 @@ const NewPost = () => {
     getBrands(id);
   }, [brandValue]);
 
-  //------------------------------------------------------------ 
+  //------------------------------------------------------------
   const handleChange = (e) => {
     // Destructuring
     const { value, checked } = e.target;
-    console.log("target",e.target)
+    console.log("target", e.target);
     // Case 1 : The user checks the box
-  
+
     if (checked) {
-      setExtraBoolen([...extraBoolen,value]);
+      setExtraBoolen([...extraBoolen, value]);
     }
-  
+
     // Case 2  : The user unchecks the box
     else {
       setExtraBoolen(extraBoolen.filter((e) => e !== value));
     }
   };
-  //------------------------------------------------------------ 
+  //------------------------------------------------------------
   // console.log(extraBoolen)
   const files = useSelector((state) => state.file.value);
   // console.log("files: " + files)
@@ -120,13 +132,12 @@ const NewPost = () => {
   formData.append("mileage", values?.mileageValue);
   formData.append("price", values.priceValue);
   for (let i = 0; i < extraBoolen?.length; i++) {
-
     formData.append("extra_fields", extraBoolen[i]);
-    console.log("value : ",extraBoolen[i]);
+    console.log("value : ", extraBoolen[i]);
   }
   formData.append("crashed", values?.loanValue);
   formData.append("loan", values?.loanValue);
-  formData.append("painted",values?.loanValue);
+  formData.append("painted", values?.loanValue);
   formData.append("description", values.descriptionValue);
   formData.append("brand", brandValue?.value);
   formData.append("auto_model", modelValue?.value);
@@ -134,7 +145,7 @@ const NewPost = () => {
   formData.append("category", values?.categoryValue?.value);
   formData.append("mileage_type", values.mileageTypeValue);
   formData.append("color", values?.colorValue?.value);
-  formData.append("price_type",values?.priceTypeValue);
+  formData.append("price_type", values?.priceTypeValue);
   formData.append("prior_owners_count", values?.priorOwnerCountValue?.value);
   formData.append("seats_count", values?.seatsCountValue?.value);
   formData.append("fuel_type", values?.fuelValue?.value);
@@ -146,8 +157,8 @@ const NewPost = () => {
   formData.append("market", values?.marketValue?.value);
   formData.append("city", values?.cityValue?.value);
 
-  const token = useSelector((state)=>state.auth.value)
-  const postCarData =async (e) => {
+  const token = useSelector((state) => state.auth.value);
+  const postCarData = async (e) => {
     e.preventDefault();
     const post = await axios.post(`${url}/api/post/create/`, formData, {
       headers: {
@@ -157,24 +168,30 @@ const NewPost = () => {
     });
   };
   //---------------------------------------------------------------------------------------------
-  const [inputValue,setInputValue]=useState('')
-  const handleInput=e=>{
-      const formattedPhoneNumber=formatPhoneNumber(e.target.value)
-      setInputValue(formattedPhoneNumber)
-      setValues({...values,phoneNumberValue:e.target.value.replace(/[^\d]/gm,'')})
-}
+  const [inputValue, setInputValue] = useState("");
+  const handleInput = (e) => {
+    const formattedPhoneNumber = formatPhoneNumber(e.target.value);
+    setInputValue(formattedPhoneNumber);
+    setValues({
+      ...values,
+      phoneNumberValue: e.target.value.replace(/[^\d]/gm, ""),
+    });
+  };
 
-function formatPhoneNumber(value) {
-  if(!value) return value;
-  const phoneNumber=value.replace(/[^\d]/gm,'')
-  const phoneNumberLength = phoneNumber.length
-  if(phoneNumberLength<4) return phoneNumber
-  if(phoneNumberLength<7){
-      return `(${phoneNumber.slice(0,3)}) ${phoneNumber.slice(3)}`
+  function formatPhoneNumber(value) {
+    if (!value) return value;
+    const phoneNumber = value.replace(/[^\d]/gm, "");
+    const phoneNumberLength = phoneNumber.length;
+    if (phoneNumberLength < 4) return phoneNumber;
+    if (phoneNumberLength < 7) {
+      return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
+    }
+    return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(
+      3,
+      6
+    )}-${phoneNumber.slice(6, 10)}`;
   }
-  return `(${phoneNumber.slice(0,3)}) ${phoneNumber.slice(3,6,)}-${phoneNumber.slice(6,10)}`
-}
-  //---------------------------------------------------------------------------------------------- 
+  //----------------------------------------------------------------------------------------------
   return (
     <>
       <MobileNewAnnouncement />
@@ -206,28 +223,28 @@ function formatPhoneNumber(value) {
             name={"Yanacaq növü : "}
             options={data.fuels}
             value={values.fuelValue}
-            onChange={(e) => setValues({...values, fuelValue: e })}
+            onChange={(e) => setValues({ ...values, fuelValue: e })}
             placeholder={"Yanacaq növü"}
           />
           <Input
             name={"Ötürücü : "}
             options={data.gears}
             value={values.gearValue}
-            onChange={(e) => setValues({...values, gearValue: e })}
+            onChange={(e) => setValues({ ...values, gearValue: e })}
             placeholder={"Ötürücü"}
           />
           <Input
             name={"Ban növü : "}
             options={data.category}
             value={values.categoryValue}
-            onChange={(e) => setValues({...values, categoryValue: e })}
+            onChange={(e) => setValues({ ...values, categoryValue: e })}
             placeholder={"Ban növü"}
           />
           <Input
             name={"Sürətlər qutusu : "}
             options={data.transmission}
             value={values.transmissionValue}
-            onChange={(e) => setValues({...values, transmissionValue: e })}
+            onChange={(e) => setValues({ ...values, transmissionValue: e })}
             placeholder={"Sürətlər qutusu"}
           />
 
@@ -238,7 +255,9 @@ function formatPhoneNumber(value) {
             <div className='w-[250px] flex items-center'>
               <input
                 value={values.mileageValue}
-                onChange={(e) => setValues({...values, mileageValue: e.target.value })}
+                onChange={(e) =>
+                  setValues({ ...values, mileageValue: e.target.value })
+                }
                 type='number'
                 placeholder='0'
                 min='0'
@@ -248,9 +267,23 @@ function formatPhoneNumber(value) {
               {data?.mileageType?.map((item, index) => {
                 return (
                   <div key={index} className='w-[50px] flex ml-3'>
-                    <input  type='radio' defaultChecked={index === 0} value={index+1} onChange={(e) => setValues({...values,mileageTypeValue:e.target.value})}
-                      name='mileage' id={`${item}`} className=''/>{" "}
-                    <label name='mileage' htmlFor={`${item}`} className='ml-1'>{item}</label>
+                    <input
+                      type='radio'
+                      defaultChecked={index === 0}
+                      value={index + 1}
+                      onChange={(e) =>
+                        setValues({
+                          ...values,
+                          mileageTypeValue: e.target.value,
+                        })
+                      }
+                      name='mileage'
+                      id={`${item}`}
+                      className=''
+                    />{" "}
+                    <label name='mileage' htmlFor={`${item}`} className='ml-1'>
+                      {item}
+                    </label>
                   </div>
                 );
               })}
@@ -261,21 +294,22 @@ function formatPhoneNumber(value) {
             name={"İl : "}
             options={data.year}
             value={values.yearValue}
-            onChange={(e)=>setValues({...values,yearValue: e})}
+            onChange={(e) => setValues({ ...values, yearValue: e })}
             placeholder={"İl"}
           />
-          <Input 
-          name={"Rəng : "} 
-          options={data.color} 
-          value={values.colorValue}
-          onChange={(e)=>setValues({...values,colorValue: e})} 
-          placeholder={"Rəng"} />
+          <Input
+            name={"Rəng : "}
+            options={data.color}
+            value={values.colorValue}
+            onChange={(e) => setValues({ ...values, colorValue: e })}
+            placeholder={"Rəng"}
+          />
           <Input
             name={"Mühərrikin həcmi,sm"}
             sup={"3"}
             options={data.engineVolume}
             value={values.engineVolumeValue}
-            onChange={(e)=>setValues({...values,engineVolumeValue: e})}
+            onChange={(e) => setValues({ ...values, engineVolumeValue: e })}
             placeholder={"Mühərrikin həcmi,sm"}
           />
           {/* PRICE */}
@@ -285,7 +319,9 @@ function formatPhoneNumber(value) {
             <div className='w-[250px] flex items-center'>
               <input
                 value={values?.priceValue}
-                onChange={(e) => setValues({...values, priceValue: e.target.value })}
+                onChange={(e) =>
+                  setValues({ ...values, priceValue: e.target.value })
+                }
                 type='number'
                 placeholder='0'
                 min='0'
@@ -296,56 +332,69 @@ function formatPhoneNumber(value) {
               {data?.priceType?.map((item, index) => {
                 return (
                   <div key={index} className='w-[200px] flex'>
-                    <input  type='radio' defaultChecked={index === 0} value={index+1} onChange={(e) => setValues({...values,priceTypeValue:e.target.value})}
-                      name='price' id={`${item}`} className='ml-1'/>{" "}
-                    <label name='price' htmlFor={`${item}`} className='ml-1'>{item}</label>
+                    <input
+                      type='radio'
+                      defaultChecked={index === 0}
+                      value={index + 1}
+                      onChange={(e) =>
+                        setValues({ ...values, priceTypeValue: e.target.value })
+                      }
+                      name='price'
+                      id={`${item}`}
+                      className='ml-1'
+                    />{" "}
+                    <label name='price' htmlFor={`${item}`} className='ml-1'>
+                      {item}
+                    </label>
                   </div>
                 );
               })}
             </div>
           </div>
           {/* -------------------- */}
-          
-           <div className='py-2 w-[48%] rounded flex items-center justify-between'>
+
+          <div className='py-2 w-[48%] rounded flex items-center justify-between'>
             <div className='mr-5 '>Mühərrikin gücü, a . g :</div>
 
             <div className='w-[250px] flex items-center'>
               <input
                 value={values?.enginePowerValue}
-                onChange={(e) => setValues({ ...values,enginePowerValue: e.target.value })}
+                onChange={(e) =>
+                  setValues({ ...values, enginePowerValue: e.target.value })
+                }
                 type='number'
                 placeholder='0'
                 min='0'
                 className='w-[110px] px-2 bg-white text-black border-gray-400 border rounded flex items-center min-h-[38px] outline-none'
               />
-              </div>
             </div>
+          </div>
           <Input
             name={"Neçənci sahibisiniz ?"}
             options={data.priorOwnerCount}
             value={values.priorOwnerCountValue}
-            onChange={(e)=>setValues({...values,priorOwnerCountValue: e})}
+            onChange={(e) => setValues({ ...values, priorOwnerCountValue: e })}
             placeholder={"Neçənci sahibisiniz ?"}
           />
           <Input
             name={"Hansı bazar üçün yığılıb"}
             options={data.market}
             value={values.marketValue}
-            onChange={(e)=>setValues({...values,marketValue: e})}
+            onChange={(e) => setValues({ ...values, marketValue: e })}
             placeholder={"Hansı bazar üçün yığılıb"}
           />
           <Input
             name={"Şəhər"}
             options={data.city}
             value={values.cityValue}
-            onChange={(e) => setValues({...values, cityValue: e })}
+            onChange={(e) => setValues({ ...values, cityValue: e })}
             placeholder={"Şəhər"}
           />
           <Input
             name={"Yerlərin sayı"}
             options={data.seatsCount}
             value={values.seatsCountValue}
-            onChange={(e) => setValues({...values, seatsCountValue: e })}
+            onChange={(e) => setValues({ ...values, seatsCountValue: e })}
             placeholder={"Yerlərin sayı"}
           />
           {/* ---SITUATION--- */}
@@ -353,11 +402,23 @@ function formatPhoneNumber(value) {
             <div className='mr-5'>Vəziyyəti :</div>
 
             <div className='w-[250px] flex items-center'>
-              <input onChange={(e)=>setValues({...values,crashedValue:e.target.checked})} type='checkbox' id='checkbox1' />
+              <input
+                onChange={(e) =>
+                  setValues({ ...values, crashedValue: e.target.checked })
+                }
+                type='checkbox'
+                id='checkbox1'
+              />
               <label htmlFor='checkbox1' className='mx-2'>
                 Vuruğu var
               </label>
-              <input onChange={(e)=>setValues({...values,paintedValue:e.target.checked})} type='checkbox' id='checkbox2' />
+              <input
+                onChange={(e) =>
+                  setValues({ ...values, paintedValue: e.target.checked })
+                }
+                type='checkbox'
+                id='checkbox2'
+              />
               <label htmlFor='checkbox2' className='ml-2'>
                 Rənglənib
               </label>
@@ -369,7 +430,13 @@ function formatPhoneNumber(value) {
             <div className='mr-5'>Kredit :</div>
 
             <div className='w-[250px] flex items-center'>
-              <input onChange={(e)=>setValues({...values,loanValue:e.target.checked})} type='checkbox' id='checkbox3' />
+              <input
+                onChange={(e) =>
+                  setValues({ ...values, loanValue: e.target.checked })
+                }
+                type='checkbox'
+                id='checkbox3'
+              />
               <label htmlFor='checkbox3' className='mx-1'>
                 Kreditədir
               </label>
@@ -388,7 +455,7 @@ function formatPhoneNumber(value) {
               <textarea
                 value={values.descriptionValue}
                 onChange={(e) =>
-                  setValues({ ...values,descriptionValue: e.target.value })
+                  setValues({ ...values, descriptionValue: e.target.value })
                 }
                 className='w-full min-h-16 border rounded border-gray-400 outline-none px-3 py-1'
               ></textarea>
@@ -401,7 +468,14 @@ function formatPhoneNumber(value) {
             <div className='mr-5'>Əlavə məlumat :</div>
 
             <div className='w-4/5  rounded text-sm '>
-              <input value={inputValue} maxLength='14' onChange={handleInput} type='tel' placeholder="(000) 000-00-00" className="w-[200px] px-2 bg-white text-black border-gray-400 border rounded flex items-center h-[30px] outline-none"/>
+              <input
+                value={inputValue}
+                maxLength='14'
+                onChange={handleInput}
+                type='tel'
+                placeholder='(000) 000-00-00'
+                className='w-[200px] px-2 bg-white text-black border-gray-400 border rounded flex items-center h-[30px] outline-none'
+              />
             </div>
           </div>
           {/*--------------------------- */}
@@ -412,8 +486,13 @@ function formatPhoneNumber(value) {
               {data.extraBooleanFields.map((item, index) => {
                 return (
                   <div key={index} className='min-w-[200px] p-1'>
-                    <input onChange={handleChange} value={index+1} type='checkbox' id={index+1} />{" "}
-                    <label htmlFor={index+1}>{item}</label>
+                    <input
+                      onChange={handleChange}
+                      value={index + 1}
+                      type='checkbox'
+                      id={index + 1}
+                    />{" "}
+                    <label htmlFor={index + 1}>{item}</label>
                   </div>
                 );
               })}
