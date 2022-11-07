@@ -1,26 +1,17 @@
-import { useState, useEffect } from "react";
-import Select from "react-select";
+import { useEffect } from "react";
 import axios from "axios";
+// Components
+import Select from "react-select";
+import SelectedButtons from "./Search/SelectButtons"
+import DetailedSearch from "./Search/DetailedSearch";
+// React Redux
 import { useSelector, useDispatch } from "react-redux";
-import {
-  setPosts,
-  setQuery,
-  setPageCount,
-  setActivePage,
-  setIsLoading,
-  setPageNotLoading,
-} from "../../redux/reducers/postSlice";
-import {
-  setBrands,
-  setModels,
-  setBrandValue,
-  setModelValue,
-  setValues,
-  setData,
-} from "../../redux/reducers/searchSlice";
+import { setPosts,setQuery, setPageCount, setActivePage, setIsLoading, setPageNotLoading,} from "../../redux/reducers/postSlice";
+import {setBrandValue, setModelValue, setValues} from "../../redux/reducers/searchSlice";
+// React icons
 import { RiArrowGoBackFill } from "react-icons/ri";
 import { AiOutlineSearch } from "react-icons/ai";
-import { VscSettings } from "react-icons/vsc";
+import FetchData from "./FetchData"
 import { useNavigate } from "react-router";
 const Search = () => {
   const url = process.env.REACT_APP_API_URL;
@@ -30,11 +21,6 @@ const Search = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const types = [" Bütün", "Yeni", "İşlənmiş"];
-  const searchTypes = ["Sadə axtarış", "Ətraflı axtarış"];
-  const [active, setActive] = useState(types[0]);
-  const [searchActive, setSearchActive] = useState(searchTypes[0]);
-
   const posts = useSelector((state) => state.post.posts);
   const brands = useSelector((state) => state.search.brands);
   const models = useSelector((state) => state.search.models);
@@ -42,60 +28,10 @@ const Search = () => {
   const modelValue = useSelector((state) => state.search.modelValue);
   const values = useSelector((state) => state.search.values);
   const data = useSelector((state) => state.search.data);
+  // const active= useSelector((state) => state.search.activeButton)
+  // const searchActive= useSelector((state) => state.search.searchActiveButton)
+  // const detailedSearchToggle= useSelector((state) => state.search.detailedSearchToggle)
 
-  const getBrands = async (id) => {
-    const { data } = await axios.get(`${url}/api/post/choices/`);
-    dispatch(
-      setBrands(data?.brand?.map((n) => ({ value: n.id, label: n.name })))
-    );
-    dispatch(
-      setData({
-        fuels: data?.fuel_type?.map((n) => ({ value: n.id, label: n.name })),
-        gears: data?.gear?.map((n) => ({ value: n.id, label: n.name })),
-        category: data?.category?.map((n) => ({ value: n.id, label: n.name })),
-        transmission: data?.transmission?.map((n) => ({
-          value: n.id,
-          label: n.name,
-        })),
-        year: data?.year?.map((n) => ({ value: n.id, label: n.year })),
-        color: data?.color?.map((n) => ({ value: n.id, label: n.name })),
-        engineVolume: data?.engine_volume?.map((n) => ({
-          value: n.id,
-          label: n.volume,
-        })),
-        priorOwnerCount: data?.prior_owners_count?.map((n) => ({
-          value: n.id,
-          label: n.name,
-        })),
-        market: data?.market?.map((n) => ({ value: n.id, label: n.name })),
-        city: data?.city?.map((n) => ({ value: n.id, label: n.name })),
-        seatsCount: data?.seats_count?.map((n) => ({
-          value: n.id,
-          label: n.count,
-        })),
-        extraBooleanFields: data.extra_boolean_fields.map((n) => n.name),
-        priceType: data?.price_type?.map((n) => ({ value: n.id, label: n.name })),
-        mileageType: data?.mileage_type?.map((n) => n.name),
-      })
-    );
-    // when the brand is selected, get the models
-    if (brandValue !== null) {
-      const models = `${url}/api/post/models-choices/?brand=${id}`;
-      const modelsData = await axios.get(models);
-      dispatch(
-        setModels(
-          modelsData?.data?.map((n) => ({ value: n.id, label: n.name }))
-        )
-      );
-    }
-  };
-  useEffect(() => {
-    setModelValue(null);
-  }, [brandValue]);
-  useEffect(() => {
-    let id = brands.indexOf(brandValue) + 1;
-    getBrands(id);
-  }, [brandValue]);
   const filterObject = {
     brand: brandValue?.value || "",
     model: modelValue?.value || "",
@@ -151,10 +87,10 @@ const Search = () => {
     dispatch(setBrandValue(null));
     dispatch(setModelValue(null));
     const res=Object.keys(values).reduce((initial, key) => {
-      initial[key] = null
+      initial[key] = ''
       return initial
     },{})
-    dispatch(setValues({...res}));
+    dispatch(setValues({...res,cityValue:[]}));
 
     dispatch(setIsLoading(true));
     navigate("/");
@@ -185,13 +121,12 @@ const Search = () => {
   };
 
   // when nothing is selected ,button is disabled
-  const enabled = Object.values(filterObject).every(stringChechker);
+  const disabled = Object.values(filterObject).every(stringChechker);
   function stringChechker(value) {
     if (value === "" || value.length === 0) return true;
     else return false;
   }
 
-  console.log("values : ",values)
   // const customStyles = {
   //   singleValue: (base) => ({ ...base, color: "white" }),
   //   valueContainer: (base) => ({
@@ -221,50 +156,9 @@ const Search = () => {
   // });
   return (
     <div className='min-h-[250px] w-full sm:w-[540px] lg:w-[910px] xl:min-w-[1170px] rounded p-6 mx-auto bg-white dark:bg-[#242426] '>
-      <div className='flex items-center justify-between w-full'>
-        <div className='flex-col lg:flex-row w-full flex justify-between text-red-500'>
-          <div className='flex mb-4'>
-            {types.map((type) => (
-              <button
-                className={`w-full lg:min-w-[140px] h-[34px] px-3  mr-4 rounded hover:bg-red-100 dark:hover:bg-slate-500 border border-red-500  dark:border-slate-500 dark:text-white flex justify-center items-center
-        ${
-          active === type &&
-          "!bg-red-500 !text-white hover:!bg-red-500 dark:!bg-white dark:!text-black dark:hover:!bg-white"
-        } `}
-                key={type}
-                active={active === type}
-                onClick={() => setActive(type)}
-              >
-                {type}
-              </button>
-            ))}
-          </div>
-          {/* --------------------------------------------------------------------------------------------------------------------------------------------- */}
-          <div className='flex mb-4'>
-            {searchTypes.map((type) => (
-              <button
-                className={`w-full lg:min-w-[170px] h-[34px] px-3  mr-4 rounded hover:bg-red-100 dark:hover:bg-slate-500 border border-red-500  dark:border-slate-500 dark:text-white flex justify-center items-center
-        ${
-          searchActive === type &&
-          "!bg-red-500 !text-white hover:!bg-red-500 dark:!bg-white dark:!text-black dark:hover:!bg-white"
-        } `}
-                key={type}
-                active={searchActive === type}
-                onClick={() => setSearchActive(type)}
-              >
-                {type === searchTypes[0] ? (
-                  <AiOutlineSearch className='mr-1 text-lg' />
-                ) : (
-                  <VscSettings className='mr-1 text-lg' />
-                )}
-
-                {type}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-      <div className='flex justify-between lg:mb-4'>
+      <FetchData/>
+      <SelectedButtons/>
+      {/* <div className='flex justify-between lg:mb-4'>
         <Select
           className='lg:w-[270px] xl:w-[300px] rounded '
           isClearable
@@ -287,23 +181,23 @@ const Search = () => {
           // theme={theme}
         />
         <Select
-          className='lg:w-[270px] xl:w-[300px]  rounded '
+          className='lg:w-[270px] xl:w-[300px] rounded'
           isClearable
           isMulti
           placeholder='Şəhər'
           options={data.city}
-          value={data.cityValue}
+          value={values.cityValue}
           onChange={(e) => dispatch(setValues({ ...values, cityValue: e }))}
         />
-      </div>
-      <div className='flex justify-between'>
+      </div> */}
+      {/* <div className='flex justify-between'>
         <div className='flex'>
           <Select
             className='lg:w-[135px] xl:w-[150px]'
             isClearable
             options={data?.year}
             placeholder='İl,min'
-            value={data?.yearsValue}
+            value={values?.minYearValue}
             onChange={(e) =>
               dispatch(setValues({ ...values, minYearValue: e }))
             }
@@ -313,7 +207,7 @@ const Search = () => {
             isClearable
             options={data?.year}
             placeholder='İl,max'
-            value={data?.yearsValue}
+            value={values?.maxYearValue}
             onChange={(e) =>
               dispatch(setValues({ ...values, maxYearValue: e }))
             }
@@ -321,7 +215,7 @@ const Search = () => {
         </div>
         <div className='flex '>
           <input
-            value={values?.priceValue}
+            value={values?.minPriceValue}
             onChange={(e) =>
               dispatch(setValues({ ...values, minPriceValue: e.target.value }))
             }
@@ -332,7 +226,7 @@ const Search = () => {
             className='lg:w-[135px] xl:w-[150px] px-2 bg-white text-black border-gray-400 border rounded flex items-center min-h-[38px] outline-none'
           />
           <input
-            value={values?.priceValue}
+            value={values?.maxPriceValue}
             onChange={(e) =>
               dispatch(setValues({ ...values, maxPriceValue: e.target.value }))
             }
@@ -345,11 +239,11 @@ const Search = () => {
         </div>
         <div className='flex justify-between lg:w-[270px] xl:w-[300px] '>
           <Select
-            className=' rounded'
+            className='rounded'
             isClearable
             placeholder='Azn'
             options={data?.priceType}
-            value={data?.priceTypeValue}
+            value={values?.priceTypeValue}
             onChange={(e) =>
               dispatch(setValues({ ...values, priceTypeValue: e }))
             }
@@ -365,7 +259,7 @@ const Search = () => {
           <label
             htmlFor='checkbox3'
             className={`${
-              values?.loanValue && "bg-red-200"
+              values?.loanValue ? "bg-red-200 dark:text-black" : "dark:text-white"
             } mx-1 border border-red-500 px-2 py-1 rounded cursor-pointer`}
           >
             Kredit
@@ -381,13 +275,14 @@ const Search = () => {
           <label
             htmlFor='checkbox4'
             className={`${
-              values?.barterValue && "bg-red-200"
+              values?.barterValue ? "bg-red-200 dark:text-black" : "dark:text-white"
             } mx-1 border border-red-500 px-2 py-1 rounded cursor-pointer`}
           >
             Barter
           </label>
         </div>
-      </div>
+      </div> */}
+      <DetailedSearch/>
       <div className='flex lg:mt-2 justify-end'>
         <div className='bg-slate-500 text-white flex items-center justify-center rounded w-full lg:w-[170px] h-[34px] lg:mt-2 mr-4'>
           <span>{posts?.count} Elan</span>
@@ -400,10 +295,10 @@ const Search = () => {
           <span>Sıfırla</span>
         </button>
         <button
-          disabled={enabled === true}
+          disabled={disabled === true}
           onClick={handleChange}
           className={`${
-            enabled === true ? "bg-green-300" : "bg-green-500"
+            disabled === true ? "bg-green-300" : "bg-green-500"
           } text-white flex items-center justify-center rounded w-full lg:w-[170px] h-[34px] lg:mt-2`}
         >
           <AiOutlineSearch className='mr-1 text-lg' />

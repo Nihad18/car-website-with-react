@@ -10,7 +10,12 @@ const NewPost = () => {
   const [brandValue, setBrandValue] = useState(null);
   const [modelValue, setModelValue] = useState(null);
   const [extraBoolen, setExtraBoolen] = useState([]);
+  
+  const selectedImages = useSelector((state) => state.selectedImages.value);
 
+  const [brands, setBrands] = useState([]);
+  const [models, setModels] = useState([]);
+  
   const [values, setValues] = useState({
     gearValue: null,
     fuelValue: null,
@@ -34,10 +39,6 @@ const NewPost = () => {
     paintedValue: null,
     loanValue: null,
   });
-  const selectedImages = useSelector((state) => state.selectedImages.value);
-
-  const [brands, setBrands] = useState([]);
-  const [models, setModels] = useState([]);
 
   const [data, setData] = useState({
     fuels: null,

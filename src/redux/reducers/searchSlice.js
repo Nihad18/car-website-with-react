@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-
+const types = [" Bütün", "Yeni", "İşlənmiş"];
+const searchTypes = ["Sadə axtarış", "Ətraflı axtarış"];
 export const searchSlice = createSlice({
   name: "data",
   initialState: {
@@ -50,6 +51,9 @@ export const searchSlice = createSlice({
       mileageType: null,
       extraBooleanFields: [],
     },
+    activeButton: types[0],
+    searchActiveButton:searchTypes[0],
+    detailedSearchToggle:false
   },
 
   reducers: {
@@ -71,6 +75,15 @@ export const searchSlice = createSlice({
     setData: (state, action) => {
       state.data = action.payload;
     },
+    setActiveButton: (state, action) => {
+      state.activeButton = action.payload;
+    },
+    setSearchActiveButton: (state, action) => {
+      state.searchActiveButton = action.payload;
+    },
+    setDetailedSearchToggle: (state) => {
+      state.detailedSearchToggle =  !state.detailedSearchToggle;
+    },
   },
 });
 
@@ -81,6 +94,9 @@ export const {
   setModelValue,
   setValues,
   setData,
+  setActiveButton,
+  setSearchActiveButton,
+  setDetailedSearchToggle,
 } = searchSlice.actions;
 
 export default searchSlice.reducer;

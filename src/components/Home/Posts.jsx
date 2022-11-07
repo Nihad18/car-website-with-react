@@ -148,15 +148,10 @@ function Home() {
   // -------------------------------------------------------------------------
   const handlePageClick = (data) => {
     let currentPage = data.selected + 1;
-    // setIsLoading(true);
     dispatch(setIsLoading(true));
-    // setPageNotLoading(false);
-    // setPosts([]);
     dispatch(setPosts([]));
     fetchPosts(currentPage);
-    // setPageCount(currentPage);
     dispatch(setPageCount(currentPage));
-    // setActivePage(currentPage);
     dispatch(setActivePage(currentPage))
   };
   return (
