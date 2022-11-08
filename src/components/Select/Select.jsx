@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
 import { IoIosArrowDown, IoIosArrowUp, IoMdClose } from "react-icons/io";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
-const Select = ({ options }) => {
-  const [animationParent] = useAutoAnimate();
+const Select = ({ options, isMulti, placeHolder }) => {
   const [toggle, setToggle] = useState(true);
-  const [inputValue, setInputValue] = useState("");
-  const [selectedValue, setSelectedValue] = useState("");
-  const [searchValue, setSearchValue] = useState(selectedValue);
+  const [isChecked, setIsChecked] = useState(false);
+  const [inputValue, setInputValue] = useState(isMulti ? [] : "");
+  const [selectedValue, setSelectedValue] = useState(isMulti ? [] : "");
+  const [currentValue, setCurrentValue] = useState("");
+  const [searchValue, setSearchValue] = useState(inputValue);
+
   const container = useRef();
   const input = useRef();
   useEffect(() => {
@@ -20,9 +21,21 @@ const Select = ({ options }) => {
   const filtered = options?.filter(
     (item) => item.label.toString().indexOf(searchValue) !== -1
   );
-  console.log("value : ",inputValue)
+  const handleChange = (event) => {
+    if (event.target.checked) {
+      setSelectedValue(
+        isMulti ? [...selectedValue, currentValue] : currentValue
+      );
+      setInputValue(isMulti ? [...inputValue, currentValue] : currentValue);
+    } else {
+      setInputValue(inputValue.filter((item) => item !== currentValue));
+      setSelectedValue(inputValue.filter((item) => item !== currentValue));
+    }
+    setIsChecked((current) => !current);
+  };
+  console.log("inputValue : ", isMulti ? [...new Set(inputValue)] : inputValue);
   return (
-    <div ref={animationParent}>
+    <div>
       <div className='relative ' ref={container}>
         <div className={`relative flex h-[46px] mb-2 cursor-pointer`}>
           <input
@@ -30,7 +43,18 @@ const Select = ({ options }) => {
             ref={input}
             required={true}
             id='select'
-            value={toggle ? (selectedValue ? selectedValue : inputValue) : searchValue}
+            // when we click input , input value will be reset , then if we click other place ,input value will be previous value
+            value={
+              toggle
+                ? inputValue //when we click other place,then this value will be set to input value
+                  ? isMulti
+                    ? [...new Set(inputValue)] //for array
+                    : inputValue //for single value
+                  : isMulti
+                  ? [...new Set(selectedValue)] // for array
+                  : selectedValue // for single value
+                : searchValue
+            }
             onChange={onSearch}
             onClick={() => {
               setSelectedValue("");
@@ -40,9 +64,9 @@ const Select = ({ options }) => {
           />
           <span
             htmlFor='select'
-            className='text-[#8E8EA9] top-3 left-2 absolute text-sm cursor-text pointer-events-none peer-valid:top-0.5 peer-valid:text-sm peer-valid:pb-2'
+            className='text-[#8E8EA9] top-[14px] left-2 absolute text-sm cursor-text pointer-events-none peer-valid:top-0.5 peer-valid:text-sm peer-valid:pb-2'
           >
-            Marka
+            {placeHolder ? placeHolder : "text"}
           </span>
           <label
             htmlFor='select'
@@ -54,14 +78,14 @@ const Select = ({ options }) => {
 
         <div
           className={`${
-            toggle === true ? "hidden" : "block"
-          } absolute z-10 w-60 bg-white rounded shadow dark:bg-gray-700`}
+            toggle === true ? "opacity-0 scale-y-0" : " opacity-1 scale-y-100"
+          } absolute z-10 w-60 bg-white transition origin-top rounded shadow dark:bg-gray-700`}
         >
-          <ul className='overflow-y-auto px-3 pb-3 max-h-60 text-sm text-gray-700 dark:text-gray-200'>
+          <ul className='overflow-y-auto max-h-60 px-3 pb-3 text-sm text-gray-700 dark:text-gray-200'>
             <em
               onClick={() => {
                 setSelectedValue("");
-                setInputValue("")
+                setInputValue("");
                 setSearchValue("");
               }}
               className={`${
@@ -73,14 +97,34 @@ const Select = ({ options }) => {
             </em>
             {filtered?.map((option) => (
               <li
-                key={option.value}
                 onClick={() => {
-                  setSelectedValue(option.label);
-                  setInputValue(option.label);
+                  // setSelectedValue(
+                  //   isMulti ? [...selectedValue, option.label] : option.label
+                  // );
+                  // setInputValue(
+                  //   isMulti ? [...inputValue, option.label] : option.label
+                  // );
+                  setCurrentValue(option.label);
                 }}
-                className='p-2 cursor-pointer hover:bg-red-300'
+                key={option.value}
+                className='p-2 cursor-pointer hover:bg-sky-400'
               >
-                {option.label}
+                {isMulti ? (
+                  <label
+                    htmlFor={option.label}
+                    className='flex justify-between'
+                  >
+                    {option.label}
+                    <input
+                      value={isChecked}
+                      onChange={handleChange}
+                      id={option.label}
+                      type='checkbox'
+                    />
+                  </label>
+                ) : (
+                  option.label
+                )}
               </li>
             ))}
             <em

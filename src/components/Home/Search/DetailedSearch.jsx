@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 // import Select from "react-select";
-import Select from "../../Select/Select"
+import Select from "../../Select/Select";
 import { useSelector, useDispatch } from "react-redux";
 import { setValues } from "../../../redux/reducers/searchSlice";
 const DetailedSearch = () => {
@@ -10,12 +10,14 @@ const DetailedSearch = () => {
   );
   const values = useSelector((state) => state.search.values);
   const data = useSelector((state) => state.search.data);
-  
-  
+
+  // const [value,setValues]= useState("")
+  // console.log(value)
   return (
     <div className={`${!detailedSearchToggle && "hidden"}`}>
       <div className='flex justify-between lg:my-4'>
-        <Select options={data?.year}/>
+        <Select options={data?.year} isMulti={false} placeHolder='Il' />
+        <Select options={data?.city} isMulti={true} placeHolder='Şəhər' />
         {/* <div className='max-h-[150px]'>
           <select
             onChange={(e) =>
@@ -42,7 +44,6 @@ const DetailedSearch = () => {
           </select>
         </div> */}
 
-        
         {/* <Select
           className='lg:w-[270px] xl:w-[300px] rounded '
           isClearable
