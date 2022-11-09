@@ -1,13 +1,16 @@
 import React, { useEffect, useState, useRef } from "react";
 import { IoIosArrowDown, IoIosArrowUp, IoMdClose } from "react-icons/io";
-const Select = ({ options, isMulti, placeHolder }) => {
+import { setValues } from "../../redux/reducers/searchSlice";
+import { useSelector, useDispatch } from "react-redux";
+const Select = ({ options, isMulti, placeHolder,Type }) => {
+  const dispatch = useDispatch();
+  const values = useSelector((state) => state.search.values);
   const [toggle, setToggle] = useState(true);
   const [isChecked, setIsChecked] = useState(false);
   const [inputValue, setInputValue] = useState(isMulti ? [] : "");
   const [selectedValue, setSelectedValue] = useState(isMulti ? [] : "");
   const [currentValue, setCurrentValue] = useState("");
   const [searchValue, setSearchValue] = useState(inputValue);
-
   const container = useRef();
   const input = useRef();
   useEffect(() => {
@@ -15,9 +18,6 @@ const Select = ({ options, isMulti, placeHolder }) => {
       setToggle(e.target !== container.current && e.target !== input.current);
     };
   });
-  const onSearch = (e) => {
-    setSearchValue(e.target.value);
-  };
   const filtered = options?.filter(
     (item) => item.label.toString().indexOf(searchValue) !== -1
   );
@@ -33,7 +33,7 @@ const Select = ({ options, isMulti, placeHolder }) => {
     }
     setIsChecked((current) => !current);
   };
-  console.log("inputValue : ", isMulti ? [...new Set(inputValue)] : inputValue);
+  // console.log("inputValue : ", isMulti ? [...new Set(inputValue)] : inputValue);
   return (
     <div>
       <div className='relative ' ref={container}>
@@ -42,7 +42,7 @@ const Select = ({ options, isMulti, placeHolder }) => {
             type='text'
             ref={input}
             required={true}
-            id='select'
+            id={currentValue + "select"}
             // when we click input , input value will be reset , then if we click other place ,input value will be previous value
             value={
               toggle
@@ -51,19 +51,23 @@ const Select = ({ options, isMulti, placeHolder }) => {
                     ? [...new Set(inputValue)] //for array
                     : inputValue //for single value
                   : isMulti
-                  ? [...new Set(selectedValue)] // for array
-                  : selectedValue // for single value
+                  ? [...new Set(inputValue)] // for array
+                  : inputValue // for single value
                 : searchValue
             }
-            onChange={onSearch}
+            onChange={(e) => {
+              setSearchValue(e.target.value);
+              dispatch(setValues({ ...values, Type: e.target.value }));
+            }}
             onClick={() => {
               setSelectedValue("");
               setSearchValue("");
+              setToggle(!toggle);
             }}
             className='outline-none px-[7px] valid:pt-5 peer relative w-full h-full text-sm text-gray-900 dark:text-white bg-gray-50 rounded-lg border border-gray-300 dark:bg-gray-600'
           />
           <span
-            htmlFor='select'
+            htmlFor={currentValue + "select"}
             className='text-[#8E8EA9] top-[14px] left-2 absolute text-sm cursor-text pointer-events-none peer-valid:top-0.5 peer-valid:text-sm peer-valid:pb-2'
           >
             {placeHolder ? placeHolder : "text"}
@@ -98,27 +102,27 @@ const Select = ({ options, isMulti, placeHolder }) => {
             {filtered?.map((option) => (
               <li
                 onClick={() => {
-                  // setSelectedValue(
-                  //   isMulti ? [...selectedValue, option.label] : option.label
-                  // );
-                  // setInputValue(
-                  //   isMulti ? [...inputValue, option.label] : option.label
-                  // );
                   setCurrentValue(option.label);
+                  setSelectedValue(
+                    isMulti ? [...selectedValue, option.label] : option.label
+                  );
+                  setInputValue(
+                    isMulti ? [...inputValue, option.label] : option.label
+                  );
                 }}
                 key={option.value}
                 className='p-2 cursor-pointer hover:bg-sky-400'
               >
                 {isMulti ? (
                   <label
-                    htmlFor={option.label}
+                    htmlFor={option.label + "option"}
                     className='flex justify-between'
                   >
                     {option.label}
                     <input
                       value={isChecked}
                       onChange={handleChange}
-                      id={option.label}
+                      id={option.label + "option"}
                       type='checkbox'
                     />
                   </label>
