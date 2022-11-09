@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { IoIosArrowDown, IoIosArrowUp, IoMdClose } from "react-icons/io";
 import { setValues } from "../../redux/reducers/searchSlice";
 import { useSelector, useDispatch } from "react-redux";
-const Select = ({ options, isMulti, placeHolder,Type }) => {
+const Select = ({ options, isMulti, placeHolder, Type }) => {
   const dispatch = useDispatch();
   const values = useSelector((state) => state.search.values);
   const [toggle, setToggle] = useState(true);
