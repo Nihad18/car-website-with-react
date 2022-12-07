@@ -61,7 +61,7 @@ const FetchData = () => {
     dispatch(setModelValue(null));
   }, [brandValue]);
   useEffect(() => {
-    let id = brands.indexOf(brandValue) + 1;
+    let id = brands?.map(item=>item.value)?.indexOf(brandValue) + 1;
     fetchData(id);
   }, [brandValue]);
   return fetchData

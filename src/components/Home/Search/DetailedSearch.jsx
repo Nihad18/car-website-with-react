@@ -1,32 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 // import Select from "react-select";
 import Select from "../../Select/Select";
-import { useSelector, useDispatch } from "react-redux";
-import { setValues } from "../../../redux/reducers/searchSlice";
+import { useSelector} from "react-redux";
 const DetailedSearch = () => {
-  const dispatch = useDispatch();
   const detailedSearchToggle = useSelector(
     (state) => state.search.detailedSearchToggle
   );
-  const values = useSelector((state) => state.search.values);
   const data = useSelector((state) => state.search.data);
-  console.log("values : "+values.minYearValue)
   return (
     <div className={`${!detailedSearchToggle && "hidden"}`}>
       <div className='flex justify-between lg:my-4'>
         <Select
-          options={data?.year}
-          isMulti={false}
-          placeHolder='Il'
-          Type={"eee"}
-  // bele istifade elemek isteyirem
-        // value={values?.year}
-        />
+          options={data?.gears}
+          placeHolder='Gear'
+          type={"minYearValue"}
+          />
         <Select
-          options={data?.city}
+          options={data?.fuels}
+          placeHolder='Yanacaq növü'
+          type={"fuelValue"}
           isMulti={true}
-          placeHolder='Şəhər'
+          ID={true}
         />
+
 
         {/* <Select
           className='lg:w-[270px] xl:w-[300px] rounded '

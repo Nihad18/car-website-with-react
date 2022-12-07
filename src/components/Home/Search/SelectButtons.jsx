@@ -15,7 +15,7 @@ const SelectButtons = () => {
   const searchActive = useSelector((state) => state.search.searchActiveButton);
   return (
     <div className='flex items-center justify-between w-full'>
-      <div className='flex-col lg:flex-row w-full flex justify-between text-red-500'>
+      <div className='flex-col xl:flex-row w-full flex justify-between text-red-500'>
         <div className='flex mb-4'>
           {types.map((type) => (
             <button
@@ -43,9 +43,10 @@ const SelectButtons = () => {
         } `}
               key={type}
               active={searchActive === type}
-              onClick={() => {dispatch(setSearchActiveButton(type));
-              type===searchTypes[1] && dispatch(setDetailedSearchToggle(true));
-              type===searchTypes[0] && dispatch(setDetailedSearchToggle(false));
+              onClick={() => {
+                dispatch(setSearchActiveButton(type));
+                type === searchTypes[0] && dispatch(setDetailedSearchToggle(false));
+                type === searchTypes[1] && dispatch(setDetailedSearchToggle(true));
               }}
             >
               {type === searchTypes[0] ? (

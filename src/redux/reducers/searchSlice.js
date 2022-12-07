@@ -10,7 +10,7 @@ export const searchSlice = createSlice({
     modelValue: null,
     values: {
       gearValue: null,
-      fuelValue: null,
+      fuelValue: [],
       categoryValue: null,
       minYearValue: null,
       maxYearValue: null,
@@ -81,8 +81,8 @@ export const searchSlice = createSlice({
     setSearchActiveButton: (state, action) => {
       state.searchActiveButton = action.payload;
     },
-    setDetailedSearchToggle: (state) => {
-      state.detailedSearchToggle =  !state.detailedSearchToggle;
+    setDetailedSearchToggle: (state,action) => {
+      state.detailedSearchToggle =  action.payload;
     },
   },
 });

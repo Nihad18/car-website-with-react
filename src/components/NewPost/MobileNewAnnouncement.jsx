@@ -1,5 +1,5 @@
 import React from 'react'
-import MobileViewSelect from "./MobileViewSelect"
+import MobileViewSelect from "../Select/MobileSelect"
 
 const MobileNewAnnouncement = () => {
   return (

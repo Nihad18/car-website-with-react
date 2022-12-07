@@ -1,17 +1,20 @@
 import { useEffect } from "react";
 import axios from "axios";
-// Components
-import Select from "react-select";
-import SelectedButtons from "./Search/SelectButtons"
+// Custom Components
+import Input from "../Input/Input"
+import Select from "../Select/Select";
+import SimpleSelect from "../Select/SimpleSelect";
+import MobileSelect from "../Select/MobileSelect"
+import SelectedButtons from "./Search/SelectButtons";
 import DetailedSearch from "./Search/DetailedSearch";
 // React Redux
 import { useSelector, useDispatch } from "react-redux";
-import { setPosts,setQuery, setPageCount, setActivePage, setIsLoading, setPageNotLoading,} from "../../redux/reducers/postSlice";
-import {setBrandValue, setModelValue, setValues} from "../../redux/reducers/searchSlice";
+import {setPosts, setQuery,setPageCount, setActivePage, setIsLoading, setPageNotLoading} from "../../redux/reducers/postSlice";
+import { setBrandValue, setModelValue, setValues,} from "../../redux/reducers/searchSlice";
 // React icons
 import { RiArrowGoBackFill } from "react-icons/ri";
 import { AiOutlineSearch } from "react-icons/ai";
-import FetchData from "./FetchData"
+import FetchData from "./FetchData";
 import { useNavigate } from "react-router";
 const Search = () => {
   const url = process.env.REACT_APP_API_URL;
@@ -28,21 +31,19 @@ const Search = () => {
   const modelValue = useSelector((state) => state.search.modelValue);
   const values = useSelector((state) => state.search.values);
   const data = useSelector((state) => state.search.data);
-  // const active= useSelector((state) => state.search.activeButton)
-  // const searchActive= useSelector((state) => state.search.searchActiveButton)
-  // const detailedSearchToggle= useSelector((state) => state.search.detailedSearchToggle)
 
   const filterObject = {
     brand: brandValue?.value || "",
     model: modelValue?.value || "",
     city: values?.cityValue?.map((item) => item?.value) || "",
-    min_year: values?.minYearValue?.label || "",
+    min_year: values?.minYearValue || "",
     max_year: values?.maxYearValue?.label || "",
     min_price: values?.minPriceValue || "",
     max_price: values?.maxPriceValue || "",
     price_type: values?.priceTypeValue?.value || "",
     loan: values?.loanValue || "",
     barterValue: values?.barterValue || "",
+    fuel: values?.fuelValue || "",
   };
   const handleChange = (e) => {
     dispatch(setIsLoading(true));
@@ -86,11 +87,11 @@ const Search = () => {
     e.preventDefault();
     dispatch(setBrandValue(null));
     dispatch(setModelValue(null));
-    const res=Object.keys(values).reduce((initial, key) => {
-      initial[key] = ''
-      return initial
-    },{})
-    dispatch(setValues({...res,cityValue:[]}));
+    const res = Object.keys(values).reduce((initial, key) => {
+      initial[key] = "";
+      return initial;
+    }, {});
+    dispatch(setValues({ ...res, cityValue: [] }));
 
     dispatch(setIsLoading(true));
     navigate("/");
@@ -126,128 +127,25 @@ const Search = () => {
     if (value === "" || value.length === 0) return true;
     else return false;
   }
-
-  // const customStyles = {
-  //   singleValue: (base) => ({ ...base, color: "white" }),
-  //   valueContainer: (base) => ({
-  //     ...base,
-  //     background: "#1C1C1E",
-  //   }),
-  //   indicatorsContainer: (base) => ({
-  //     ...base,
-  //     background: "#1C1C1E",
-  //     color: "#fff",
-  //   }),
-  //   option: (base) => ({
-  //     ...base,
-  //     background: "#1C1C1E",
-  //     color: "#fff",
-  //     "--custom-color": "#3C3F53",
-  //     cursor: "pointer",
-  //   }),
-  // };
-  // const theme = (theme) => ({
-  //   ...theme,
-  //   borderRadius: 0,
-  //   colors: {
-  //     ...theme.colors,
-  //     primary: "#212123",
-  //   },
-  // });
+  // console.log("values : ", values);
   return (
-    <div className='min-h-[250px] w-full sm:w-[540px] lg:w-[910px] xl:min-w-[1170px] rounded p-6 mx-auto bg-white dark:bg-[#242426] '>
-      <FetchData/>
-      <SelectedButtons/>
-      {/* <div className='flex justify-between lg:mb-4'>
-        <Select
-          className='lg:w-[270px] xl:w-[300px] rounded '
-          isClearable
-          placeholder='Marka'
-          options={brands}
-          value={brandValue}
-          onChange={(e) => dispatch(setBrandValue(e))}
-          // styles={customStyles}
-          // theme={theme}
-        />
-        <Select
-          className='lg:w-[270px] xl:w-[300px] rounded '
-          isClearable
-          placeholder='Model'
-          options={models}
-          value={modelValue}
-          onChange={(e) => dispatch(setModelValue(e))}
-          isDisabled={!brandValue}
-          // styles={customStyles}
-          // theme={theme}
-        />
-        <Select
-          className='lg:w-[270px] xl:w-[300px] rounded'
-          isClearable
-          isMulti
-          placeholder='Şəhər'
-          options={data.city}
-          value={values.cityValue}
-          onChange={(e) => dispatch(setValues({ ...values, cityValue: e }))}
-        />
-      </div> */}
-      {/* <div className='flex justify-between'>
-        <div className='flex'>
-          <Select
-            className='lg:w-[135px] xl:w-[150px]'
-            isClearable
-            options={data?.year}
-            placeholder='İl,min'
-            value={values?.minYearValue}
-            onChange={(e) =>
-              dispatch(setValues({ ...values, minYearValue: e }))
-            }
-          />
-          <Select
-            className='lg:w-[135px] xl:w-[150px]'
-            isClearable
-            options={data?.year}
-            placeholder='İl,max'
-            value={values?.maxYearValue}
-            onChange={(e) =>
-              dispatch(setValues({ ...values, maxYearValue: e }))
-            }
-          />
+    <div className='min-h-[250px] w-full sm:w-[540px] lg:w-[960px] xl:min-w-[1250px] rounded p-6 mx-auto bg-white dark:bg-[#242426] '>
+      <FetchData />
+      <SelectedButtons />
+      <div className='hidden md:grid lg:grid-cols-3 xl:grid-cols-4 lg:mb-4'>
+        <Select options={brands} placeHolder='Marka' brand={true}  />
+        <Select options={models} placeHolder='Model' model={true} isDisabled={!brandValue} />
+        <Select options={data?.city} type={"cityValue"} placeHolder='Şəhər'isMulti={true} ID={true} />
+        <div className="flex">
+          <Select options={data?.year} placeHolder='Il,min' type={"minYearValue"} containerClassName={"w-[120px] mr-2"} />
+          <Select options={data?.year} placeHolder='Il,max' type={"minYearValue"} containerClassName={"w-[120px]"}/>  
         </div>
-        <div className='flex '>
-          <input
-            value={values?.minPriceValue}
-            onChange={(e) =>
-              dispatch(setValues({ ...values, minPriceValue: e.target.value }))
-            }
-            type='number'
-            placeholder='Qiymət,min'
-            min='0'
-            step='500'
-            className='lg:w-[135px] xl:w-[150px] px-2 bg-white text-black border-gray-400 border rounded flex items-center min-h-[38px] outline-none'
-          />
-          <input
-            value={values?.maxPriceValue}
-            onChange={(e) =>
-              dispatch(setValues({ ...values, maxPriceValue: e.target.value }))
-            }
-            type='number'
-            placeholder='Qiymət,max'
-            min='0'
-            step='500'
-            className='lg:w-[135px] xl:w-[150px] px-2 bg-white text-black border-gray-400 border rounded flex items-center min-h-[38px] outline-none'
-          />
+        <div className="flex">
+          <Input placeHolder={"Qiymet,min"} type={"minPriceValue"} containerClassName={"w-[116px] mr-2"}/>
+          <Input placeHolder={"Qiymet,max"} type={"maxPriceValue"} containerClassName={"w-[116px]"}/>
         </div>
-        <div className='flex justify-between lg:w-[270px] xl:w-[300px] '>
-          <Select
-            className='rounded'
-            isClearable
-            placeholder='Azn'
-            options={data?.priceType}
-            value={values?.priceTypeValue}
-            onChange={(e) =>
-              dispatch(setValues({ ...values, priceTypeValue: e }))
-            }
-          />
+      <div className='flex max-h-[46px]'>
+      <SimpleSelect options={data?.priceType} containerClassName={"w-[106px]"}/>
           <input
             className='hidden'
             onChange={(e) =>
@@ -260,7 +158,7 @@ const Search = () => {
             htmlFor='checkbox3'
             className={`${
               values?.loanValue ? "bg-red-200 dark:text-black" : "dark:text-white"
-            } mx-1 border border-red-500 px-2 py-1 rounded cursor-pointer`}
+            } flex items-center mx-1 border border-red-500 px-2 py-1 rounded cursor-pointer`}
           >
             Kredit
           </label>
@@ -276,13 +174,20 @@ const Search = () => {
             htmlFor='checkbox4'
             className={`${
               values?.barterValue ? "bg-red-200 dark:text-black" : "dark:text-white"
-            } mx-1 border border-red-500 px-2 py-1 rounded cursor-pointer`}
+            } flex items-center mx-1 border border-red-500 px-2 py-1 rounded cursor-pointer`}
           >
             Barter
           </label>
         </div>
-      </div> */}
-      <DetailedSearch/>
+
+        <Select options={data?.gears} placeHolder='Ban novu' type={"gearValue"} />
+      </div>
+      <DetailedSearch />
+      {/* ------------------------------------------------------- */}
+      <div className="block md:hidden">
+        <MobileSelect name={"Marka"}/>
+        <MobileSelect name={"Model"}/>
+      </div>
       <div className='flex lg:mt-2 justify-end'>
         <div className='bg-slate-500 text-white flex items-center justify-center rounded w-full lg:w-[170px] h-[34px] lg:mt-2 mr-4'>
           <span>{posts?.count} Elan</span>
