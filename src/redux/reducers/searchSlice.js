@@ -8,20 +8,25 @@ export const searchSlice = createSlice({
     models: [],
     brandValue: null,
     modelValue: null,
+    extraBooleanFieldsValue:[],
     values: {
-      gearValue: null,
+      gearValue: [],
       fuelValue: [],
-      categoryValue: null,
+      categoryValue: [],
       minYearValue: null,
       maxYearValue: null,
-      colorValue: null,
-      transmissionValue: null,
-      mileageValue: null,
-      engineVolumeValue: null,
-      enginePowerValue: null,
+      colorValue: [],
+      transmissionValue: [],
+      minMileageValue: null,
+      maxMileageValue: null,
+      minEngineVolumeValue: null,
+      maxEngineVolumeValue: null,
+      minEnginePowerValue: null,
+      maxEnginePowerValue: null,
       priorOwnerCountValue: null,
-      marketValue: null,
+      marketValue: [],
       cityValue: [],
+      // extraBooleanFieldsValue: [],
       seatsCountValue: null,
       minPriceValue: null,
       maxPriceValue: null,
@@ -69,6 +74,9 @@ export const searchSlice = createSlice({
     setModelValue: (state, action) => {
       state.modelValue = action.payload;
     },
+    setExtraBooleanFieldsValue: (state, action) => {
+      state.extraBooleanFieldsValue = action.payload;
+    },
     setValues: (state, action) => {
       state.values = action.payload;
     },
@@ -92,6 +100,7 @@ export const {
   setModels,
   setBrandValue,
   setModelValue,
+  setExtraBooleanFieldsValue,
   setValues,
   setData,
   setActiveButton,

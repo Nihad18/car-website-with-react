@@ -1,41 +1,45 @@
-import "./input.css";
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect} from "react";
 // Redux
 import { useSelector, useDispatch } from "react-redux";
-import { setValues } from "../../redux/reducers/searchSlice";
+import { setValues } from "../../../redux/reducers/searchSlice";
 // Icons
 import { RiCloseCircleFill } from "react-icons/ri";
-const Input = ({ placeHolder, containerClassName, type }) => {
+const Input = ({ placeHolder, containerClassName, type,inputValueLength }) => {
   const dispatch = useDispatch();
   const [inputValue, setInputValue] = useState("");
   const values = useSelector((state) => state.search.values);
+
   useEffect(() => {
     dispatch(setValues({ ...values, [type]: inputValue }));
-  }, [dispatch, inputValue]);
+  }, []);
   const resetInputValue = () => {
     setInputValue("");
   };
   useEffect(()=>{
-      if(inputValue[0]==="0"){
-        setInputValue(inputValue.slice(0,1))
-      }
-      if(inputValue.length>9){
-        setInputValue(inputValue.slice(0,9));
-      }
+        if(!isNaN(inputValue) || Number(inputValue)<0){
+            if(inputValue[0]==="0"){
+              setInputValue(inputValue.slice(0,1))
+            }
+        }
+        else{
+          setInputValue("");  
+        }
+      
   },[inputValue])
   return (
     <div className={`${containerClassName}`}>
       <div className={`relative flex h-[46px] w-full mb-2 cursor-pointer`}>
         <input
-          type="number"
+          maxLength={inputValueLength}
+          size={inputValueLength}
           required={true}
           value={inputValue}
           id={placeHolder} // unique id
           onChange={(e) => {
             setInputValue(e.target.value);
           }}
-          className='outline-none px-[7px] valid:pt-5 peer relative w-full h-full text-sm text-gray-900 dark:text-white bg-gray-50 rounded-sm border border-gray-300 dark:bg-gray-600'
+          className='outline-none px-[7px] valid:pt-5 peer relative w-full h-full text-sm text-gray-900 dark:text-white bg-gray-50 rounded border border-gray-300 dark:bg-gray-600'
         />
         <span className='text-[#8E8EA9] top-[14px] left-2 absolute text-sm cursor-text pointer-events-none peer-valid:top-0.5 peer-valid:text-sm peer-valid:pb-2'>
           {placeHolder ? placeHolder : "text"}

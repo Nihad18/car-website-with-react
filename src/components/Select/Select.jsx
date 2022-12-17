@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { IoIosArrowDown, IoIosArrowUp, IoMdClose } from "react-icons/io";
+import { AiOutlineCheck } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setBrandValue,
@@ -34,6 +35,7 @@ const Select = ({
       setToggle(e.target !== container.current && e.target !== input?.current);
     };
   });
+
   useEffect(() => {
     (brand === false || model === false) &&
       dispatch(
@@ -58,19 +60,19 @@ const Select = ({
   const handleChange = (event) => {
     if (event.target.checked) {
       setInputValue(isMulti ? [...inputValue, currentValue] : currentValue);
+      setIdValue(isMulti ? [...idValue, currentIdValue] : currentIdValue);
     } else {
-      setInputValue(
-        inputValue.filter((item) =>
-          item !== ID ? currentIdValue : currentValue
-        )
-      );
+      setInputValue(inputValue.filter((item) => item !== currentValue));
+      setIdValue(idValue.filter((item) => item !== currentIdValue));
     }
     setIsChecked((current) => !current);
   };
   return (
     <div
       style={containerStyle}
-      className={`${containerClassName ? containerClassName : "w-[240px]"}`}
+      className={`${
+        containerClassName ? containerClassName : "w-[240px] select-none"
+      }`}
     >
       <div className='relative w-full' ref={container}>
         <div className={`relative flex h-[46px] mb-2 cursor-pointer`}>
@@ -78,7 +80,6 @@ const Select = ({
             type='text'
             ref={input}
             required={true}
-            id={ID ? currentIdValue : currentValue}
             // when we click input , input value will be reset , then if we click other place ,input value will be previous value
             value={
               !isDisabled
@@ -98,17 +99,16 @@ const Select = ({
               setSearchValue("");
               setToggle(!toggle);
             }}
-            className='outline-none px-[7px] valid:pt-5 peer relative w-full h-full text-sm text-gray-900 dark:text-white bg-gray-50 rounded-md border border-gray-300 dark:bg-gray-600'
+            className={`${toggle && 'cursor-pointer'} outline-none px-[7px] valid:pt-5 peer relative w-full h-full text-sm text-gray-900 dark:text-white bg-gray-50 rounded-md border border-gray-300 dark:bg-gray-600`}
           />
           <span className='text-[#8E8EA9] top-[14px] left-2 absolute text-sm cursor-text pointer-events-none peer-valid:top-0.5 peer-valid:text-sm peer-valid:pb-2'>
             {placeHolder ? placeHolder : "text"}
           </span>
-          <label
-            htmlFor='select'
+          <div
             className='cursor-pointer text-xl absolute right-4 top-[14px] text-slate-400 dark:text-white'
           >
-            {toggle ? <IoIosArrowDown /> : <IoIosArrowUp />}
-          </label>
+            {toggle ? <IoIosArrowDown /> : <IoIosArrowUp/>}
+          </div>
         </div>
 
         <div
@@ -134,7 +134,6 @@ const Select = ({
             </em>
             {filtered?.map((option) => (
               <li
-                //
                 onClick={() => {
                   setToggle(isMulti ? false : true);
                   setCurrentValue(option.label);
@@ -160,16 +159,30 @@ const Select = ({
                     htmlFor={option.label + "option"}
                     className='p-2 cursor-pointer flex justify-between'
                   >
-                    {option.label}
+                    {option.label}{" "}
+                    <div className="border border-1 w-[22px] h-[22px] rounded">
+                    <AiOutlineCheck
+                      className={`
+                      w-full h-full
+                      ${
+                        [...new Set(inputValue)].find(
+                          (item) => item === option.label
+                        )
+                          ? "block"
+                          : "hidden"
+                      }`}
+                    />
+                    </div>
                     <input
                       value={isChecked}
                       onChange={handleChange}
                       id={option.label + "option"}
                       type='checkbox'
+                      className='hidden'
                     />
                   </label>
                 ) : (
-                  <div className='p-2 cursor-pointer'>{option.label}</div>
+                  <div className='p-2 cursor-pointer flex justify-between items-center'>{option.label} <AiOutlineCheck className={`w-[22px] h-[22px] ${option.label === inputValue ? 'block' : 'hidden'}`}/></div>
                 )}
               </li>
             ))}

@@ -1,16 +1,28 @@
 import { useEffect } from "react";
 import axios from "axios";
 // Custom Components
-import Input from "../Input/Input"
+import Input from "./Search/Input";
 import Select from "../Select/Select";
+import CheckBox from "../../components/Home/Search/CheckBox";
 import SimpleSelect from "../Select/SimpleSelect";
-import MobileSelect from "../Select/MobileSelect"
+import MobileSelect from "../Select/MobileSelect";
 import SelectedButtons from "./Search/SelectButtons";
 import DetailedSearch from "./Search/DetailedSearch";
 // React Redux
 import { useSelector, useDispatch } from "react-redux";
-import {setPosts, setQuery,setPageCount, setActivePage, setIsLoading, setPageNotLoading} from "../../redux/reducers/postSlice";
-import { setBrandValue, setModelValue, setValues,} from "../../redux/reducers/searchSlice";
+import {
+  setPosts,
+  setQuery,
+  setPageCount,
+  setActivePage,
+  setIsLoading,
+  setPageNotLoading,
+} from "../../redux/reducers/postSlice";
+import {
+  setBrandValue,
+  setModelValue,
+  setValues,
+} from "../../redux/reducers/searchSlice";
 // React icons
 import { RiArrowGoBackFill } from "react-icons/ri";
 import { AiOutlineSearch } from "react-icons/ai";
@@ -127,66 +139,92 @@ const Search = () => {
     if (value === "" || value.length === 0) return true;
     else return false;
   }
-  // console.log("values : ", values);
+  console.log("values : ", values);
   return (
     <div className='min-h-[250px] w-full sm:w-[540px] lg:w-[960px] xl:min-w-[1250px] rounded p-6 mx-auto bg-white dark:bg-[#242426] '>
       <FetchData />
       <SelectedButtons />
-      <div className='hidden md:grid lg:grid-cols-3 xl:grid-cols-4 lg:mb-4'>
-        <Select options={brands} placeHolder='Marka' brand={true}  />
-        <Select options={models} placeHolder='Model' model={true} isDisabled={!brandValue} />
-        <Select options={data?.city} type={"cityValue"} placeHolder='Şəhər'isMulti={true} ID={true} />
-        <div className="flex">
-          <Select options={data?.year} placeHolder='Il,min' type={"minYearValue"} containerClassName={"w-[120px] mr-2"} />
-          <Select options={data?.year} placeHolder='Il,max' type={"minYearValue"} containerClassName={"w-[120px]"}/>  
-        </div>
-        <div className="flex">
-          <Input placeHolder={"Qiymet,min"} type={"minPriceValue"} containerClassName={"w-[116px] mr-2"}/>
-          <Input placeHolder={"Qiymet,max"} type={"maxPriceValue"} containerClassName={"w-[116px]"}/>
-        </div>
-      <div className='flex max-h-[46px]'>
-      <SimpleSelect options={data?.priceType} containerClassName={"w-[106px]"}/>
-          <input
-            className='hidden'
-            onChange={(e) =>
-              dispatch(setValues({ ...values, loanValue: e.target.checked }))
-            }
-            type='checkbox'
-            id='checkbox3'
+      <div className='hidden md:grid lg:grid-cols-3 xl:grid-cols-4'>
+        <Select options={brands} placeHolder='Marka' brand={true} />
+        <Select
+          options={models}
+          placeHolder='Model'
+          model={true}
+          isDisabled={!brandValue}
+        />
+        <Select
+          options={data?.city}
+          type={"cityValue"}
+          placeHolder='Şəhər'
+          isMulti={true}
+          ID={true}
+        />
+        <div className='flex'>
+          <Select
+            options={data?.year}
+            placeHolder='Il,min'
+            type={"minYearValue"}
+            containerClassName={"w-[120px] mr-2"}
           />
-          <label
-            htmlFor='checkbox3'
-            className={`${
-              values?.loanValue ? "bg-red-200 dark:text-black" : "dark:text-white"
-            } flex items-center mx-1 border border-red-500 px-2 py-1 rounded cursor-pointer`}
-          >
-            Kredit
-          </label>
-          <input
-            type='checkbox'
-            id='checkbox4'
-            className='hidden'
-            onChange={(e) =>
-              dispatch(setValues({ ...values, barterValue: e.target.checked }))
-            }
+          <Select
+            options={data?.year}
+            placeHolder='Il,max'
+            type={"maxYearValue"}
+            containerClassName={"w-[120px]"}
           />
-          <label
-            htmlFor='checkbox4'
-            className={`${
-              values?.barterValue ? "bg-red-200 dark:text-black" : "dark:text-white"
-            } flex items-center mx-1 border border-red-500 px-2 py-1 rounded cursor-pointer`}
-          >
-            Barter
-          </label>
         </div>
-
-        <Select options={data?.gears} placeHolder='Ban novu' type={"gearValue"} />
+        <div className='flex'>
+          <Input
+            placeHolder={"Qiymet,min"}
+            type={"minPriceValue"}
+            inputValueLength={9}
+            containerClassName={"w-[116px] mr-2"}
+          />
+          <Input
+            placeHolder={"Qiymet,max"}
+            type={"maxPriceValue"}
+            inputValueLength={9}
+            containerClassName={"w-[116px]"}
+          />
+        </div>
+        <div className='flex max-h-[46px]'>
+          <SimpleSelect
+            options={data?.priceType}
+            containerClassName={"w-[85px]"}
+          />
+          <CheckBox
+            placeHolder={"Kredit"}
+            inputClassName={"ml-2 px-2 py-1"}
+            onChangeType={true}
+            type={"loanValue"}
+          />
+          <CheckBox
+            placeHolder={"Barter"}
+            inputClassName={"ml-3 px-2 py-1"}
+            onChangeType={true}
+            type={"barterValue"}
+          />
+        </div>
+        <Select
+          options={data?.category}
+          type={"categoryValue"}
+          placeHolder='Ban növü'
+          isMulti={true}
+          ID={true}
+        />
+        <Select
+          options={data?.color}
+          type={"colorValue"}
+          placeHolder='Rəng'
+          isMulti={true}
+          ID={true}
+        />
       </div>
       <DetailedSearch />
       {/* ------------------------------------------------------- */}
-      <div className="block md:hidden">
-        <MobileSelect name={"Marka"}/>
-        <MobileSelect name={"Model"}/>
+      <div className='block md:hidden'>
+        <MobileSelect name={"Marka"} />
+        <MobileSelect name={"Model"} />
       </div>
       <div className='flex lg:mt-2 justify-end'>
         <div className='bg-slate-500 text-white flex items-center justify-center rounded w-full lg:w-[170px] h-[34px] lg:mt-2 mr-4'>

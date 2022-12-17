@@ -107,7 +107,6 @@ const NewPost = () => {
   const handleChange = (e) => {
     // Destructuring
     const { value, checked } = e.target;
-    console.log("target", e.target);
     // Case 1 : The user checks the box
 
     if (checked) {
