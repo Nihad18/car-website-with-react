@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, memo } from "react";
 import { IoIosArrowDown, IoIosArrowUp, IoMdClose } from "react-icons/io";
 import { AiOutlineCheck } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
@@ -32,7 +32,7 @@ const Select = ({
   const input = useRef();
   useEffect(() => {
     window.onclick = (e) => {
-      setToggle(e.target !== container.current && e.target !== input?.current);
+      setToggle(e.target !== container.current && e.target !== input.current);
     };
   });
 
@@ -67,6 +67,7 @@ const Select = ({
     }
     setIsChecked((current) => !current);
   };
+
   return (
     <div
       style={containerStyle}
@@ -75,19 +76,21 @@ const Select = ({
       }`}
     >
       <div className='relative w-full' ref={container}>
-        <div className={`relative flex h-[46px] mb-2 cursor-pointer`}>
+        {/* <div className={`relative flex h-[46px] mb-2 cursor-pointer`}> */}
+        <div
+          onClick={() => setToggle(!toggle)}
+          className={`relative flex h-[46px] mb-2 cursor-pointer text-gray-900 dark:text-white bg-gray-50 rounded-md border border-gray-300 dark:bg-gray-600`}
+        >
           <input
             type='text'
             ref={input}
             required={true}
-            // when we click input , input value will be reset , then if we click other place ,input value will be previous value
             value={
               !isDisabled
                 ? toggle
-                  ? inputValue && //when we click other place,then this value will be set to input value
-                    isMulti
-                    ? [...new Set(inputValue)] //for array
-                    : inputValue //for single value
+                  ? inputValue && isMulti
+                    ? [...new Set(inputValue)]
+                    : inputValue
                   : searchValue
                 : ""
             }
@@ -99,15 +102,32 @@ const Select = ({
               setSearchValue("");
               setToggle(!toggle);
             }}
-            className={`${toggle && 'cursor-pointer'} outline-none px-[7px] valid:pt-5 peer relative w-full h-full text-sm text-gray-900 dark:text-white bg-gray-50 rounded-md border border-gray-300 dark:bg-gray-600`}
+            className={`${toggle && "cursor-pointer pt-4"}
+             outline-none peer px-[7px] relative w-[80%] h-[90%] mt-1 text-sm text-gray-900 dark:text-white bg-gray-50 rounded-md border-gray-300 dark:bg-gray-600`}
           />
-          <span className='text-[#8E8EA9] top-[14px] left-2 absolute text-sm cursor-text pointer-events-none peer-valid:top-0.5 peer-valid:text-sm peer-valid:pb-2'>
-            {placeHolder ? placeHolder : "text"}
+          <span
+            className={`${!toggle && (
+               searchValue.length > 0
+                ? "hidden"
+                : "block")
+            }
+           text-[#8E8EA9] top-3 left-2 absolute w-[80%] peer-valid:top-0.5 peer-valid:text-sm peer-valid:pb-2 overflow-hidden text-ellipsis whitespace-nowrap text-base cursor-text pointer-events-none`}
+          >
+            {
+            !toggle ? (inputValue.length > 0 ? [...new Set(inputValue)] + ",": placeHolder) :placeHolder
+              }
           </span>
           <div
-            className='cursor-pointer text-xl absolute right-4 top-[14px] text-slate-400 dark:text-white'
+            onClick={() => setToggle(!toggle)}
+            className='pointer-events-none text-xl absolute right-4 top-[14px] text-slate-400 dark:text-white'
           >
-            {toggle ? <IoIosArrowDown /> : <IoIosArrowUp/>}
+            {isDisabled ? (
+              <IoIosArrowDown />
+            ) : toggle ? (
+              <IoIosArrowDown />
+            ) : (
+              <IoIosArrowUp />
+            )}
           </div>
         </div>
 
@@ -160,9 +180,9 @@ const Select = ({
                     className='p-2 cursor-pointer flex justify-between'
                   >
                     {option.label}{" "}
-                    <div className="border border-1 w-[22px] h-[22px] rounded">
-                    <AiOutlineCheck
-                      className={`
+                    <div className='border border-1 w-[22px] h-[22px] rounded'>
+                      <AiOutlineCheck
+                        className={`
                       w-full h-full
                       ${
                         [...new Set(inputValue)].find(
@@ -171,7 +191,7 @@ const Select = ({
                           ? "block"
                           : "hidden"
                       }`}
-                    />
+                      />
                     </div>
                     <input
                       value={isChecked}
@@ -182,7 +202,14 @@ const Select = ({
                     />
                   </label>
                 ) : (
-                  <div className='p-2 cursor-pointer flex justify-between items-center'>{option.label} <AiOutlineCheck className={`w-[22px] h-[22px] ${option.label === inputValue ? 'block' : 'hidden'}`}/></div>
+                  <div className='p-2 cursor-pointer flex justify-between items-center'>
+                    {option.label}{" "}
+                    <AiOutlineCheck
+                      className={`w-[22px] h-[22px] ${
+                        option.label === inputValue ? "block" : "hidden"
+                      }`}
+                    />
+                  </div>
                 )}
               </li>
             ))}
@@ -200,4 +227,4 @@ const Select = ({
   );
 };
 
-export default Select;
+export default memo(Select);

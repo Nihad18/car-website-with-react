@@ -10,8 +10,9 @@ const DetailedSearch = () => {
     (state) => state.search.detailedSearchToggle
   );
   const data = useSelector((state) => state.search.data);
+
   return (
-    <div className={`${!detailedSearchToggle && "hidden"}`}>
+    <div className={`${!detailedSearchToggle && "opacity-0 absolute duration-75"}`}>
       <div className='flex justify-between md:grid lg:grid-cols-3 xl:grid-cols-4 '>
         <Select
           options={data?.fuels}

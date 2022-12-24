@@ -42,6 +42,7 @@ const Search = () => {
   const brandValue = useSelector((state) => state.search.brandValue);
   const modelValue = useSelector((state) => state.search.modelValue);
   const values = useSelector((state) => state.search.values);
+  const extraBooleanFields=useSelector((state) => state.search.extraBooleanFieldsValue)
   const data = useSelector((state) => state.search.data);
 
   const filterObject = {
@@ -55,7 +56,23 @@ const Search = () => {
     price_type: values?.priceTypeValue?.value || "",
     loan: values?.loanValue || "",
     barterValue: values?.barterValue || "",
-    fuel: values?.fuelValue || "",
+    color: values?.colorValue?.map((item) => item?.value) || "",
+    fuel: values?.fuelValue?.map((item) => item?.value) || "",
+    gear: values?.gearValue?.map((item) => item?.value) || "",
+    transmission: values?.transmissionValue?.map((item) => item?.value) || "",
+    min_engine_volume: values?.minEngineVolumeValue || "",
+    max_engine_volume: values?.maxEngineVolumeValue || "",
+    min_engine_power: values?.minEnginePowerValue|| "",
+    max_engine_power: values?.maxEnginePowerValue || "",
+    min_mileage: values?.minMileageValue || "",
+    max_mileage: values?.maxMileageValue || "",
+    prior_owners_count: values?.priorOwnerCountValue?.map((item) => item?.value) || "",
+    seats_count:values?.priorOwnerCountValue?.map((item) => item?.value) || "",
+    crashed:values?.crashedValue || "",
+    painted:values?.paintedValue || "",
+    market: values?.marketValue?.map((item) => item?.value) || "",
+    extra_fields:extraBooleanFields?.map((item) => item?.value) || "",
+    
   };
   const handleChange = (e) => {
     dispatch(setIsLoading(true));
@@ -138,8 +155,15 @@ const Search = () => {
   function stringChechker(value) {
     if (value === "" || value.length === 0) return true;
     else return false;
-  }
+  } 
+  
+  useEffect(() => {
+    window.onclick = (event) => {
+      console.log("target : "+event.target);
+    };
+  },[]);
   console.log("values : ", values);
+  console.log("extraBooleanFields : ",extraBooleanFields)
   return (
     <div className='min-h-[250px] w-full sm:w-[540px] lg:w-[960px] xl:min-w-[1250px] rounded p-6 mx-auto bg-white dark:bg-[#242426] '>
       <FetchData />
