@@ -125,7 +125,7 @@ function Favourites() {
     setPosts([]);
   };
   return (
-    <>
+    <div className="flex justify-center items-center h-[80vh]">
       <div className='bg-[#F3F7FC] text-[#1b1b1b] dark:bg-[#1C1C1E] dark:text-white sm:w-[540px] lg:w-[960px] xl:min-w-[1250px] '>
         {token ? (
           <>
@@ -255,7 +255,7 @@ function Favourites() {
             <NavLink
               to='/login'
               className={
-                "text-white mx-4 bg-green-500 min-w-20 min-h-8 rounded flex items-center justify-center"
+                "text-white mx-4 bg-green-500 min-w-20 min-h-8 px-4 py-1 rounded flex items-center justify-center"
               }
             >
               DAXIL Ol
@@ -263,7 +263,7 @@ function Favourites() {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }
 export default Favourites;

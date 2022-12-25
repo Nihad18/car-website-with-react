@@ -7,6 +7,12 @@ import {
   setModelValue,
   setValues,
 } from "../../redux/reducers/searchSlice";
+import {
+  setBrandVals,
+  setModelVals,
+  setVals,
+} from "../../redux/reducers/newPostSlice";
+
 const Select = ({
   containerStyle,
   containerClassName,
@@ -17,10 +23,14 @@ const Select = ({
   type,
   brand = false,
   model = false,
+  postBrand = false,
+  postModel = false,
+  newPost = false,
   isDisabled = false,
 }) => {
   const dispatch = useDispatch();
   const values = useSelector((state) => state.search.values);
+  const postValues = useSelector((state) => state.search.values);
   const [toggle, setToggle] = useState(true);
   const [isChecked, setIsChecked] = useState(false);
   const [inputValue, setInputValue] = useState(isMulti ? [] : "");
@@ -48,9 +58,25 @@ const Select = ({
             : inputValue,
         })
       );
+    (postBrand === false || postModel === false) &&
+      newPost &&
+      dispatch(
+        setVals({
+          ...postValues,
+          [type]: isMulti
+            ? [...new Set(ID ? idValue : inputValue)]
+            : ID
+            ? idValue
+            : inputValue,
+        })
+      );
     brand === true && dispatch(setBrandValue(idValue));
     model === true &&
       dispatch(setModelValue(isMulti ? [...new Set(idValue)] : idValue));
+
+    postBrand === true && dispatch(setBrandVals(idValue));
+    postModel === true &&
+      dispatch(setModelVals(isMulti ? [...new Set(idValue)] : idValue));
   }, [dispatch, inputValue, idValue]);
   const filtered = options?.filter(
     (item) =>
@@ -106,16 +132,16 @@ const Select = ({
              outline-none peer px-[7px] relative w-[80%] h-[90%] mt-1 text-sm text-gray-900 dark:text-white bg-gray-50 rounded-md border-gray-300 dark:bg-gray-600`}
           />
           <span
-            className={`${!toggle && (
-               searchValue.length > 0
-                ? "hidden"
-                : "block")
+            className={`${
+              !toggle && (searchValue.length > 0 ? "hidden" : "block")
             }
            text-[#8E8EA9] top-3 left-2 absolute w-[80%] peer-valid:top-0.5 peer-valid:text-sm peer-valid:pb-2 overflow-hidden text-ellipsis whitespace-nowrap text-base cursor-text pointer-events-none`}
           >
-            {
-            !toggle ? (inputValue.length > 0 ? [...new Set(inputValue)] + ",": placeHolder) :placeHolder
-              }
+            {!toggle
+              ? inputValue.length > 0 && isMulti
+                ? [...new Set(inputValue)] + ","
+                : placeHolder +" axtarın..."
+              : placeHolder}
           </span>
           <div
             onClick={() => setToggle(!toggle)}

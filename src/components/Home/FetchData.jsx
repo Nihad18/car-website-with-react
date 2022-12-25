@@ -2,12 +2,16 @@ import { useEffect } from "react";
 import axios from "axios";
 // React Redux
 import { useSelector, useDispatch } from "react-redux";
-import { setBrands, setModels, setModelValue, setData,} from "../../redux/reducers/searchSlice";
+import { setModelValue} from "../../redux/reducers/searchSlice";
+import { setBrands, setModels, setData} from "../../redux/reducers/dataSlice";
+import { setModelVals} from "../../redux/reducers/newPostSlice";
+
 const FetchData = () => {
   const url = process.env.REACT_APP_API_URL;
   const dispatch = useDispatch();
-  const brands = useSelector((state) => state.search.brands);
+  const brands = useSelector((state) => state.data.brands);
   const brandValue = useSelector((state) => state.search.brandValue);
+  const dataBrandValue = useSelector((state) => state.newPost.brandValue);
   const fetchData = async (id) => {
     const { data } = await axios.get(`${url}/api/post/choices/`);
     dispatch(
@@ -47,7 +51,7 @@ const FetchData = () => {
       })
     );
     // when the brand is selected, get the models
-    if (brandValue !== null) {
+    if (brandValue !== null || dataBrandValue!== null) {
       const models = `${url}/api/post/models-choices/?brand=${id}`;
       const modelsData = await axios.get(models);
       dispatch(
@@ -56,14 +60,23 @@ const FetchData = () => {
         )
       );
     }
+
   };
   useEffect(() => {
     dispatch(setModelValue(null));
   }, [brandValue]);
   useEffect(() => {
+    dispatch(setModelVals(null));
+  }, [dataBrandValue]);
+  
+  useEffect(() => {
     let id = brands?.map(item=>item.value)?.indexOf(brandValue) + 1;
     fetchData(id);
   }, [brandValue]);
+  useEffect(() => {
+    let id = brands?.map(item=>item.value)?.indexOf(dataBrandValue) + 1;
+    fetchData(id);
+  }, [dataBrandValue]);
   return fetchData
   
 };

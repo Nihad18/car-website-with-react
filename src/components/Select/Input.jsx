@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect} from "react";
 // Redux
 import { useSelector, useDispatch } from "react-redux";
-import { setValues } from "../../../redux/reducers/searchSlice";
+import { setValues } from "../../redux/reducers/searchSlice";
 // Icons
 import { RiCloseCircleFill } from "react-icons/ri";
 const Input = ({ placeHolder, containerClassName, type,inputValueLength }) => {

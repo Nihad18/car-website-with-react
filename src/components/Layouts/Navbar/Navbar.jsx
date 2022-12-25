@@ -1,14 +1,15 @@
+import {useEffect} from "react"
 import { NavLink } from "react-router-dom";
-import { AiOutlineMenu, AiOutlineHeart, AiFillHeart} from "react-icons/ai";
+import { AiOutlineMenu, AiFillHeart} from "react-icons/ai";
 import { VscSettings } from "react-icons/vsc";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 
 import { MyAccount } from "./MyAccount";
-import Select from "react-select";
-
+// import Select from "react-select";
+import SimpleSelect from "../../Select/SimpleSelect";
 // Redux
-import { setToggle } from "../../../redux/reducers/toggleSlice";
+import { setToggle} from "../../../redux/reducers/toggleSlice";
 import { useSelector,useDispatch } from "react-redux";
 
 //**DARK MODE ANIMATION ICON CSS------------
@@ -30,10 +31,11 @@ const Navbar = () => {
   const [setTheme, colorTheme] = useDarkMode();
 
   const { t, i18n } = useTranslation();
-  function clickLanguage(lang) {
-    changeLanguage(lang);
-  }
   const token = useSelector(state=>state.auth.value);
+  const language = useSelector(state=>state.toggle.language);
+  useEffect(()=>{
+    changeLanguage(language);
+  },[language])
   return (
     <>
       <div
@@ -76,13 +78,12 @@ const Navbar = () => {
           }
 
           {/* -------LANGUAGE SELECT------------ */}
-          <Select
-            className='text-center text-black mx-4 z-50'
-            defaultValue={options[0]}
-            onChange={(e) => {
-              clickLanguage(e.value);
-            }}
+          <SimpleSelect
             options={options}
+            defaultValue={"az"}
+            lang={true}
+            containerClassName={"w-[85px]"}
+            inputClassName={"h-[40px] bg-[#081A3E] text-white dark:text-white"}
           />
 
           {/* DARK MODE ICON */}

@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   setValues,
   setExtraBooleanFieldsValue,
-} from "../../../redux/reducers/searchSlice";
+} from "../../redux/reducers/searchSlice";
 
 const CheckBox = ({
   placeHolder,

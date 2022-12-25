@@ -1,18 +1,18 @@
 import React from "react";
 //custom components
 import Select from "../../Select/Select";
-import Input from "./Input";
-import CheckBox from "./CheckBox";
+import Input from "../../Select/Input";
+import CheckBox from "../../Select/CheckBox";
 //---------------------
 import { useSelector } from "react-redux";
 const DetailedSearch = () => {
   const detailedSearchToggle = useSelector(
     (state) => state.search.detailedSearchToggle
   );
-  const data = useSelector((state) => state.search.data);
+  const data = useSelector((state) => state.data.data);
 
   return (
-    <div className={`${!detailedSearchToggle && "opacity-0 absolute duration-75"}`}>
+    <div className={`${!detailedSearchToggle && "hidden"}`}>
       <div className='flex justify-between md:grid lg:grid-cols-3 xl:grid-cols-4 '>
         <Select
           options={data?.fuels}

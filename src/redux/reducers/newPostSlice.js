@@ -1,12 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-const types = [" Bütün", "Yeni", "İşlənmiş"];
-const searchTypes = ["Sadə axtarış", "Ətraflı axtarış"];
-export const searchSlice = createSlice({
+export const newPostSlice = createSlice({
   name: "data",
   initialState: {
     brandValue: null,
     modelValue: null,
-    extraBooleanFieldsValue:[],
+    extraBooleanFieldsValue: [],
     values: {
       gearValue: [],
       fuelValue: [],
@@ -24,7 +22,6 @@ export const searchSlice = createSlice({
       priorOwnerCountValue: null,
       marketValue: [],
       cityValue: [],
-      // extraBooleanFieldsValue: [],
       seatsCountValue: null,
       minPriceValue: null,
       maxPriceValue: null,
@@ -37,44 +34,29 @@ export const searchSlice = createSlice({
       loanValue: null,
       barterValue: null,
     },
-    activeButton: types[0],
-    searchActiveButton:searchTypes[0],
-    detailedSearchToggle:false
   },
 
   reducers: {
-    setBrandValue: (state, action) => {
+    setBrandVals: (state, action) => {
       state.brandValue = action.payload;
     },
-    setModelValue: (state, action) => {
+    setModelVals: (state, action) => {
       state.modelValue = action.payload;
     },
-    setExtraBooleanFieldsValue: (state, action) => {
-      state.extraBooleanFieldsValue = action.payload;
+    setExtraBooleanValue: (state, action) => {
+      state.modelValue = action.payload;
     },
-    setValues: (state, action) => {
+    setVals: (state, action) => {
       state.values = action.payload;
-    },
-    setActiveButton: (state, action) => {
-      state.activeButton = action.payload;
-    },
-    setSearchActiveButton: (state, action) => {
-      state.searchActiveButton = action.payload;
-    },
-    setDetailedSearchToggle: (state,action) => {
-      state.detailedSearchToggle =  action.payload;
     },
   },
 });
 
 export const {
-  setBrandValue,
-  setModelValue,
+  setBrandVals,
+  setModelVals,
   setExtraBooleanFieldsValue,
-  setValues,
-  setActiveButton,
-  setSearchActiveButton,
-  setDetailedSearchToggle,
-} = searchSlice.actions;
+  setVals,
+} = newPostSlice.actions;
 
-export default searchSlice.reducer;
+export default newPostSlice.reducer;

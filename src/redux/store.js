@@ -7,6 +7,8 @@ import fileSlice from "./reducers/fileSlice";
 import authSlice from "./reducers/authSlice";
 import postSlice from "./reducers/postSlice";
 import searchSlice from "./reducers/searchSlice";
+import dataSlice from "./reducers/dataSlice";
+import newPostSlice from "./reducers/newPostSlice";
 export const store = configureStore({
   reducer: {
     login: loginSlice,
@@ -17,5 +19,7 @@ export const store = configureStore({
     auth:authSlice,
     post:postSlice,
     search:searchSlice,
+    data: dataSlice,
+    newPost:newPostSlice,
   },
 });

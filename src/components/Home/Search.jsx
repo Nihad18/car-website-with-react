@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import axios from "axios";
 // Custom Components
-import Input from "./Search/Input";
+import Input from "../Select/Input";
 import Select from "../Select/Select";
-import CheckBox from "../../components/Home/Search/CheckBox";
+import CheckBox from "../../components/Select/CheckBox";
 import SimpleSelect from "../Select/SimpleSelect";
 import MobileSelect from "../Select/MobileSelect";
 import SelectedButtons from "./Search/SelectButtons";
@@ -37,13 +37,13 @@ const Search = () => {
   const navigate = useNavigate();
 
   const posts = useSelector((state) => state.post.posts);
-  const brands = useSelector((state) => state.search.brands);
-  const models = useSelector((state) => state.search.models);
+  const brands = useSelector((state) => state.data.brands);
+  const models = useSelector((state) => state.data.models);
   const brandValue = useSelector((state) => state.search.brandValue);
   const modelValue = useSelector((state) => state.search.modelValue);
   const values = useSelector((state) => state.search.values);
   const extraBooleanFields=useSelector((state) => state.search.extraBooleanFieldsValue)
-  const data = useSelector((state) => state.search.data);
+  const data = useSelector((state) => state.data.data);
 
   const filterObject = {
     brand: brandValue?.value || "",
@@ -214,7 +214,10 @@ const Search = () => {
         <div className='flex max-h-[46px]'>
           <SimpleSelect
             options={data?.priceType}
+            type={"priceTypeValue"}
+            defaultValue={"AZN"}
             containerClassName={"w-[85px]"}
+            inputClassName={"h-[46px]"}
           />
           <CheckBox
             placeHolder={"Kredit"}

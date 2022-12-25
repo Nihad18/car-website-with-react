@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import {AiOutlineEye,AiOutlineEyeInvisible} from 'react-icons/ai';
 export default function Input({ label, type = "text", ...props }) {
   const [show, setShow] = useState(false);
   const [inputType, setType] = useState(type);
@@ -10,27 +10,32 @@ export default function Input({ label, type = "text", ...props }) {
     } else if (type === "password") {
       setType("password");
     }
-  }, [show,type]);
+  }, [show, type]);
   return (
-    <div className='relative flex h-[52px] font-normal focus-within:border-gray-400 rounded-sm border focus:border-[#a7a7c5] mb-2'>
-      <input
-      {...props}
-        required={true}
-        type={inputType}
-        className='bg-[#FAFAFA] w-full h-full outline-none relative px-[7px] text-lg peer valid:pt-5'
-      />
-      <span className='text-[#8E8EA9] top-3 left-2 absolute text-lg cursor-text pointer-events-none peer-valid:top-0.5 peer-valid:text-sm peer-valid:pb-2'>
+    <div>
+      <label
+        for='name'
+        className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
+      >
         {label}
-      </span>
-      {type === 'password' && props?.value &&(
-        <button
-        type="button"
+      </label>
+      <div className="relative flex">
+      <input
+        {...props}
+        required={""}
+        type={inputType}
+        className='bg-gray-50 border outline-none border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-sky-600 focus:border-sky-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+      />
+      {type === "password" && props?.value && (
+      <button
+          type='button'
           onClick={() => setShow(!show)}
-          className='h-full flex items-center text-sm font-semibold pr-2'
+          className='absolute top-[50%] translate-y-[-50%] right-2 text-xl text-slate-700 dark:text-white font-semibold pr-2'
         >
-          {show ? "Hide" : "Show"}
+          {show ? <AiOutlineEyeInvisible/> : <AiOutlineEye/>}
         </button>
       )}
+      </div>
     </div>
   );
 }

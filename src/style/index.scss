@@ -13,13 +13,12 @@
     scroll-behavior: smooth;
   }
 }
-
-@media (max-width: 850px) {
-  html{
-    scrollbar-width: thin;
-  }
-  html::-webkit-scrollbar{
-    width: 5px;
-  }
-}
+// @media (max-width: 850px) {
+//   html{
+//     scrollbar-width: thin;
+//   }
+//   html::-webkit-scrollbar{
+//     width: 5px;
+//   }
+// }
 
