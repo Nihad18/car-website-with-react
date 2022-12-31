@@ -18,6 +18,7 @@ import {
   setIsLoading,
   setPageNotLoading,
 } from "../../redux/reducers/postSlice";
+import { setResetToggle } from "../../redux/reducers/toggleSlice";
 import {
   setBrandValue,
   setModelValue,
@@ -42,37 +43,38 @@ const Search = () => {
   const brandValue = useSelector((state) => state.search.brandValue);
   const modelValue = useSelector((state) => state.search.modelValue);
   const values = useSelector((state) => state.search.values);
-  const extraBooleanFields=useSelector((state) => state.search.extraBooleanFieldsValue)
+  const extraBooleanFields = useSelector(
+    (state) => state.search.extraBooleanFieldsValue
+  );
   const data = useSelector((state) => state.data.data);
-
+  const resetToggle = useSelector((state) => state.toggle.resetToggle);
   const filterObject = {
-    brand: brandValue?.value || "",
-    model: modelValue?.value || "",
-    city: values?.cityValue?.map((item) => item?.value) || "",
+    brand: brandValue || "",
+    model: modelValue || "",
+    city: values?.cityValue || "",
     min_year: values?.minYearValue || "",
-    max_year: values?.maxYearValue?.label || "",
+    max_year: values?.maxYearValue || "",
     min_price: values?.minPriceValue || "",
     max_price: values?.maxPriceValue || "",
     price_type: values?.priceTypeValue?.value || "",
     loan: values?.loanValue || "",
     barterValue: values?.barterValue || "",
-    color: values?.colorValue?.map((item) => item?.value) || "",
-    fuel: values?.fuelValue?.map((item) => item?.value) || "",
-    gear: values?.gearValue?.map((item) => item?.value) || "",
-    transmission: values?.transmissionValue?.map((item) => item?.value) || "",
+    color: values?.colorValue || "",
+    fuel: values?.fuelValue || "",
+    gear: values?.gearValue || "",
+    transmission: values?.transmissionValue || "",
     min_engine_volume: values?.minEngineVolumeValue || "",
     max_engine_volume: values?.maxEngineVolumeValue || "",
-    min_engine_power: values?.minEnginePowerValue|| "",
+    min_engine_power: values?.minEnginePowerValue || "",
     max_engine_power: values?.maxEnginePowerValue || "",
     min_mileage: values?.minMileageValue || "",
     max_mileage: values?.maxMileageValue || "",
-    prior_owners_count: values?.priorOwnerCountValue?.map((item) => item?.value) || "",
-    seats_count:values?.priorOwnerCountValue?.map((item) => item?.value) || "",
-    crashed:values?.crashedValue || "",
-    painted:values?.paintedValue || "",
-    market: values?.marketValue?.map((item) => item?.value) || "",
-    extra_fields:extraBooleanFields?.map((item) => item?.value) || "",
-    
+    prior_owners_count: values?.priorOwnerCountValue || "",
+    seats_count: values?.priorOwnerCountValue || "",
+    crashed: values?.crashedValue || "",
+    painted: values?.paintedValue || "",
+    market: values?.marketValue || "",
+    extra_fields: extraBooleanFields || "",
   };
   const handleChange = (e) => {
     dispatch(setIsLoading(true));
@@ -114,15 +116,16 @@ const Search = () => {
   // ------------------------------------------------------
   const reset = (e) => {
     e.preventDefault();
-    dispatch(setBrandValue(null));
-    dispatch(setModelValue(null));
-    const res = Object.keys(values).reduce((initial, key) => {
+    dispatch(setBrandValue(""));
+    dispatch(setModelValue(""));
+    const res = Object.keys(filterObject).reduce((initial, key) => {
       initial[key] = "";
       return initial;
     }, {});
-    dispatch(setValues({ ...res, cityValue: [] }));
-
+    dispatch(setValues({ ...res }));
+    dispatch(setQuery(""));
     dispatch(setIsLoading(true));
+    dispatch(setResetToggle(false));
     navigate("/");
     axios
       .get(
@@ -149,26 +152,30 @@ const Search = () => {
         console.log(err);
       });
   };
-
+  useEffect(() => {
+    dispatch(setBrandValue(""));
+    dispatch(setModelValue(""));
+    const res = Object.keys(filterObject).reduce((initial, key) => {
+      initial[key] = "";
+      return initial;
+    }, {});
+    dispatch(setValues({ ...res }));
+  }, [resetToggle]);
   // when nothing is selected ,button is disabled
   const disabled = Object.values(filterObject).every(stringChechker);
   function stringChechker(value) {
     if (value === "" || value.length === 0) return true;
     else return false;
-  } 
-  
-  useEffect(() => {
-    window.onclick = (event) => {
-      console.log("target : "+event.target);
-    };
-  },[]);
-  console.log("values : ", values);
-  console.log("extraBooleanFields : ",extraBooleanFields)
+  }
+
+  console.log("brand : ",brandValue)
+  console.log("model : ",modelValue)
+  console.log("value :",values)
   return (
     <div className='min-h-[250px] w-full sm:w-[540px] lg:w-[960px] xl:min-w-[1250px] rounded p-6 mx-auto bg-white dark:bg-[#242426] '>
       <FetchData />
       <SelectedButtons />
-      <div className='hidden md:grid lg:grid-cols-3 xl:grid-cols-4'>
+      <div className='hidden lg:grid lg:grid-cols-3 xl:grid-cols-4'>
         <Select options={brands} placeHolder='Marka' brand={true} />
         <Select
           options={models}
@@ -248,11 +255,16 @@ const Search = () => {
         />
       </div>
       <DetailedSearch />
-      {/* ------------------------------------------------------- */}
-      <div className='block md:hidden'>
-        <MobileSelect name={"Marka"} />
-        <MobileSelect name={"Model"} />
+      {/* =============== MOBILE SEARCH START ======================================== */}
+      <div className='grid grid-cols-2 lg:hidden'>
+        <MobileSelect placeholder={"Marka"} Id={true} brand={true} single={true} options={brands} />
+        <MobileSelect placeholder={"Model"} Id={true} model={true} isDisabled={!brandValue} single={true} options={models} />
+        <MobileSelect placeholder={"İl"} options={data?.year} type={"minYearValue"} secondType={"maxYearValue"} />
+        <MobileSelect placeholder={"İl"} options={data?.year} type={"minYearValue"} secondType={"maxYearValue"} />
+        <MobileSelect placeholder={"İl"} options={data?.year} type={"minYearValue"} secondType={"maxYearValue"} />
       </div>
+      {/* =============== MOBILE SEARCH END ======================================== */}
+
       <div className='flex lg:mt-2 justify-end'>
         <div className='bg-slate-500 text-white flex items-center justify-center rounded w-full lg:w-[170px] h-[34px] lg:mt-2 mr-4'>
           <span>{posts?.count} Elan</span>

@@ -12,6 +12,7 @@ import {
   setModelVals,
   setVals,
 } from "../../redux/reducers/newPostSlice";
+import { setResetToggle } from "../../redux/reducers/toggleSlice";
 
 const Select = ({
   containerStyle,
@@ -30,7 +31,8 @@ const Select = ({
 }) => {
   const dispatch = useDispatch();
   const values = useSelector((state) => state.search.values);
-  const postValues = useSelector((state) => state.search.values);
+  const postValues = useSelector((state) => state.newPost.values);
+  const resetToggle = useSelector((state) => state.toggle.resetToggle);
   const [toggle, setToggle] = useState(true);
   const [isChecked, setIsChecked] = useState(false);
   const [inputValue, setInputValue] = useState(isMulti ? [] : "");
@@ -58,8 +60,7 @@ const Select = ({
             : inputValue,
         })
       );
-    (postBrand === false || postModel === false) &&
-      newPost &&
+    newPost === true &&
       dispatch(
         setVals({
           ...postValues,
@@ -78,6 +79,11 @@ const Select = ({
     postModel === true &&
       dispatch(setModelVals(isMulti ? [...new Set(idValue)] : idValue));
   }, [dispatch, inputValue, idValue]);
+  useEffect(() => {
+    if (!resetToggle) {
+      setInputValue("");
+    }
+  }, [inputValue, resetToggle]);
   const filtered = options?.filter(
     (item) =>
       item.label.toString().toLowerCase().indexOf(searchValue.toLowerCase()) !==
@@ -93,7 +99,6 @@ const Select = ({
     }
     setIsChecked((current) => !current);
   };
-
   return (
     <div
       style={containerStyle}
@@ -105,7 +110,7 @@ const Select = ({
         {/* <div className={`relative flex h-[46px] mb-2 cursor-pointer`}> */}
         <div
           onClick={() => setToggle(!toggle)}
-          className={`relative flex h-[46px] mb-2 cursor-pointer text-gray-900 dark:text-white bg-gray-50 rounded-md border border-gray-300 dark:bg-gray-600`}
+          className={`relative flex h-[46px] mb-2 cursor-pointer text-gray-900 dark:text-white bg-[#ECF2F9] rounded-md border border-gray-300 dark:bg-gray-600`}
         >
           <input
             type='text'
@@ -128,19 +133,21 @@ const Select = ({
               setSearchValue("");
               setToggle(!toggle);
             }}
-            className={`${toggle && "cursor-pointer pt-4"}
-             outline-none peer px-[7px] relative w-[80%] h-[90%] mt-1 text-sm text-gray-900 dark:text-white bg-gray-50 rounded-md border-gray-300 dark:bg-gray-600`}
+            className={`${toggle && "cursor-pointer pt-4"} ${[type]}
+             outline-none peer px-[7px] relative w-[80%] h-[90%] mt-1 text-sm text-gray-900 dark:text-white bg-[#ECF2F9] rounded-md dark:bg-gray-600`}
           />
           <span
             className={`${
               !toggle && (searchValue.length > 0 ? "hidden" : "block")
             }
-           text-[#8E8EA9] top-3 left-2 absolute w-[80%] peer-valid:top-0.5 peer-valid:text-sm peer-valid:pb-2 overflow-hidden text-ellipsis whitespace-nowrap text-base cursor-text pointer-events-none`}
+           text-[#8E8EA9] dark:text-gray-300 top-3 left-2 absolute w-[80%] peer-valid:top-0.5 peer-valid:text-sm peer-valid:pb-2 overflow-hidden text-ellipsis whitespace-nowrap text-base cursor-text pointer-events-none`}
           >
-            {!toggle
+            {isDisabled
+              ? placeHolder
+              : !toggle
               ? inputValue.length > 0 && isMulti
                 ? [...new Set(inputValue)] + ","
-                : placeHolder +" axtarın..."
+                : placeHolder + " axtarın..."
               : placeHolder}
           </span>
           <div
@@ -181,6 +188,7 @@ const Select = ({
             {filtered?.map((option) => (
               <li
                 onClick={() => {
+                  dispatch(setResetToggle(true));
                   setToggle(isMulti ? false : true);
                   setCurrentValue(option.label);
                   setCurrentIdValue(option.value);

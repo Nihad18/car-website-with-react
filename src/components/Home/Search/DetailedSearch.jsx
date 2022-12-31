@@ -126,6 +126,7 @@ const DetailedSearch = () => {
           {data?.extraBooleanFields.map((item, index) => {
             return (
               <CheckBox
+                key={index+1}
                 placeHolder={item}
                 containerClassName={"mr-2 my-2"}
                 inputClassName={"p-2"}

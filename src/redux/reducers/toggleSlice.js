@@ -5,6 +5,7 @@ export const toggleSlice = createSlice({
   initialState: {
     value: true,
     language: null,
+    resetToggle:true,
   },
   reducers: {
     setToggle: (state) => {
@@ -13,11 +14,14 @@ export const toggleSlice = createSlice({
     setLanguage: (state,action) => {
       state.language = action.payload;
     },
+    setResetToggle: (state,action) => {
+      state.resetToggle = action.payload;;
+    },
     
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setToggle,setLanguage } = toggleSlice.actions;
+export const { setToggle,setLanguage,setResetToggle } = toggleSlice.actions;
 
 export default toggleSlice.reducer;

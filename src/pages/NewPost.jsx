@@ -1,16 +1,22 @@
 import { useState, useEffect } from "react";
 import FetchData from "../components/Home/FetchData";
-import Input from "../components/NewPost/Input";
+import Input from "../components/Select/Input";
 import Picture from "../components/NewPost/Picture";
 import MobileNewAnnouncement from "../components/NewPost/MobileNewAnnouncement";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import { setBrandValue,setModelValue,setExtraBoolenValue } from "../redux/reducers/newPostSlice";
-import Select from ".././components/Select/Select"
+import {
+  setBrandVals,
+  setModelVals,
+  setExtraBooleanFieldsValue,
+  setVals,
+} from "../redux/reducers/newPostSlice";
+import Select from ".././components/Select/Select";
 const NewPost = () => {
   const url = process.env.REACT_APP_API_URL;
   const brandValue = useSelector((state) => state.newPost.brandValue);
   const modelValue = useSelector((state) => state.newPost.modelValue);
+  const values = useSelector((state) => state.newPost.values);
   const brands = useSelector((state) => state.data.brands);
   const models = useSelector((state) => state.data.models);
   const data = useSelector((state) => state.data.data);
@@ -103,27 +109,75 @@ const NewPost = () => {
     )}-${phoneNumber.slice(6, 10)}`;
   }
   //----------------------------------------------------------------------------------------------
+  console.log(brandValue)
+  console.log(values);
   return (
     <>
       <FetchData />
       <MobileNewAnnouncement />
       <div
         className='hidden lg:flex flex-col min-h-screen w-full sm:w-[540px] pt-6 pl-6 pr-6 mx-auto
-    bg-white dark:bg-[#1c1c1e] text-black dark:text-white lg:min-w-[960px]'
+    bg-white dark:bg-[#1c1c1e] text-black dark:text-white lg:min-w-[960px] xl:min-w-[1250px]'
       >
         <div className=''>Yeni elan yerləşdirin</div>
-        <form
-          // onSubmit={postCarData}
-          className=' flex w-full justify-between flex-wrap'
-        >
-      <Select options={brands} placeHolder='Marka' postBrand={true} />
-        <Select
-          options={models}
-          placeHolder='Model'
-          postModel={true}
-          isDisabled={!brandValue}
-        />
-    {/* <Input
+        <div className='md:grid lg:grid-cols-3 xl:grid-cols-4 justify-between'>
+          <Select options={brands} placeHolder='Marka' postBrand={true} />
+          <Select
+            options={models}
+            placeHolder='Model'
+            postModel={true}
+            isDisabled={!brandValue}
+          />
+          <Select
+            options={data?.fuels}
+            placeHolder='Yanacaq növü'
+            type={"fuelValue"}
+            postModel={true}
+            ID={true}
+          />
+          <Select
+            options={data?.gears}
+            placeHolder='Ötürücü'
+            type={"gearValue"}
+            newPost={true}
+            ID={true}
+          />
+          <Select
+            options={data?.category}
+            type={"categoryValue"}
+            placeHolder='Ban növü'
+            newPost={true}
+            ID={true}
+          />
+          <Select
+            options={data?.transmission}
+            placeHolder='Sürətlər qutusu'
+            type={"transmissionValue"}
+            newPost={true}
+            ID={true}
+          />
+          <Input
+            placeHolder={"Yürüş"}
+            type={"mileageValue"}
+            inputValueLength={7}
+            newPost={true}
+            containerClassName={"w-[140px] mr-2"}
+          />
+          <Select
+            options={data?.gears}
+            placeHolder='Ötürücü'
+            type={"gearValue"}
+            newPost={true}
+            ID={true}
+          />
+          <Select
+            options={data?.gears}
+            placeHolder='Ötürücü'
+            type={"gearValue"}
+            newPost={true}
+            ID={true}
+          />
+          {/* <Input
             name={"Yanacaq növü : "}
             options={data.fuels}
             value={values.fuelValue}
@@ -404,8 +458,8 @@ const NewPost = () => {
           {/* PICTURES */}
           {/* <div className='font-semibold text-xl'>Şəkillər</div>
           <div className='border border-gray-400 w-full min-h-[170px] flex items-center'> */}
-            {/* RULES */}
-            {/* <div
+          {/* RULES */}
+          {/* <div
               className={`${
                 selectedImages.length > 3 ? "hidden" : ""
               } w-2/5 text-sm px-4`}
@@ -419,8 +473,13 @@ const NewPost = () => {
             </div>
             <Picture />
           </div> */}
-          <button className={`p-1 bg-red-500`}>Elanı paylaş</button>
-        </form>
+        </div>
+        <button
+          // onClick={postCarData}
+          className={`p-1 bg-red-500`}
+        >
+          Elanı paylaş
+        </button>
       </div>
     </>
   );

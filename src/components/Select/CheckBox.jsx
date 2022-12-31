@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState,useEffect,memo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setValues,
   setExtraBooleanFieldsValue,
 } from "../../redux/reducers/searchSlice";
+import { setResetToggle } from "../../redux/reducers/toggleSlice";
 
 const CheckBox = ({
   placeHolder,
@@ -15,6 +16,7 @@ const CheckBox = ({
 }) => {
   const dispatch = useDispatch();
   const values = useSelector((state) => state.search.values);
+  const resetToggle = useSelector((state) => state.toggle.resetToggle);
   const extraBooleanFieldsValue = useSelector(
     (state) => state.search.extraBooleanFieldsValue
   );
@@ -36,7 +38,13 @@ const CheckBox = ({
         )
       );
     }
+    dispatch(setResetToggle(true))
   };
+  useEffect(() => {
+    if(!resetToggle) {
+      setIsChecked(false)
+    }
+  }, [resetToggle]);
   return (
     <div className={`${containerClassName} select-none`}>
       <input
@@ -69,4 +77,4 @@ const CheckBox = ({
   );
 };
 
-export default CheckBox;
+export default memo(CheckBox);
